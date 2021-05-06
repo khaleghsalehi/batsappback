@@ -2,10 +2,7 @@ package net.khalegh.batsapp.contorl;
 
 import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
-import net.khalegh.batsapp.entity.Experience;
-import net.khalegh.batsapp.entity.PrivateMessage;
-import net.khalegh.batsapp.entity.Reply;
-import net.khalegh.batsapp.entity.UserInfo;
+import net.khalegh.batsapp.entity.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -55,6 +53,9 @@ public class WebView {
     @Autowired
     MessageRepo messageRepo;
 
+    @Autowired
+    CommandRepo commandRepo;
+
 
     @RequestMapping(value = {"", "/", "/index"})
     public String index(@RequestParam(required = false, defaultValue = "") String q,
@@ -65,114 +66,31 @@ public class WebView {
                         Model model) throws ExecutionException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        int totalMatchedResult;
-
-        if (page < 0)
-            page = 0;
-        @Nullable String hotCacheCanary = Service.hotCache.get(IS_EMPTY_GAP);
-        if (hotCacheCanary == null || hotCacheCanary.isEmpty()) {
-            log.info("NullOrEmpty hot catch, fetch db");
-            List<Object[]> Obj = experienceRepo.getHotTags();
-            for (Object[] row : Obj) {
-                Service.hotCache.put(row[0].toString(), (row[1].toString()));
-                Service.hotCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
-            }
-        }
-
-        @Nullable String appCacheCanary = Service.appCache.get(IS_EMPTY_GAP);
-        if (appCacheCanary == null || appCacheCanary.isEmpty()) {
-            log.info("NullOrEmpty catch found, fetch db");
-            Service.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
-            Service.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
-            Service.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
-            Service.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
-        }
-
-
-        Map<String, String> trends = new HashMap<>();
-        Random random = new Random();
-        Service.hotCache.asMap().forEach((k, v) -> {
-            if (!k.equals(IS_EMPTY_GAP)) {
-                trends.put(k, v);
-                // todo get random trend form rich list (current list is limit or equal to 10)
-                if (random.nextInt(200) > 100) {
-                    model.addAttribute("random", k);
-                }
-            }
-        });
-
-
-        UserInfo userInfo = userRepo.findByUserName(auth.getName());
+        UserInfo userInfo = new UserInfo();
         if (auth.isAuthenticated()) {
             model.addAttribute("username", auth.getName());
+            userInfo = userRepo.findByUserName(auth.getName());
+            List<Command> command;
+            // initialize
+            model.addAttribute("controlStatus", "unknown");
+            try {
+                command = commandRepo.getLastCommand(userInfo.getUuid());
+                if (command != null) {
+                    if (command.get(command.size() - 1).getCommandName().equals("start"))
+                        model.addAttribute("controlStatus", "on");
+                    else
+                        model.addAttribute("controlStatus", "off");
+                }
+            } catch (Exception e) {
+                //fixme nullPointerException
+                e.printStackTrace();
+                model.addAttribute("controlStatus", "off");
+            }
+
         } else {
             model.addAttribute("username", "Guest");
         }
 
-        model.addAttribute("trends", trends);
-        model.addAttribute(ALL_TAGS, Service.appCache.get(ALL_TAGS));
-        model.addAttribute(ALL_USERS, Service.appCache.get(ALL_USERS));
-        model.addAttribute(ALL_COMMUNES, Service.appCache.get(ALL_COMMUNES));
-        if (userInfo != null) {
-            @Nullable List<PrivateMessage> allMessage = messageRepo.getMessage(userInfo.getUuid());
-            if (allMessage != null && !allMessage.isEmpty())
-                model.addAttribute("messageCount", allMessage.size());
-            else
-                model.addAttribute("messageCount", 0);
-        } else {
-            model.addAttribute("messageCount", 0);
-        }
-
-
-        List<Experience> experienceListColumn1;
-        List<Experience> experienceListColumn2;
-        List<Experience> experienceListColumn3;
-        List<Experience> experienceListColumn4;
-        List<Experience> allItems;
-        Pageable pageable = PageRequest.of(page, PAGINATION_COUNT);
-
-        if (userId != null) {
-            totalMatchedResult = experienceRepo.countUserPost(userId);
-            allItems = experienceRepo.findExperienceByUserId(userId, pageable);
-        } else {
-            if (q != null && !q.isEmpty()) {
-                totalMatchedResult = experienceRepo.countMatchedItem(q);
-                allItems = experienceRepo.findByString(q, pageable);
-                model.addAttribute("experienceCount", experienceRepo.countMatchedItem(q));
-            } else if (subject != null && !subject.isEmpty()) {
-                totalMatchedResult = (int) experienceRepo.count();
-                allItems = experienceRepo.findBySubject(subject, pageable);
-            } else {
-                totalMatchedResult = (int) experienceRepo.count();
-                allItems = experienceRepo.getAllItems(pageable);
-            }
-        }
-        model.addAttribute("experienceCount", (long) allItems.size());
-        if (allItems.size() >= PAGINATION_COUNT)
-            model.addAttribute("hasNexPage", "true");
-        else
-            model.addAttribute("hasNexPage", "false");
-
-        experienceListColumn1 = allItems.subList(0, allItems.size() / 4);
-        experienceListColumn2 = allItems.subList(allItems.size() / 4, (allItems.size() / 4) * 2);
-        experienceListColumn3 = allItems.subList((allItems.size() / 4) * 2, (allItems.size() / 4) * 3);
-        experienceListColumn4 = allItems.subList((allItems.size() / 3) * 2, allItems.size());
-        model.addAttribute("experienceList4", experienceListColumn1);
-        model.addAttribute("experienceList3", experienceListColumn2);
-        model.addAttribute("experienceList2", experienceListColumn3);
-        model.addAttribute("experienceList1", experienceListColumn4);
-
-        log.info("total matched count > " + totalMatchedResult);
-        if (page * PAGINATION_COUNT >= totalMatchedResult)
-            model.addAttribute("nextPage", page);
-        else
-            model.addAttribute("nextPage", page + 1);
-
-        model.addAttribute("q", q);
-        if (page > 0)
-            model.addAttribute("prevPage", page - 1);
-        else
-            model.addAttribute("prevPage", page);
 
         if (request.getHeader("exbord") == null) {
             log.info("not mobile app");

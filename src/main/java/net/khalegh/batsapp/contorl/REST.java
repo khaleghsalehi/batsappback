@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -72,6 +73,9 @@ public class REST {
     @Autowired
     ContactRepo contactRepo;
 
+    @Autowired
+    CommandRepo commandRepo;
+
     private final static String VERSION = "0.0.1";
     private final static String TYPE_INVALID_ERROR = "Error, Invalid or empty type";
     public final static int SPACE_ERROR_USERNAME = -9;
@@ -88,6 +92,40 @@ public class REST {
     public static final int RESPONSE_ERROR = 500;
     private static final String DEFAULT_AVATAR = "avatar.png";
 
+
+    @GetMapping("/v1/setCommand")
+    public void setCommand(@RequestParam(required = true) String cmd,
+                           HttpServletResponse response) throws IOException {
+
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!auth.isAuthenticated()) {
+            response.sendRedirect("/login");
+            return;
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo = userRepo.findByUserName(auth.getName());
+
+
+        Command command = new Command();
+        if (cmd.equals("start") || cmd.equals("stop")) {
+            command.setCommandName(cmd);
+            command.setUserId(userInfo.getUuid());
+            commandRepo.save(command);
+            response.sendRedirect("/");
+        }
+    }
+
+
+    @GetMapping("/v1/getCommand")
+    public String getCommand(@RequestParam(required = true) UUID uuid) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserInfo userInfo = new UserInfo();
+        userInfo = userRepo.findByUserName(auth.getName());
+        List<Command> command;
+        command = commandRepo.getLastCommand(uuid);
+        return command.get(command.size() - 1).getCommandName();
+    }
 
     // TODO: 1/28/21 change GET to POST, also control the input size
     // FIXME: 1/28/21  body size is a large in DB, cause 500 error, fix it
