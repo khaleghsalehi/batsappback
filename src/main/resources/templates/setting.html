@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>اکسبورد</title>
+
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Main Font -->
+    <script src="nui/js/webfontloader.min.js"></script>
+    <script>
+		WebFont.load({
+			google: {
+				families: ['Roboto:300,400,500,700:latin']
+			}
+		});
+
+
+
+    </script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-grid.css">
+
+    <!-- Main Styles CSS -->
+    <link rel="stylesheet" type="text/css" href="nui/css/main.min.css">
+
+</head>
+
+<body>
+<div class="fixed-sidebar">
+    <div class="fixed-sidebar-left sidebar--small" id="sidebar-left">
+
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="اکسبورد">
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="بازکردن منو">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="/share">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="اشتراک تجربه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنظیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-logout-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1">
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="اکسبورد">
+            </div>
+            <div class="title-block">
+                <h6 class="logo-title">اکسبورد</h6>
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-close-icon left-menu-icon">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">بستن منو</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ثبت نام</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ورود</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خروج</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنطیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">تنظیمات</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/share">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="اشتراک تجربه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">اشتراک تجربه</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div th:if="${username != 'anonymousUser' and  username !=null }" class="profile-completion">
+
+                <div class="skills-item">
+                    <div class="skills-item-info">
+                        <span class="skills-item-title">تکمیل مشخصات کاربری</span>
+                        <span class="skills-item-count"><span class="count-animate" data-speed="1000"
+                                                              data-refresh-interval="50" data-to="76"
+                                                              data-from="0"></span><span class="units">76%</span></span>
+                    </div>
+                    <div class="skills-item-meter">
+                        <span class="skills-item-meter-active bg-primary" style="width: 76%"></span>
+                    </div>
+                </div>
+
+                <span>اطلاعات <a
+                        href="/setting">حساب کاربری</a> را تکمیل کنید تا کاربران بتوانند شما را براحتی پیدا کنند!</span>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fixed-sidebar fixed-sidebar-responsive">
+
+    <div class="fixed-sidebar-left sidebar--small" id="sidebar-left-responsive">
+        <a href="/" class="logo js-sidebar-open">
+            <img src="nui/img/logo.png" alt="اکسبورد">
+        </a>
+
+    </div>
+
+    <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1-responsive">
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="اکسبورد">
+            </div>
+            <div class="title-block">
+                <h6 class="logo-title">اکسبورد</h6>
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-close-icon left-menu-icon">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">بستن منو</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ثبت نام</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ورود</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خروج</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنطیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">تنظیمات</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/share">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="اشتراک تجربه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">اشتراک تجربه</span>
+                    </a>
+                </li>
+                <li>
+                    <form th:action="@{/}" method="get">
+                        <div class="form-group with-button">
+                            <input name="q" class="form-control" placeholder="عبارت یا جمله را وارد کنید...."
+                                   type="text">
+                            <button type="submit">
+                                <svg class="olymp-happy-face-icon">
+                                    <use xlink:href="svg-icons/sprites/icons.svg#olymp-happy-face-icon"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+
+            <div th:if="${username != 'anonymousUser' and  username !=null }" class="profile-completion">
+
+                <div class="skills-item">
+                    <div class="skills-item-info">
+                        <span class="skills-item-title">تکمیل مشخصات کاربری</span>
+                        <span class="skills-item-count"><span class="count-animate" data-speed="1000"
+                                                              data-refresh-interval="50" data-to="76"
+                                                              data-from="0"></span><span class="units">76%</span></span>
+                    </div>
+                    <div class="skills-item-meter">
+                        <span class="skills-item-meter-active bg-primary" style="width: 76%"></span>
+                    </div>
+                </div>
+
+                <span>اطلاعات <a
+                        href="/setting">حساب کاربری</a> را تکمیل کنید تا کاربران بتوانند شما را براحتی پیدا کنند!</span>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="fixed-sidebar right fixed-sidebar-responsive">
+    <div class="fixed-sidebar-right sidebar--small" id="sidebar-right-responsive">
+        <a href="/share" class="olympus-chat inline-items">
+            <svg class="olymp-chat---messages-icon">
+                <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-camera-icon"></use>
+            </svg>
+        </a>
+    </div>
+</div>
+
+
+<header class="header" id="site-header">
+
+    <div class="page-title">
+        <h6> دنبال چی هستی؟</h6>
+    </div>
+
+    <div class="header-content-wrapper">
+        <form class="search-bar w-search" th:action="@{/}" method="get">
+            <div class="form-group with-button">
+                <input name="q" class="form-control" placeholder="عبارت یا جمله را وارد کنید...." type="text">
+                <button type="submit">
+                    <svg class="olymp-magnifying-glass-icon">
+                        <use xlink:href="svg-icons/sprites/icons.svg#olymp-magnifying-glass-icon"></use>
+                    </svg>
+                </button>
+            </div>
+        </form>
+
+    </div>
+</header>
+
+
+<header class="header header-responsive" id="site-header-responsive">
+
+</header>
+
+<!-- ... end Responsive Header-BP -->
+<div class="header-spacer"></div>
+
+<div class="container">
+    <div class="row row-fluid">
+        <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="ui-block">
+                <div class="top-header">
+                    <div class="top-header-thumb">
+                        <!--                        <img max-width="-webkit-fill-available" height="fit-content" th:src="@{'user-photos/'+${userObject.uuid}+'/headerPhoto'}" alt="nature">-->
+                        <img src="nui/img/top-header2.jpg" alt="nature">
+                    </div>
+                    <div class="profile-section">
+                        <div class="row">
+                            <div class="col col-lg-5 col-md-5 col-sm-12 col-12">
+                                <ul class="profile-menu">
+                                    <li>
+                                        <a href="#" class="friend-count-item">
+                                            <div class="h6">0</div>
+                                            <div class="title">دوستان</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="friend-count-item">
+                                            <div class="h6">0</div>
+                                            <div class="title">تصاویر</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="friend-count-item">
+                                            <div class="h6">0</div>
+                                            <div class="title">ویدیوها</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col col-lg-5 ml-auto col-md-5 col-sm-12 col-12">
+                                <ul class="profile-menu">
+                                    <li>
+                                        <a href="#" class="friend-count-item">
+                                            <div class="h6">0</div>
+                                            <div class="title">پست ها</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="friend-count-item">
+                                            <div class="h6">0</div>
+                                            <div class="title">نظرات</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="friend-count-item">
+                                            <div class="h6">0</div>
+                                            <div class="title">پسندها</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="control-block-button">
+                            <a href="35-YourAccount-FriendsRequests.html" class="btn btn-control bg-blue">
+                                <svg class="olymp-happy-face-icon">
+                                    <use xlink:href="#olymp-happy-face-icon"></use>
+                                </svg>
+                            </a>
+
+                            <a href="#" class="btn btn-control bg-purple">
+                                <svg class="olymp-chat---messages-icon">
+                                    <use xlink:href="#olymp-chat---messages-icon"></use>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="top-header-author">
+                        <a href="#" class="author-thumb">
+                            <img th:src="@{'user-photos/'+${userObject.uuid}+'/picture-thumbnail.jpg'}" alt="author">
+                        </a>
+                        <div class="author-content">
+                            <a href="02-ProfilePage.html"
+                               class="h4 author-name">
+                                <th:block th:text="${userObject.firstName}"></th:block>
+                                <th:block th:text="${userObject.lastName}"></th:block>
+
+                            </a>
+                            <div class="country">
+                                <th:block th:text="${userObject.country}"></th:block>
+                                -
+                                <th:block th:text="${userObject.city}"></th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="ui-block">
+                <div class="news-feed-form">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active inline-items" data-toggle="tab" href="#profile" role="tab"
+                               aria-expanded="true">
+
+                                <svg class="olymp-status-icon">
+                                    <use xlink:href="#olymp-status-icon"></use>
+                                </svg>
+
+                                <span>پروفایل</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link inline-items" data-toggle="tab" href="#security" role="tab"
+                               aria-expanded="false">
+
+                                <svg class="olymp-multimedia-icon">
+                                    <use xlink:href="#olymp-multimedia-icon"></use>
+                                </svg>
+
+                                <span>تنظیمات امنیتی و حساب کاربری</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link inline-items" data-toggle="tab" href="#personal" role="tab"
+                               aria-expanded="false">
+                                <svg class="olymp-blog-icon">
+                                    <use xlink:href="#olymp-blog-icon"></use>
+                                </svg>
+
+                                <span>اطلاعات فردی</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="profile" role="tabpanel" aria-expanded="true">
+                            <form th:action="@{/v1/photo}" method="post" enctype="multipart/form-data">
+                                <div class="col-xl-6 col-lg-12 col-md-12">
+                                    <div class="control-group">
+                                        <label class="control-label">
+                                            تنظیم عکس پروفایل ( حداکثر اندازه 25 مگابابت)
+                                        </label>
+
+                                        <div class="form-group floating-label-form-group controls">
+
+                                            <input class="form-control" type="file" name="photo"
+                                                   id="image_upload_id"
+                                                   style="display:none">
+                                            <a href="#"><i id="icon_image" class="fa fa-4x fa-image"
+                                                           onclick="_uploadImage()"></i></a>
+                                            <span class="material-input"></span>
+
+                                        </div>
+                                        <!--                                <div class="form-group with-icon label-floating is-empty">-->
+                                        <!--                                    <input class="form-control" type="file" name="headerPhoto" id="image_header_upload_id"-->
+                                        <!--                                           style="display:none">-->
+                                        <!--                                    <a href="#"><i id="icon_header_image" class="fa fa-4x fa-image"-->
+                                        <!--                                                   onclick="_uploadHeaderImage()"></i></a>-->
+                                        <!--                                    <span class="material-input"></span>-->
+                                        <!--                                    <label class="control-label">انتخاب و تنظیم عکس قاب پروفایل</label>-->
+                                        <!--                                </div>-->
+                                        <div class="add-options-message">
+                                            <button type="submit" class="btn btn-primary btn-md-2">اعمال تغییرات
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="tab-pane" id="security" role="tabpanel" aria-expanded="true">
+                            <form action="/v1/passwd" name="sentMessage" id="settingFormPassword" novalidate>
+                                <div class="col-xl-6 col-lg-12 col-md-12">
+                                    <div class="control-group">
+                                        <label>رمز عبور قبلی</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="password" class="form-control" id="oldPassword"
+                                                   name="oldPassword"
+                                                   required
+                                                   data-validation-required-message="رمز عبور قدیمی را وارد کنید">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>رمز عبور جدید</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="password" class="form-control" id="newPassword"
+                                                   name="newPassword"
+                                                   required
+                                                   data-validation-required-message="رمز عبور جدید را وارد کنید">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>تکرار رمز عبور جدید</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="password" class="form-control" id="reNewPassword"
+                                                   name="reNewPassword"
+                                                   required
+                                                   data-validation-required-message="رمز عبور جدید را مجددا وارد کنید">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="add-options-message">
+                                        <button type="submit" class="btn btn-primary btn-md-2">اعمال تغییرات
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="personal" role="tabpanel" aria-expanded="true">
+                            <div class="col-xl-6 col-lg-12 col-md-12">
+                                <form th:action="@{/v1/info}" name="sentMessage" method="post" novalidate>
+                                    <div class="control-group">
+                                        <label>نام</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="text" th:value="${userObject.firstName}"
+                                                   class="form-control"
+                                                   name="firstName"
+                                                   required data-validation-required-message="نام">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>نام خانوادگی</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="text" th:value="${userObject.lastName}"
+                                                   class="form-control"
+                                                   name="lastName"
+                                                   required data-validation-required-message="نام خانوادگی">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>بیوگرافی</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="text" th:value="${userObject.bio}" class="form-control"
+                                                   name="bio"
+                                                   required
+                                                   data-validation-required-message="بیوگرافی ( در مورد خودتان)">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>شهر</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="text" th:value="${userObject.city}"
+                                                   class="form-control"
+                                                   name="city"
+                                                   required
+                                                   data-validation-required-message="شهر">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>کشور</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="text" th:value="${userObject.country}"
+                                                   class="form-control"
+                                                   name="country"
+                                                   required data-validation-required-message="کشور">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>شماره تلفن</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="text" th:value="${userObject.phoneNumber}"
+                                                   class="form-control"
+                                                   name="phoneNumber" required
+                                                   data-validation-required-message="شماره تلفن">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>وضعیت</label>
+                                        <div class="form-group floating-label-form-group controls">
+                                            <input type="text" th:value="${userObject.status}"
+                                                   class="form-control"
+                                                   name="status"
+                                                   required data-validation-required-message="وضعیت">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>
+                                    <div class="add-options-message">
+                                        <button type="submit" class="btn btn-primary btn-md-2">اعمال تغییرات
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer       -->
+    <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="sub-footer-copyright" style="color: #ffff;">
+						<span>
+							<a href="/" style="color: #ffff;">EXBORD</a> تمام حقوق مادی و معنوی سایت محفوظ است
+						</span>
+        </div>
+    </div>
+
+    <a class="back-to-top" href="#">
+        <img src="nui/svg-icons/back-to-top.svg" alt="arrow" class="back-icon">
+    </a>
+</div>
+
+<!-- JS Scripts -->
+<script src="nui/js/jquery-3.2.1.js"></script>
+<script src="nui/js/jquery.appear.js"></script>
+<script src="nui/js/jquery.mousewheel.js"></script>
+<script src="nui/js/perfect-scrollbar.js"></script>
+<script src="nui/js/jquery.matchHeight.js"></script>
+<script src="nui/js/svgxuse.js"></script>
+<script src="nui/js/imagesloaded.pkgd.js"></script>
+<script src="nui/js/Headroom.js"></script>
+<script src="nui/js/velocity.js"></script>
+<script src="nui/js/ScrollMagic.js"></script>
+<script src="nui/js/jquery.waypoints.js"></script>
+<script src="nui/js/jquery.countTo.js"></script>
+<script src="nui/js/popper.min.js"></script>
+<script src="nui/js/material.min.js"></script>
+<script src="nui/js/bootstrap-select.js"></script>
+<script src="nui/js/smooth-scroll.js"></script>
+<script src="nui/js/selectize.js"></script>
+<script src="nui/js/swiper.jquery.js"></script>
+<script src="nui/js/moment.js"></script>
+<script src="nui/js/daterangepicker.js"></script>
+<script src="nui/js/simplecalendar.js"></script>
+<script src="nui/js/fullcalendar.js"></script>
+<script src="nui/js/isotope.pkgd.js"></script>
+<script src="nui/js/ajax-pagination.js"></script>
+<script src="nui/js/Chart.js"></script>
+<script src="nui/js/chartjs-plugin-deferred.js"></script>
+<script src="nui/js/circle-progress.js"></script>
+<script src="nui/js/loader.js"></script>
+<script src="nui/js/run-chart.js"></script>
+<script src="nui/js/jquery.magnific-popup.js"></script>
+<script src="nui/js/jquery.gifplayer.js"></script>
+<script src="nui/js/mediaelement-و-player.js"></script>
+<script src="nui/js/mediaelement-playlist-plugin.min.js"></script>
+<script src="nui/js/ha-solardate.min.js"></script>
+<script src="nui/js/ha-datetimepicker.min.js"></script>
+<!--<script src="nui/js/exbord-utils.js"></script>-->
+<script src="nui/js/base-init.js"></script>
+<script defer src="fonts/fontawesome-all.js"></script>
+<script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script>
+                    function _uploadImage(){
+                document.getElementById('image_upload_id').click();
+                }
+
+                    function _uploadHeaderImage(){
+                document.getElementById('image_header_upload_id').click();
+                }
+
+
+
+
+</script>
+
+
+</body>
+</html>

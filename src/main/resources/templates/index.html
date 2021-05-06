@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>اکسبورد</title>
+
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Main Font -->
+    <script src="nui/js/webfontloader.min.js"></script>
+    <script>
+		WebFont.load({
+			google: {
+				families: ['Roboto:300,400,500,700:latin']
+			}
+		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-grid.css">
+
+    <!-- Main Styles CSS -->
+    <link rel="stylesheet" type="text/css" href="nui/css/main.min.css">
+
+</head>
+
+<body>
+<div class="fixed-sidebar">
+    <div class="fixed-sidebar-left sidebar--small" id="sidebar-left">
+
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="اکسبورد">
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="بازکردن منو">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="/share">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="اشتراک تجربه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنظیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-logout-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exbord">
+                        <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
+                             data-placement="right"
+                             data-original-title="درباره اسکبورد">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1">
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="اکسبورد">
+            </div>
+            <div class="title-block">
+                <h6 class="logo-title">اکسبورد</h6>
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-close-icon left-menu-icon">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">بستن منو</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/">
+                        <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خانه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خانه</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ثبت نام</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ورود</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خروج</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنطیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">تنظیمات</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/share">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="اشتراک تجربه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">اشتراک تجربه</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exbord">
+                        <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
+                             data-placement="right"
+                             data-original-title="درباره اکسبورد">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">درباره اکسبورد</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div th:if="${username != 'anonymousUser' and  username !=null }" class="profile-completion">
+
+                <div class="skills-item">
+                    <div class="skills-item-info">
+                        <span class="skills-item-title">تکمیل مشخصات کاربری</span>
+                        <span class="skills-item-count"><span class="count-animate" data-speed="1000"
+                                                              data-refresh-interval="50" data-to="76"
+                                                              data-from="0"></span><span class="units">76%</span></span>
+                    </div>
+                    <div class="skills-item-meter">
+                        <span class="skills-item-meter-active bg-primary" style="width: 76%"></span>
+                    </div>
+                </div>
+
+                <span>اطلاعات <a
+                        href="/setting">حساب کاربری</a> را تکمیل کنید تا کاربران بتوانند شما را براحتی پیدا کنند!</span>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fixed-sidebar fixed-sidebar-responsive">
+
+    <div class="fixed-sidebar-left sidebar--small" id="sidebar-left-responsive">
+        <a href="/" class="logo js-sidebar-open">
+            <img src="nui/img/logo.png" alt="اکسبورد">
+        </a>
+
+    </div>
+
+    <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1-responsive">
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="اکسبورد">
+            </div>
+            <div class="title-block">
+                <h6 class="logo-title">اکسبورد</h6>
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-close-icon left-menu-icon">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">بستن منو</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/signup">
+                        <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خانه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خانه</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ثبت نام</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ورود</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خروج</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنطیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">تنظیمات</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/share">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="اشتراک تجربه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">اشتراک تجربه</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exbord">
+                        <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
+                             data-placement="right"
+                             data-original-title="درباره اکسبورد">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">درباره اکسبورد</span>
+                    </a>
+                </li>
+                <li>
+                    <form th:action="@{/}" method="get">
+                        <div class="form-group with-button">
+                            <input name="q" class="form-control"
+                                   th:placeholder="'در بین '+${allTags}+' تجربه موجود جستجو کنید'"
+                                   type="text">
+                            <button type="submit">
+                                <svg class="olymp-happy-face-icon">
+                                    <use xlink:href="svg-icons/sprites/icons.svg#olymp-happy-face-icon"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+
+            <div th:if="${username != 'anonymousUser' and  username !=null }" class="profile-completion">
+
+                <div class="skills-item">
+                    <div class="skills-item-info">
+                        <span class="skills-item-title">تکمیل مشخصات کاربری</span>
+                        <span class="skills-item-count"><span class="count-animate" data-speed="1000"
+                                                              data-refresh-interval="50" data-to="76"
+                                                              data-from="0"></span><span class="units">76%</span></span>
+                    </div>
+                    <div class="skills-item-meter">
+                        <span class="skills-item-meter-active bg-primary" style="width: 76%"></span>
+                    </div>
+                </div>
+
+                <span>اطلاعات <a
+                        href="/setting">حساب کاربری</a> را تکمیل کنید تا کاربران بتوانند شما را براحتی پیدا کنند!</span>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="fixed-sidebar right fixed-sidebar-responsive">
+
+    <div class="fixed-sidebar-right sidebar--small" id="sidebar-right-responsive_1">
+        <a th:if="${isMobile=='true'}" href="/share" class="olympus-chat inline-items">
+            <svg class="olymp-chat---messages-icon">
+                <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-camera-icon"></use>
+            </svg>
+        </a>
+
+        <a class="olympus-chat inline-items" th:if="${isMobile=='false'}" href="nui/download/exbord.apk"><i
+                class="fa fa-2x fa-android" aria-hidden="true"></i>برنامه موبایل</a>
+
+    </div>
+</div>
+
+<header class="header" id="site-header">
+
+    <div class="page-title">
+        <h6>
+            ما به نقش تجربه در موفقیت زندگی انسان‌ها ایمان داریم، در اسکبورد تجربیات خود را به اشتراک بگذارید و از
+            تجربیات دیگران استفاده کنید
+        </h6>
+    </div>
+    <div class="page-download-app">
+        <h3>
+            <a href="nui/download/exbord.apk"><i class="fa fa-android" aria-hidden="true"></i></a>
+            <a href="#"><i class="fa fa-apple" aria-hidden="true"></i></a>
+        </h3>
+    </div>
+</header>
+
+
+<header class="header header-responsive" id="site-header-responsive">
+
+</header>
+
+<!-- ... end Responsive Header-BP -->
+<div class="header-spacer"></div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+
+        </div>
+        <div class="col col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12">
+            <form th:action="@{/}" method="get">
+                <div class="form-group with-button">
+                    <input style="background-color: #fcfde6cc;     border: 1px solid #ff5e3a;" name="q"
+                           class="form-control"
+                           th:placeholder="'در بین '+${allTags}+' تجربه موجود جستجو کنید'"
+                           type="text">
+                    <button type="submit">
+                        <svg class="olymp-happy-face-icon">
+                            <use xlink:href="svg-icons/sprites/icons.svg#olymp-camera-icon"></use>
+                        </svg>
+                    </button>
+
+
+                </div>
+            </form>
+            <div class="col-xs-1" align="center">
+                <a href="/"><i class="fa fa-heart">همه تجربه‌ها را نشان بده</i></a> |
+                <a th:href="@{/(q=${random})}"><i class="fa fa-heart-o">یا شانس و یا اقبال</i></a>
+            </div>
+
+        </div>
+        <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <hr class="star-light">
+            <div class="col-xs-1" align="center">
+                <label class="text-center">داغ‌ترین #هشتک‌ها</label>
+            </div>
+            <br>
+            <h6 class="text-center">
+                <th:block th:each="item : ${trends}">
+                    &nbsp;&nbsp;
+                    <a th:href="@{/(q=${item.key})}">
+                        <th:block th:text="'#'+${item.key}"></th:block>
+                    </a>
+                    &nbsp;&nbsp;
+                </th:block>
+            </h6>
+            <hr class="star-light">
+        </div>
+    </div>
+    <div class="row row-fluid">
+
+        <!-- Main Content Post Versions -->
+        <div class="col col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
+
+            <div th:each="item : ${experienceList1}" class="ui-block">
+
+                <article class="hentry post">
+
+                    <div class="post__author author vcard inline-items">
+
+                        <img th:src="@{'user-photos/'+${item.authorId}+'/thumbnail.picture.jpg'}" alt="کاربر">
+
+                        <div class="author-date">
+                            <a class="h6 post__author-name fn" th:href="@{/profile(username=${item.authorName})}">
+                                <th:block th:text="${item.authorName}"></th:block>
+                            </a>
+                            <div class="post__date">
+                                <time class="published" datetime="2017-03-24T18:18">
+                                    <th:block
+                                            th:text="${#temporals.format(item.timeStamp,'HH:mm yyyy-MM-dd')}"></th:block>
+                                </time>
+                            </div>
+                        </div>
+
+                        <div class="more">
+                            <svg class="olymp-three-dots-icon">
+                                <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-three-dots-icon"></use>
+                            </svg>
+                            <ul class="more-dropdown">
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SEXUAL')};f()">گزارش
+                                        محتوای
+                                        غیر‌اخلاقی و پورن</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SOCIAL')};f()">گزارش
+                                        محتوای
+                                        ناهنجاری اجتماعی</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=CRIMINAL')};f()">گزارش
+                                        محتوای
+                                        خشونت </a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SPAM')};f()">گزارش
+                                        اسپم و
+                                        شایعه</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=OTHER')};f()">موارد
+                                        دیگر</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <p th:text="${item.body}"></p>
+
+                    <div th:if="${not #lists.isEmpty(item.video)}" th:each="clip : ${item.video}" class="post-video">
+                        <div class="video-thumb f-none">
+                            <img th:src="@{'user-photos/'+${item.uuid}+'/'+${clip}+'.png'}" alt="photo">
+                            <a th:href="@{'user-photos/'+${item.uuid}+'/'+${clip}}" class="play-video">
+                                <svg class="olymp-play-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-play-icon"></use>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div th:if="${not #lists.isEmpty(item.photos)}">
+                        <div th:each="pic :${item.photos} " class="post-block-photo js-zoom-gallery">
+
+                            <a th:if="${#lists.size(item.photos) > 1}"
+                               th:href="@{'user-photos/'+${item.uuid}+'/'+${pic}}" class="half-width"><img
+                                    th:src="@{'user-photos/'+${item.uuid}+'/thumbnail.'+${pic}}" alt="photo"></a>
+
+                            <a th:fi="${#lists.size(item.photos)  > 1}"
+                               th:href="@{'user-photos/'+${item.uuid}+'/'+${pic}}"><img
+                                    th:src="@{'user-photos/'+${item.uuid}+'/thumbnail.'+${pic}}" alt="photo"></a>
+                        </div>
+
+                    </div>
+                    <div>
+                        <p>
+                            <th:block th:each="tagItem : ${item.tags}">
+                                &nbsp;&nbsp;
+                                <a class="link-post" th:href="@{/(q=${tagItem})}">
+                                    <th:block th:text="'#'+${tagItem}"></th:block>
+                                </a>
+                            </th:block>
+                        </p>
+                    </div>
+                    <div class="post-additional-info inline-items">
+                        <div class="comments-shared">
+                            <a class="post-add-icon inline-items"
+                               th:onclick="var f=function(){const res = fetch('/v1/like?uuid=[(${item.uuid})]')};f()">
+                                <i class="fa fa-lg fa-thumbs-up"></i>
+                                <th:span th:text="${item.liked}"></th:span>
+                            </a>
+
+                            <a class="post-add-icon inline-items"
+                               th:onclick="var f=function(){const res = fetch('/v1/dislike?uuid=[(${item.uuid})]')};f()">
+                                <i class="fa fa-lg fa-thumbs-down"></i>
+                                <th:span th:text="${item.disliked}"></th:span>
+                            </a>
+
+                            <ul th:if="${item.liked>5}" class="friends-harmonic">
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic9.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic10.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic7.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic8.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic11.jpg" alt="friend">
+                                    </a>
+                                </li>
+                            </ul>
+                            <div th:if="${item.liked>5}" class="names-people-likes">
+                                <a href="#">مینا</a>, <a href="#">زهرا</a> و
+                                <br>
+                                <th:block th:text="${item.liked}+'نفر دیگر پسندیدند'"></th:block>
+                            </div>
+                            <a href="#" class="post-add-icon inline-items">
+                                <svg class="olymp-speech-balloon-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-speech-balloon-icon"></use>
+                                </svg>
+                                <span>0</span>
+                            </a>
+
+                            <a href="#" class="post-add-icon inline-items">
+                                <svg class="olymp-share-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-icon"></use>
+                                </svg>
+                                <span>0</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </article>
+
+                <!-- ... end Post -->
+
+
+            </div>
+
+
+        </div>
+        <div class="col col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
+
+            <div th:each="item : ${experienceList2}" class="ui-block">
+
+                <article class="hentry post">
+
+                    <div class="post__author author vcard inline-items">
+
+                        <img th:src="@{'user-photos/'+${item.authorId}+'/thumbnail.picture.jpg'}" alt="کاربر">
+
+                        <div class="author-date">
+                            <a class="h6 post__author-name fn" th:href="@{/profile(username=${item.authorName})}">
+                                <th:block th:text="${item.authorName}"></th:block>
+                            </a>
+                            <div class="post__date">
+                                <time class="published" datetime="2017-03-24T18:18">
+                                    <th:block
+                                            th:text="${#temporals.format(item.timeStamp,'HH:mm yyyy-MM-dd')}"></th:block>
+                                </time>
+                            </div>
+                        </div>
+
+                        <div class="more">
+                            <svg class="olymp-three-dots-icon">
+                                <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-three-dots-icon"></use>
+                            </svg>
+                            <ul class="more-dropdown">
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SEXUAL')};f()">گزارش
+                                        محتوای
+                                        غیر‌اخلاقی و پورن</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SOCIAL')};f()">گزارش
+                                        محتوای
+                                        ناهنجاری اجتماعی</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=CRIMINAL')};f()">گزارش
+                                        محتوای
+                                        خشونت </a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SPAM')};f()">گزارش
+                                        اسپم و
+                                        شایعه</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=OTHER')};f()">موارد
+                                        دیگر</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <p th:text="${item.body}"></p>
+
+                    <div th:if="${not #lists.isEmpty(item.video)}" th:each="clip : ${item.video}" class="post-video">
+                        <div class="video-thumb f-none">
+                            <img th:src="@{'user-photos/'+${item.uuid}+'/'+${clip}+'.png'}" alt="photo">
+                            <a th:href="@{'user-photos/'+${item.uuid}+'/'+${clip}}" class="play-video">
+                                <svg class="olymp-play-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-play-icon"></use>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div th:if="${not #lists.isEmpty(item.photos)}">
+                        <div th:each="pic :${item.photos} " class="post-block-photo js-zoom-gallery">
+
+                            <a th:if="${#lists.size(item.photos) > 1}"
+                               th:href="@{'user-photos/'+${item.uuid}+'/'+${pic}}" class="half-width"><img
+                                    th:src="@{'user-photos/'+${item.uuid}+'/thumbnail.'+${pic}}" alt="photo"></a>
+
+                            <a th:fi="${#lists.size(item.photos)  > 1}"
+                               th:href="@{'user-photos/'+${item.uuid}+'/'+${pic}}"><img
+                                    th:src="@{'user-photos/'+${item.uuid}+'/thumbnail.'+${pic}}" alt="photo"></a>
+                        </div>
+
+                    </div>
+                    <div>
+                        <p>
+                            <th:block th:each="tagItem : ${item.tags}">
+                                &nbsp;&nbsp;
+                                <a class="link-post" th:href="@{/(q=${tagItem})}">
+                                    <th:block th:text="'#'+${tagItem}"></th:block>
+                                </a>
+                            </th:block>
+                        </p>
+                    </div>
+                    <div class="post-additional-info inline-items">
+                        <div class="comments-shared">
+                            <a class="post-add-icon inline-items"
+                               th:onclick="var f=function(){const res = fetch('/v1/like?uuid=[(${item.uuid})]')};f()">
+                                <i class="fa fa-lg fa-thumbs-up"></i>
+                                <th:span th:text="${item.liked}"></th:span>
+                            </a>
+
+                            <a class="post-add-icon inline-items"
+                               th:onclick="var f=function(){const res = fetch('/v1/dislike?uuid=[(${item.uuid})]')};f()">
+                                <i class="fa fa-lg fa-thumbs-down"></i>
+                                <th:span th:text="${item.disliked}"></th:span>
+                            </a>
+
+                            <ul th:if="${item.liked>5}" class="friends-harmonic">
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic9.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic10.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic7.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic8.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic11.jpg" alt="friend">
+                                    </a>
+                                </li>
+                            </ul>
+                            <div th:if="${item.liked>5}" class="names-people-likes">
+                                <a href="#">مینا</a>, <a href="#">زهرا</a> و
+                                <br>
+                                <th:block th:text="${item.liked}+'نفر دیگر پسندیدند'"></th:block>
+                            </div>
+                            <a href="#" class="post-add-icon inline-items">
+                                <svg class="olymp-speech-balloon-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-speech-balloon-icon"></use>
+                                </svg>
+                                <span>0</span>
+                            </a>
+
+                            <a href="#" class="post-add-icon inline-items">
+                                <svg class="olymp-share-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-icon"></use>
+                                </svg>
+                                <span>0</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </article>
+
+                <!-- ... end Post -->
+
+
+            </div>
+
+
+        </div>
+        <div class="col col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
+
+            <div th:each="item : ${experienceList3}" class="ui-block">
+
+                <article class="hentry post">
+
+                    <div class="post__author author vcard inline-items">
+
+                        <img th:src="@{'user-photos/'+${item.authorId}+'/thumbnail.picture.jpg'}" alt="کاربر">
+
+                        <div class="author-date">
+                            <a class="h6 post__author-name fn" th:href="@{/profile(username=${item.authorName})}">
+                                <th:block th:text="${item.authorName}"></th:block>
+                            </a>
+                            <div class="post__date">
+                                <time class="published" datetime="2017-03-24T18:18">
+                                    <th:block
+                                            th:text="${#temporals.format(item.timeStamp,'HH:mm yyyy-MM-dd')}"></th:block>
+                                </time>
+                            </div>
+                        </div>
+
+                        <div class="more">
+                            <svg class="olymp-three-dots-icon">
+                                <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-three-dots-icon"></use>
+                            </svg>
+                            <ul class="more-dropdown">
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SEXUAL')};f()">گزارش
+                                        محتوای
+                                        غیر‌اخلاقی و پورن</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SOCIAL')};f()">گزارش
+                                        محتوای
+                                        ناهنجاری اجتماعی</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=CRIMINAL')};f()">گزارش
+                                        محتوای
+                                        خشونت </a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SPAM')};f()">گزارش
+                                        اسپم و
+                                        شایعه</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=OTHER')};f()">موارد
+                                        دیگر</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <p th:text="${item.body}"></p>
+
+                    <div th:if="${not #lists.isEmpty(item.video)}" th:each="clip : ${item.video}" class="post-video">
+                        <div class="video-thumb f-none">
+                            <img th:src="@{'user-photos/'+${item.uuid}+'/'+${clip}+'.png'}" alt="photo">
+                            <a th:href="@{'user-photos/'+${item.uuid}+'/'+${clip}}" class="play-video">
+                                <svg class="olymp-play-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-play-icon"></use>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div th:if="${not #lists.isEmpty(item.photos)}">
+                        <div th:each="pic :${item.photos} " class="post-block-photo js-zoom-gallery">
+
+                            <a th:if="${#lists.size(item.photos) > 1}"
+                               th:href="@{'user-photos/'+${item.uuid}+'/'+${pic}}" class="half-width"><img
+                                    th:src="@{'user-photos/'+${item.uuid}+'/thumbnail.'+${pic}}" alt="photo"></a>
+
+                            <a th:fi="${#lists.size(item.photos)  > 1}"
+                               th:href="@{'user-photos/'+${item.uuid}+'/'+${pic}}"><img
+                                    th:src="@{'user-photos/'+${item.uuid}+'/thumbnail.'+${pic}}" alt="photo"></a>
+                        </div>
+
+                    </div>
+                    <div>
+                        <p>
+                            <th:block th:each="tagItem : ${item.tags}">
+                                &nbsp;&nbsp;
+                                <a class="link-post" th:href="@{/(q=${tagItem})}">
+                                    <th:block th:text="'#'+${tagItem}"></th:block>
+                                </a>
+                            </th:block>
+                        </p>
+                    </div>
+                    <div class="post-additional-info inline-items">
+                        <div class="comments-shared">
+                            <a class="post-add-icon inline-items"
+                               th:onclick="var f=function(){const res = fetch('/v1/like?uuid=[(${item.uuid})]')};f()">
+                                <i class="fa fa-lg fa-thumbs-up"></i>
+                                <th:span th:text="${item.liked}"></th:span>
+                            </a>
+
+                            <a class="post-add-icon inline-items"
+                               th:onclick="var f=function(){const res = fetch('/v1/dislike?uuid=[(${item.uuid})]')};f()">
+                                <i class="fa fa-lg fa-thumbs-down"></i>
+                                <th:span th:text="${item.disliked}"></th:span>
+                            </a>
+
+                            <ul th:if="${item.liked>5}" class="friends-harmonic">
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic9.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic10.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic7.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic8.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic11.jpg" alt="friend">
+                                    </a>
+                                </li>
+                            </ul>
+                            <div th:if="${item.liked>5}" class="names-people-likes">
+                                <a href="#">مینا</a>, <a href="#">زهرا</a> و
+                                <br>
+                                <th:block th:text="${item.liked}+'نفر دیگر پسندیدند'"></th:block>
+                            </div>
+                            <a href="#" class="post-add-icon inline-items">
+                                <svg class="olymp-speech-balloon-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-speech-balloon-icon"></use>
+                                </svg>
+                                <span>0</span>
+                            </a>
+
+                            <a href="#" class="post-add-icon inline-items">
+                                <svg class="olymp-share-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-icon"></use>
+                                </svg>
+                                <span>0</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </article>
+
+                <!-- ... end Post -->
+
+
+            </div>
+
+
+        </div>
+        <div class="col col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
+
+            <div th:each="item : ${experienceList4}" class="ui-block">
+
+                <article class="hentry post">
+
+                    <div class="post__author author vcard inline-items">
+
+                        <img th:src="@{'user-photos/'+${item.authorId}+'/thumbnail.picture.jpg'}" alt="کاربر">
+
+                        <div class="author-date">
+                            <a class="h6 post__author-name fn" th:href="@{/profile(username=${item.authorName})}">
+                                <th:block th:text="${item.authorName}"></th:block>
+                            </a>
+                            <div class="post__date">
+                                <time class="published" datetime="2017-03-24T18:18">
+                                    <th:block
+                                            th:text="${#temporals.format(item.timeStamp,'HH:mm yyyy-MM-dd')}"></th:block>
+                                </time>
+                            </div>
+                        </div>
+
+                        <div class="more">
+                            <svg class="olymp-three-dots-icon">
+                                <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-three-dots-icon"></use>
+                            </svg>
+                            <ul class="more-dropdown">
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SEXUAL')};f()">گزارش
+                                        محتوای
+                                        غیر‌اخلاقی و پورن</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SOCIAL')};f()">گزارش
+                                        محتوای
+                                        ناهنجاری اجتماعی</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=CRIMINAL')};f()">گزارش
+                                        محتوای
+                                        خشونت </a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=SPAM')};f()">گزارش
+                                        اسپم و
+                                        شایعه</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="var f=function(){const res = fetch('/v1/report?uuid=[(${item.uuid})]&reportType=OTHER')};f()">موارد
+                                        دیگر</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <p th:text="${item.body}"></p>
+
+                    <div th:if="${not #lists.isEmpty(item.video)}" th:each="clip : ${item.video}" class="post-video">
+                        <div class="video-thumb f-none">
+                            <img th:src="@{'user-photos/'+${item.uuid}+'/'+${clip}+'.png'}" alt="photo">
+                            <a th:href="@{'user-photos/'+${item.uuid}+'/'+${clip}}" class="play-video">
+                                <svg class="olymp-play-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-play-icon"></use>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div th:if="${not #lists.isEmpty(item.photos)}">
+                        <div th:each="pic :${item.photos} " class="post-block-photo js-zoom-gallery">
+
+                            <a th:if="${#lists.size(item.photos) > 1}"
+                               th:href="@{'user-photos/'+${item.uuid}+'/'+${pic}}" class="half-width"><img
+                                    th:src="@{'user-photos/'+${item.uuid}+'/thumbnail.'+${pic}}" alt="photo"></a>
+
+                            <a th:fi="${#lists.size(item.photos)  > 1}"
+                               th:href="@{'user-photos/'+${item.uuid}+'/'+${pic}}"><img
+                                    th:src="@{'user-photos/'+${item.uuid}+'/thumbnail.'+${pic}}" alt="photo"></a>
+                        </div>
+
+                    </div>
+                    <div>
+                        <p>
+                            <th:block th:each="tagItem : ${item.tags}">
+                                &nbsp;&nbsp;
+                                <a class="link-post" th:href="@{/(q=${tagItem})}">
+                                    <th:block th:text="'#'+${tagItem}"></th:block>
+                                </a>
+                            </th:block>
+                        </p>
+                    </div>
+                    <div class="post-additional-info inline-items">
+                        <div class="comments-shared">
+                            <a class="post-add-icon inline-items"
+                               th:onclick="var f=function(){const res = fetch('/v1/like?uuid=[(${item.uuid})]')};f()">
+                                <i class="fa fa-lg fa-thumbs-up"></i>
+                                <th:span th:text="${item.liked}"></th:span>
+                            </a>
+
+                            <a class="post-add-icon inline-items"
+                               th:onclick="var f=function(){const res = fetch('/v1/dislike?uuid=[(${item.uuid})]')};f()">
+                                <i class="fa fa-lg fa-thumbs-down"></i>
+                                <th:span th:text="${item.disliked}"></th:span>
+                            </a>
+
+                            <ul th:if="${item.liked>5}" class="friends-harmonic">
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic9.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic10.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic7.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic8.jpg" alt="friend">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="nui/img/friend-harmonic11.jpg" alt="friend">
+                                    </a>
+                                </li>
+                            </ul>
+                            <div th:if="${item.liked>5}" class="names-people-likes">
+                                <a href="#">مینا</a>, <a href="#">زهرا</a> و
+                                <br>
+                                <th:block th:text="${item.liked}+'نفر دیگر پسندیدند'"></th:block>
+                            </div>
+                            <a href="#" class="post-add-icon inline-items">
+                                <svg class="olymp-speech-balloon-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-speech-balloon-icon"></use>
+                                </svg>
+                                <span>0</span>
+                            </a>
+
+                            <a href="#" class="post-add-icon inline-items">
+                                <svg class="olymp-share-icon">
+                                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-icon"></use>
+                                </svg>
+                                <span>0</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </article>
+
+                <!-- ... end Post -->
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- paging        -->
+        <div th:if="${hasNexPage}=='true'" class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"><a class="page-link" th:href="@{/(q=${q},page=${prevPage})}">قبلی</a></li>
+                    <li class="page-item"><a class="page-link" th:href="@{/(q=${q},page=${nextPage})}">بعدی</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- footer       -->
+        <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="sub-footer-copyright" style="color: #ffff;">
+						<span>
+							<a href="/" style="color: #ffff;">EXBORD</a> تمام حقوق مادی و معنوی سایت محفوظ است
+						</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<a class="back-to-top" href="#">
+    <img src="nui/svg-icons/back-to-top.svg" alt="arrow" class="back-icon">
+</a>
+
+
+<!-- JS Scripts -->
+<script src="nui/js/jquery-3.2.1.js"></script>
+<script src="nui/js/jquery.appear.js"></script>
+<script src="nui/js/jquery.mousewheel.js"></script>
+<script src="nui/js/perfect-scrollbar.js"></script>
+<script src="nui/js/jquery.matchHeight.js"></script>
+<script src="nui/js/svgxuse.js"></script>
+<script src="nui/js/imagesloaded.pkgd.js"></script>
+<script src="nui/js/Headroom.js"></script>
+<script src="nui/js/velocity.js"></script>
+<script src="nui/js/ScrollMagic.js"></script>
+<script src="nui/js/jquery.waypoints.js"></script>
+<script src="nui/js/jquery.countTo.js"></script>
+<script src="nui/js/popper.min.js"></script>
+<script src="nui/js/material.min.js"></script>
+<script src="nui/js/bootstrap-select.js"></script>
+<script src="nui/js/smooth-scroll.js"></script>
+<script src="nui/js/selectize.js"></script>
+<script src="nui/js/swiper.jquery.js"></script>
+<script src="nui/js/moment.js"></script>
+<script src="nui/js/daterangepicker.js"></script>
+<script src="nui/js/simplecalendar.js"></script>
+<script src="nui/js/fullcalendar.js"></script>
+<script src="nui/js/isotope.pkgd.js"></script>
+<script src="nui/js/ajax-pagination.js"></script>
+<script src="nui/js/Chart.js"></script>
+<script src="nui/js/chartjs-plugin-deferred.js"></script>
+<script src="nui/js/circle-progress.js"></script>
+<script src="nui/js/loader.js"></script>
+<script src="nui/js/run-chart.js"></script>
+<script src="nui/js/jquery.magnific-popup.js"></script>
+<script src="nui/js/jquery.gifplayer.js"></script>
+<script src="nui/js/mediaelement-و-player.js"></script>
+<script src="nui/js/mediaelement-playlist-plugin.min.js"></script>
+<script src="nui/js/ha-solardate.min.js"></script>
+<script src="nui/js/ha-datetimepicker.min.js"></script>
+<!--<script src="nui/js/exbord-utils.js"></script>-->
+<script src="nui/js/base-init.js"></script>
+<script defer src="fonts/fontawesome-all.js"></script>
+<script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>

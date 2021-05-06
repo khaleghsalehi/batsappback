@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="no-js" lang="fa-IR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="dc:creator" content="اکسبورد Exbord.ir"/>
+    <meta name="description" content="اشتراک تجربه"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="اکسبورد شبکه اجتماعی برای اشتراک تجربیات"/>
+    <meta property="og:description" content="اکسبورد شبکه اجتماعی برای اشتراک تجربیات"/>
+    <meta property="og:url" content="htts://exbord.ir"/>
+    <meta property="og:site_name" content="اکسبورد"/>
+    <link href="fa/css/bootstrap.min.css" rel="stylesheet">
+    <link href="fa/css/freelancer.css" rel="stylesheet">
+    <link href="fa/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <title>اکسبورد | شبکه تبادل تجربه</title>
+    <!--[if lt IE 9]>
+    <script src="fa/js/html5shiv.js"></script>
+    <script src="fa/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body id="page-top" class="index">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">منو</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">ExBord</a></div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="hidden"><a href="#page-top"></a></li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }" class="page-scroll"><a href="/logout">خروج</a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }" class="page-scroll">
+                    <a href="/inbox">صندوق پیام</a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }" class="page-scroll"><a
+                        th:href="@{/setting(username=${username})}"
+                        th:text="${username+' خوش آمدید '}"></a>
+
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }" class="page-scroll"><a href="/signup">ثبت‌نام</a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }" class="page-scroll"><a href="/login">ورود</a>
+                </li>
+                <li class="page-scroll"><a href="/share">اشتراک تجربه</a></li>
+                <li class="page-scroll"><a href="/search">جستجو</a></li>
+                <li class="page-scroll"><a href="/">خانه</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<header>
+    <div class="container">
+        <div>
+            <img class="img-responsive" src="fa/img/share.png" alt="">
+            <p>نسخه آزمایشی</p>
+            <hr class="star-light">
+            <form name="sentExperience" class="search" id="sentExperienceForm"
+                  th:action="@{/v1/saveMessage(uuid=${receiver})}"
+                  method="post"
+                  novalidate>
+                <div class="control-group">
+                    <div class="form-group  col-xs-12 controls">
+                        <input type="text" class="form-control"
+                               placeholder="عنوان پیام"
+                               name="subject"
+                               id="subject">
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="form-group  col-xs-12 controls">
+                        <textarea class="form-control span6"
+                                  name="body"
+                                  placeholder="متن پیام"
+                                  id="body" rows="5" required></textarea>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-success btn-lg">ارسال پیام</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</header>
+
+<footer class="text-center">
+    <div class="footer-above">
+        <div class="container">
+            <div>
+                <div class="footer-col col-md-4">
+                    <h4>ارتباط با ما</h4>
+                    <p>تهران، ونک<br>خیابان شیخ‌بهایی جنوبی، خیابان سامان پلاک ۸۷</p>
+                </div>
+                <div class="footer-col col-md-4">
+                    <h3>اکسبورد در شبکه های اجتماعی</h3>
+                    <ul class="list-inline">
+                        <li>
+                            <a target="_blank" href="#" class="btn-social btn-outline"><i
+                                    class="fa fa-fw fa-paper-plane-o"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="" class="btn-social btn-outline"><i
+                                    class="fa fa-fw fa-google-plus"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="" class="btn-social btn-outline"><i
+                                    class="fa fa-fw fa-twitter"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="" class="btn-social btn-outline"><i
+                                    class="fa fa-fw fa-linkedin"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-col col-md-4">
+                    <h4>محرمانگی و حریم خصوصی</h4>
+                    <p>حریم خصوصی و محرمانگی اطلاعات کاربران شبکه <a target="_blank"
+                                                                     href="https://exbord.ir">اکسبورد
+                    </a> در این صفحه مدون شده است.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-below">
+        <div class="container">
+            <div>
+                <div class="col-lg-12"> اکسبورد 1399</div>
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="scroll-top page-scroll visible-xs visible-sm">
+    <a class="btn btn-primary" href="#page-top"><i class="fa fa-chevron-up"></i></a>
+</div>
+
+
+<script src="fa/js/jquery.js"></script>
+<script src="fa/js/bootstrap.min.js"></script>
+<script src="fa/js/jquery.easing.min.js"></script>
+<script src="fa/js/classie.js"></script>
+<script src="fa/js/cbpAnimatedHeader.js"></script>
+<script src="fa/js/jqBootstrapValidation.js"></script>
+<script src="fa/js/contact_me.js"></script>
+<script src="fa/js/freelancer.js"></script>
+</body>
+</html>
