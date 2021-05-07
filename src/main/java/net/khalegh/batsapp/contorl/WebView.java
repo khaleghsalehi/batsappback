@@ -70,6 +70,7 @@ public class WebView {
         if (auth.isAuthenticated()) {
             model.addAttribute("username", auth.getName());
             userInfo = userRepo.findByUserName(auth.getName());
+            log.info("user uuid -> "+ userInfo.getUuid());
             List<Command> command;
             // initialize
             model.addAttribute("controlStatus", "unknown");

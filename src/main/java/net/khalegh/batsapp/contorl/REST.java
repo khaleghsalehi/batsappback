@@ -4,22 +4,29 @@ import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
+import net.khalegh.batsapp.service.FileUploadService;
 import net.khalegh.batsapp.service.MyUserPrinciple;
+import net.khalegh.batsapp.service.User;
 import net.khalegh.batsapp.tools.Video;
 import net.khalegh.batsapp.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import javax.management.remote.JMXAuthenticator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -37,7 +44,9 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 @CrossOrigin(origins = "*")
+
 @RestController
 public class REST {
     private static final Logger log = LoggerFactory.getLogger(WebView.class);
@@ -76,6 +85,14 @@ public class REST {
     @Autowired
     CommandRepo commandRepo;
 
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    FileUploadService fileUploadService;
+
+
     private final static String VERSION = "0.0.1";
     private final static String TYPE_INVALID_ERROR = "Error, Invalid or empty type";
     public final static int SPACE_ERROR_USERNAME = -9;
@@ -93,6 +110,29 @@ public class REST {
     private static final String DEFAULT_AVATAR = "avatar.png";
 
 
+
+
+
+    @GetMapping("/v1/getAuthKey")
+    public String getAthKey(@RequestParam(required = true) String username,
+                            @RequestParam(required = true) String password) {
+        log.info("authentication request");
+        UserInfo user = userRepo.findByUserName(username);
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            log.info("user matched ");
+            return user.getUuid().toString();
+        } else {
+            return null;
+        }
+    }
+
+    @PostMapping("/v1/getPic")
+    public void uploadFile(@RequestParam("file") MultipartFile file) {
+        log.info("incoming upload request...");
+        fileUploadService.uploadFile(file);
+    }
+
+
     @GetMapping("/v1/setCommand")
     public void setCommand(@RequestParam(required = true) String cmd,
                            HttpServletResponse response) throws IOException {
@@ -105,6 +145,7 @@ public class REST {
         }
         UserInfo userInfo = new UserInfo();
         userInfo = userRepo.findByUserName(auth.getName());
+        log.info("incoming setCommand from " + userInfo.getUuid());
 
 
         Command command = new Command();
@@ -118,13 +159,20 @@ public class REST {
 
 
     @GetMapping("/v1/getCommand")
-    public String getCommand(@RequestParam(required = true) UUID uuid) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserInfo userInfo = new UserInfo();
-        userInfo = userRepo.findByUserName(auth.getName());
-        List<Command> command;
-        command = commandRepo.getLastCommand(uuid);
-        return command.get(command.size() - 1).getCommandName();
+    public String getCommand(@RequestParam(required = false) UUID uuid) {
+        log.info("incoming getCommand from ");
+//       log.info("incoming getCommand from " + uuid);
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth.isAuthenticated()) {
+//            UserInfo userInfo = new UserInfo();
+//            userInfo = userRepo.findByUserName(auth.getName());
+//            List<Command> command;
+//            command = commandRepo.getLastCommand(uuid);
+//            return command.get(command.size() - 1).getCommandName();
+//        } else {
+//            return "stop";
+//        }
+        return "start";
     }
 
     // TODO: 1/28/21 change GET to POST, also control the input size

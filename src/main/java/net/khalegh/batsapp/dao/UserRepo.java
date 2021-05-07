@@ -14,4 +14,8 @@ public interface UserRepo extends JpaRepository<UserInfo, Long> {
 
     @Query("SELECT u.userName FROM UserInfo u WHERE u.uuid= :uuid")
     String getUserNameByUuid(@Param("uuid") UUID uuid);
+
+    @Query("SELECT u FROM UserInfo u WHERE u.userName= :userName")
+    UserInfo getAuthKey(@Param("userName") String username);
+
 }

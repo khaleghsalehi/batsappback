@@ -105,7 +105,7 @@
                 <li>
                     <a href="/share">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="اشتراک تجربه">
+                             data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
                     </a>
@@ -146,7 +146,7 @@
                     <a href="/exbord">
                         <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
                              data-placement="right"
-                             data-original-title="درباره اسکبورد">
+                             data-original-title="درباره باتساپ">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
                         </svg>
                     </a>
@@ -224,10 +224,10 @@
                 <li>
                     <a href="/share">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="اشتراک تجربه">
+                             data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
-                        <span class="left-menu-title">اشتراک تجربه</span>
+                        <span class="left-menu-title">گزارش فعالیت‌های کودک</span>
                     </a>
                 </li>
                 <li>
@@ -242,24 +242,6 @@
                 </li>
             </ul>
 
-            <div th:if="${username != 'anonymousUser' and  username !=null }" class="profile-completion">
-
-                <div class="skills-item">
-                    <div class="skills-item-info">
-                        <span class="skills-item-title">تکمیل مشخصات کاربری</span>
-                        <span class="skills-item-count"><span class="count-animate" data-speed="1000"
-                                                              data-refresh-interval="50" data-to="76"
-                                                              data-from="0"></span><span class="units">76%</span></span>
-                    </div>
-                    <div class="skills-item-meter">
-                        <span class="skills-item-meter-active bg-primary" style="width: 76%"></span>
-                    </div>
-                </div>
-
-                <span>اطلاعات <a
-                        href="/setting">حساب کاربری</a> را تکمیل کنید تا کاربران بتوانند شما را براحتی پیدا کنند!</span>
-
-            </div>
         </div>
     </div>
 </div>
@@ -343,7 +325,7 @@
                              data-original-title="اشتراک تجربه">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
-                        <span class="left-menu-title">اشتراک تجربه</span>
+                        <span class="left-menu-title">گزارش فعالیت‌های کودک</span>
                     </a>
                 </li>
                 <li>
@@ -356,40 +338,7 @@
                         <span class="left-menu-title">درباره باتساپ</span>
                     </a>
                 </li>
-                <li>
-                    <form th:action="@{/}" method="get">
-                        <div class="form-group with-button">
-                            <input name="q" class="form-control"
-                                   th:placeholder="'در بین '+${allTags}+' تجربه موجود جستجو کنید'"
-                                   type="text">
-                            <button type="submit">
-                                <svg class="olymp-happy-face-icon">
-                                    <use xlink:href="svg-icons/sprites/icons.svg#olymp-happy-face-icon"></use>
-                                </svg>
-                            </button>
-                        </div>
-                    </form>
-                </li>
             </ul>
-
-            <div th:if="${username != 'anonymousUser' and  username !=null }" class="profile-completion">
-
-                <div class="skills-item">
-                    <div class="skills-item-info">
-                        <span class="skills-item-title">تکمیل مشخصات کاربری</span>
-                        <span class="skills-item-count"><span class="count-animate" data-speed="1000"
-                                                              data-refresh-interval="50" data-to="76"
-                                                              data-from="0"></span><span class="units">76%</span></span>
-                    </div>
-                    <div class="skills-item-meter">
-                        <span class="skills-item-meter-active bg-primary" style="width: 76%"></span>
-                    </div>
-                </div>
-
-                <span>اطلاعات <a
-                        href="/setting">حساب کاربری</a> را تکمیل کنید تا کاربران بتوانند شما را براحتی پیدا کنند!</span>
-
-            </div>
         </div>
     </div>
 </div>
@@ -414,7 +363,7 @@
 
     <div class="page-title">
         <h6>
-            کنترل و نظارت بر کودکان
+            صفحه کنترل والدین
         </h6>
     </div>
     <div class="page-download-app">
@@ -460,7 +409,13 @@
                     </a>
                 </div>
             </div>
-
+            <div  class="col-xs-1" align="center">
+                <div class="col-xs-12">
+                    <a href="/v1/report">
+                        <button type="submit" class="btn btn-secondary btn-lg"> مشاهده فعالیت‌های کودک&nbsp;</button>
+                    </a>
+                </div>
+            </div>
 
         </div>
 

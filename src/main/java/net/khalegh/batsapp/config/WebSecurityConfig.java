@@ -3,7 +3,9 @@ package net.khalegh.batsapp.config;
 import net.khalegh.batsapp.service.UserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -17,6 +19,8 @@ import javax.annotation.Resource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
     @Resource
     private UserDetailService userDetailsService;
 
@@ -61,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/v1/setCommand/**","/v1/getCommand/**","/v1/startbot", "/v1/contact", "/exbord", "/v1/reg", "/v1/get", "/signup/**", "/search/**")
+                .antMatchers("/v1/getAuthKey/**", "/v1/**", "/v1/getPic", "/v1/setCommand/**", "/v1/getCommand/**", "/v1/startbot", "/v1/contact", "/exbord", "/v1/reg", "/v1/get", "/signup/**", "/search/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
