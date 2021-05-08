@@ -4,6 +4,7 @@ import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.hibernate.cfg.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -57,6 +61,27 @@ public class WebView {
     CommandRepo commandRepo;
 
 
+    @RequestMapping("/setCommand")
+    public void setCommand(@RequestParam(required = true) String cmd,
+                           HttpServletResponse response) throws IOException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!auth.isAuthenticated()) {
+            response.sendRedirect("/login");
+            return;
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo = userRepo.findByUserName(auth.getName());
+        log.info("incoming setCommand from " + userInfo.getUuid());
+        Command command = new Command();
+        if (cmd.equals("start") || cmd.equals("stop")) {
+            command.setCommandName(cmd);
+            command.setUserId(userInfo.getUuid());
+            commandRepo.save(command);
+            response.sendRedirect("/");
+        }
+    }
+
     @RequestMapping(value = {"", "/", "/index"})
     public String index(@RequestParam(required = false, defaultValue = "") String q,
                         @RequestParam(required = false, defaultValue = "0") int page,
@@ -70,7 +95,7 @@ public class WebView {
         if (auth.isAuthenticated()) {
             model.addAttribute("username", auth.getName());
             userInfo = userRepo.findByUserName(auth.getName());
-            log.info("user uuid -> "+ userInfo.getUuid());
+            log.info("user uuid -> " + userInfo.getUuid());
             List<Command> command;
             // initialize
             model.addAttribute("controlStatus", "unknown");
@@ -101,6 +126,26 @@ public class WebView {
             log.info("Mobile application found, version -> " + request.getHeader("exbord"));
         }
         return "index";
+    }
+
+
+    @RequestMapping("/show")
+    public String showActivities(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserInfo userInfo;
+        ArrayList<String> pics = new ArrayList<String>();
+        if (auth.isAuthenticated()) {
+            userInfo = userRepo.findByUserName(auth.getName());
+            String home = System.getProperty("user.home");
+            String imagePath = home + "/" + userInfo.getUuid();
+            File f = new File(imagePath);
+            String[] fileList = f.list();
+            assert fileList != null;
+            for (String item : fileList)
+                pics.add(userInfo.getUuid() + "/" + item);
+        }
+        model.addAttribute("pics", pics);
+        return "show";
     }
 
 

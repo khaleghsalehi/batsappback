@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/nui/**", "/fa/**", "/assets/css/**",
+                .antMatchers("/v1/**","/nui/**", "/fa/**", "/assets/css/**",
                         "/assets/fonts/**",
                         "/assets/img/**",
                         "/assets/js/**",
@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/v1/getAuthKey/**", "/v1/**", "/v1/getPic", "/v1/setCommand/**", "/v1/getCommand/**", "/v1/startbot", "/v1/contact", "/exbord", "/v1/reg", "/v1/get", "/signup/**", "/search/**")
+                .antMatchers("/v1/getAuthKey/**", "/v1/setCommand/**", "/v1/getCommand/**", "/v1/startbot", "/v1/contact", "/exbord", "/v1/reg", "/v1/get", "/signup/**", "/search/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

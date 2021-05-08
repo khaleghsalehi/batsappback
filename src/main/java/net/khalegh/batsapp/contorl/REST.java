@@ -110,9 +110,6 @@ public class REST {
     private static final String DEFAULT_AVATAR = "avatar.png";
 
 
-
-
-
     @GetMapping("/v1/getAuthKey")
     public String getAthKey(@RequestParam(required = true) String username,
                             @RequestParam(required = true) String password) {
@@ -127,53 +124,43 @@ public class REST {
     }
 
     @PostMapping("/v1/getPic")
-    public void uploadFile(@RequestParam("file") MultipartFile file) {
-        log.info("incoming upload request...");
-        fileUploadService.uploadFile(file);
-    }
-
-
-    @GetMapping("/v1/setCommand")
-    public void setCommand(@RequestParam(required = true) String cmd,
-                           HttpServletResponse response) throws IOException {
-
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!auth.isAuthenticated()) {
-            response.sendRedirect("/login");
-            return;
-        }
-        UserInfo userInfo = new UserInfo();
-        userInfo = userRepo.findByUserName(auth.getName());
-        log.info("incoming setCommand from " + userInfo.getUuid());
-
-
-        Command command = new Command();
-        if (cmd.equals("start") || cmd.equals("stop")) {
-            command.setCommandName(cmd);
-            command.setUserId(userInfo.getUuid());
-            commandRepo.save(command);
-            response.sendRedirect("/");
+    public void uploadFile(@RequestParam("file") MultipartFile file,
+                           @RequestParam(required = true) String uuid) {
+        log.info("incoming upload request, check authentication code");
+        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
+        try {
+            if (user != null) {
+                log.info("user matched ");
+                fileUploadService.uploadFile(file, uuid);
+            } else {
+                log.error("error uploading, uuid nor found");
+            }
+        } catch (Exception e) {
+            log.error("error uploading, uuid nor found");
+            e.printStackTrace();
         }
     }
-
-
     @GetMapping("/v1/getCommand")
-    public String getCommand(@RequestParam(required = false) UUID uuid) {
-        log.info("incoming getCommand from ");
-//       log.info("incoming getCommand from " + uuid);
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth.isAuthenticated()) {
-//            UserInfo userInfo = new UserInfo();
-//            userInfo = userRepo.findByUserName(auth.getName());
-//            List<Command> command;
-//            command = commandRepo.getLastCommand(uuid);
-//            return command.get(command.size() - 1).getCommandName();
-//        } else {
-//            return "stop";
-//        }
-        return "start";
+    public String getCommand(@RequestParam(required = true) String uuid) {
+        log.info("incoming getCommand, check authentication code");
+        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
+        try {
+            if (user != null) {
+                List<Command> command;
+                command = commandRepo.getLastCommand(UUID.fromString(uuid));
+                String commandName = command.get(command.size() - 1).getCommandName();
+                log.info("send command to client " + commandName);
+                return commandName;
+            } else {
+                log.error("user null or empty, return stop command, parent should start manually.");
+                return "stop";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "NOTHING";
+        }
     }
+
 
     // TODO: 1/28/21 change GET to POST, also control the input size
     // FIXME: 1/28/21  body size is a large in DB, cause 500 error, fix it
