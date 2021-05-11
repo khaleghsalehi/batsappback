@@ -1,7 +1,9 @@
 package net.khalegh.batsapp.contorl;
 
+import com.google.gson.Gson;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
+import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
 import net.khalegh.batsapp.service.FileUploadService;
@@ -108,6 +110,7 @@ public class REST {
     public final static int RESPONSE_SUCCESS = 200;
     public static final int RESPONSE_ERROR = 500;
     private static final String DEFAULT_AVATAR = "avatar.png";
+    private static final Gson gson = new Gson();
 
 
     @GetMapping("/v1/getAuthKey")
@@ -140,6 +143,28 @@ public class REST {
             e.printStackTrace();
         }
     }
+
+
+    @GetMapping("/v1/getConfig")
+    public String getConfig(@RequestParam(required = true) String uuid) {
+        log.info("incoming getConfig, check authentication code");
+        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
+        try {
+            if (user != null) {
+                ParentalConfig parentalConfig = new ParentalConfig();
+                parentalConfig.setImageQuality(50);
+                parentalConfig.setScreenShotDelay(5_000);
+                return gson.toJson(parentalConfig);
+            } else {
+                log.error("user null or empty, return stop command, parent should start manually.");
+                return "stop";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "NOTHING";
+        }
+    }
+
     @GetMapping("/v1/getCommand")
     public String getCommand(@RequestParam(required = true) String uuid) {
         log.info("incoming getCommand, check authentication code");
