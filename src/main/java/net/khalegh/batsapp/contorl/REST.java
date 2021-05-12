@@ -94,6 +94,9 @@ public class REST {
     @Autowired
     FileUploadService fileUploadService;
 
+    @Autowired
+    ParentalConfigRepo parentalConfigRepo;
+
 
     private final static String VERSION = "0.0.1";
     private final static String TYPE_INVALID_ERROR = "Error, Invalid or empty type";
@@ -149,19 +152,25 @@ public class REST {
     public String getConfig(@RequestParam(required = true) String uuid) {
         log.info("incoming getConfig, check authentication code");
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
+        ParentalConfig parentalConfig = new ParentalConfig();
         try {
             if (user != null) {
-                ParentalConfig parentalConfig = new ParentalConfig();
-                parentalConfig.setImageQuality(50);
-                parentalConfig.setScreenShotDelay(5_000);
+                List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));
+
+
+                int imageQuality = baseUser.get(baseUser.size() - 1).getImageQuality();
+                parentalConfig.setImageQuality(imageQuality);
+                int screenShotDelay = baseUser.get(baseUser.size() - 1).getScreenShotDelay();
+                parentalConfig.setScreenShotDelay(screenShotDelay);
                 return gson.toJson(parentalConfig);
             } else {
-                log.error("user null or empty, return stop command, parent should start manually.");
-                return "stop";
+                log.error("user null or empty, return default config");
+                return "ERROR";
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "NOTHING";
+            log.error("Oppooos, exception. return default config");
+            return gson.toJson(parentalConfig);
         }
     }
 
@@ -186,6 +195,41 @@ public class REST {
         }
     }
 
+
+    @PostMapping("/v1/kidsSetting")
+    public int kidsControlSettings(@RequestParam(required = true) String screenShotDelay,
+                                   @RequestParam(required = true) String imageQuality,
+                                   @RequestParam(required = true) String uuid,
+                                   HttpServletResponse response) throws IOException {
+        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
+        try {
+            if (user != null) {
+                if (!screenShotDelay.isEmpty() && !imageQuality.isEmpty()) {
+                    try {
+                        log.info("new setting value imageQuality " + imageQuality + " screenShotDelay " + screenShotDelay);
+                        ParentalConfig parentalConfig = new ParentalConfig();
+                        parentalConfig.setScreenShotDelay(Integer.parseInt(screenShotDelay));
+                        parentalConfig.setImageQuality(Integer.parseInt(imageQuality));
+                        parentalConfig.setUuid(user.getUuid());
+                        parentalConfigRepo.save(parentalConfig);
+                        response.sendRedirect("/");
+                        return RESPONSE_SUCCESS;
+
+                    } catch (Exception e) {
+                        response.sendRedirect("/");
+                        return RESPONSE_ERROR;
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("/");
+            return RESPONSE_ERROR;
+        }
+        response.sendRedirect("/");
+        return RESPONSE_ERROR;
+    }
 
     // TODO: 1/28/21 change GET to POST, also control the input size
     // FIXME: 1/28/21  body size is a large in DB, cause 500 error, fix it
@@ -562,45 +606,6 @@ public class REST {
         return String.valueOf(RESPONSE_SUCCESS);
     }
 
-    @PostMapping("/v1/info")
-    public int changeInformation(@RequestParam(required = false) String firstName,
-                                 @RequestParam(required = false) String lastName,
-                                 @RequestParam(required = false) String bio,
-                                 @RequestParam(required = false) String city,
-                                 @RequestParam(required = false) String country,
-                                 @RequestParam(required = false) String phoneNumber,
-                                 @RequestParam(required = false) String status,
-                                 HttpServletResponse response) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (firstName.isEmpty() && lastName.isEmpty() && bio.isEmpty() && city.isEmpty() && country.isEmpty() && phoneNumber.isEmpty() && status.isEmpty())
-            return RESPONSE_SUCCESS;
-        // TODO: 1/29/21 input validation for all presented params
-        try {
-            UserInfo userInfo = new UserInfo();
-            userInfo = userRepo.findByUserName(auth.getName());
-            if (!firstName.isEmpty())
-                userInfo.setFirstName(firstName);
-            if (!lastName.isEmpty())
-                userInfo.setLastName(lastName);
-            if (!bio.isEmpty())
-                userInfo.setBio(bio);
-            if (!city.isEmpty())
-                userInfo.setCity(city);
-            if (!country.isEmpty())
-                userInfo.setCountry(country);
-            if (!phoneNumber.isEmpty())
-                userInfo.setPhoneNumber(phoneNumber);
-            if (!status.isEmpty())
-                userInfo.setStatus(status);
-            userRepo.save(userInfo);
-            response.sendRedirect("/setting");
-            return RESPONSE_SUCCESS;
-
-        } catch (Exception e) {
-            response.sendRedirect("/setting");
-            return RESPONSE_ERROR;
-        }
-    }
 
     @PostMapping("/v1/saveMessage")
     public int postMan(@RequestParam(required = false) String subject,

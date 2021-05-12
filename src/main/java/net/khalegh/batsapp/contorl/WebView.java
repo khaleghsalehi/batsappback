@@ -1,5 +1,6 @@
 package net.khalegh.batsapp.contorl;
 
+import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
@@ -60,6 +61,8 @@ public class WebView {
     @Autowired
     CommandRepo commandRepo;
 
+    @Autowired
+    ParentalConfigRepo parentalConfigRepo;
 
     @RequestMapping("/setCommand")
     public void setCommand(@RequestParam(required = true) String cmd,
@@ -92,10 +95,12 @@ public class WebView {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserInfo userInfo = new UserInfo();
+        UUID uuid;
         if (auth.isAuthenticated()) {
             model.addAttribute("username", auth.getName());
             userInfo = userRepo.findByUserName(auth.getName());
-            log.info("user uuid -> " + userInfo.getUuid());
+            uuid = userInfo.getUuid();
+            log.info("user uuid -> " + uuid);
             List<Command> command;
             // initialize
             model.addAttribute("controlStatus", "unknown");
@@ -112,6 +117,19 @@ public class WebView {
                 e.printStackTrace();
                 model.addAttribute("controlStatus", "off");
             }
+            // get config
+            List<ParentalConfig> config = parentalConfigRepo.findConfigByUuid(uuid);
+            try {
+                model.addAttribute("imageQuality", config.get(config.size() - 1).getImageQuality());
+                model.addAttribute("screenShotDelay", config.get(config.size() - 1).getScreenShotDelay());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("null or empty config, set default");
+                model.addAttribute("imageQuality", 50);
+                model.addAttribute("screenShotDelay", 60);
+            }
+
 
         } else {
             model.addAttribute("username", "Guest");
@@ -125,6 +143,7 @@ public class WebView {
             model.addAttribute("isMobile", "true");
             log.info("Mobile application found, version -> " + request.getHeader("exbord"));
         }
+
         return "index";
     }
 
@@ -154,7 +173,8 @@ public class WebView {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
             model.addAttribute("username", auth.getName());
-            model.addAttribute("userObject", userRepo.findByUserName(auth.getName()));
+            UserInfo baseUser = userRepo.findByUserName(auth.getName());
+            model.addAttribute("uuid", baseUser.getUuid());
         } else {
             model.addAttribute("username", "Guest");
         }

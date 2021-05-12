@@ -71,6 +71,7 @@
 
 
 
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -409,10 +410,25 @@
                     </a>
                 </div>
             </div>
-            <div  class="col-xs-1" align="center">
+            <div class="col-xs-1" align="center">
                 <div class="col-xs-12">
                     <a href="/show">
                         <button type="submit" class="btn btn-secondary btn-lg"> مشاهده فعالیت‌های کودک&nbsp;</button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <div class="col-xs-1" align="center">
+                <div class="col-xs-12">
+                    <h5 th:text="'بازه زمانی ثبت تصاویر در هر '+${screenShotDelay}+' ثانیه تنظیم شده است'"></h5>
+                </div>
+                <div class="col-xs-12">
+                    <h5 th:text="'کیفیت عکس ثبت شده با '+${imageQuality}+'% وضوح تنظیم شده است'"></h5>
+                </div>
+                <div class="col-xs-12">
+                    <a href="/setting">
+                        <button type="submit" class="btn btn-secondary btn-lg">&nbsp;تغییر تنظیمات&nbsp;</button>
                     </a>
                 </div>
             </div>
