@@ -29,4 +29,8 @@ public class ParentalConfig {
     @Getter
     @Setter
     private int screenShotDelay = 60_000;
+
+    @Getter
+    @Setter
+    private String command = "stop";
 }

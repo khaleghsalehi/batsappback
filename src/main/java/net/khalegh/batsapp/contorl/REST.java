@@ -116,6 +116,37 @@ public class REST {
     private static final Gson gson = new Gson();
 
 
+    @GetMapping("/v1/ws")
+    public String whatsUp(@RequestParam(required = true) String uuid) {
+        log.info("incoming ws command, check authentication code");
+        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
+        ParentalConfig parentalConfig = new ParentalConfig();
+        try {
+            if (user != null) {
+                List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));
+                int imageQuality = baseUser.get(baseUser.size() - 1).getImageQuality();
+                parentalConfig.setImageQuality(imageQuality);
+                int screenShotDelay = baseUser.get(baseUser.size() - 1).getScreenShotDelay();
+                parentalConfig.setScreenShotDelay(screenShotDelay);
+               // String command = baseUser.get(baseUser.size() - 1).getCommand();
+                // fetch latest command
+                List<Command> command;
+                command = commandRepo.getLastCommand(UUID.fromString(uuid));
+                String commandName = command.get(command.size() - 1).getCommandName();
+                parentalConfig.setCommand(commandName);
+                log.info("send command to client " + commandName);
+                return gson.toJson(parentalConfig);
+            } else {
+                log.error("user null or empty, return default config");
+                return "ERROR";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Oppooos, exception. return default config");
+            return gson.toJson(parentalConfig);
+        }
+    }
+
     @GetMapping("/v1/getAuthKey")
     public String getAthKey(@RequestParam(required = true) String username,
                             @RequestParam(required = true) String password) {
