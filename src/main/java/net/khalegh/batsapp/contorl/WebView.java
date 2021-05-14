@@ -1,11 +1,12 @@
 package net.khalegh.batsapp.contorl;
 
+import com.github.mfathi91.time.PersianDate;
 import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
+import net.khalegh.batsapp.utils;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.hibernate.cfg.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -92,7 +96,7 @@ public class WebView {
                         @RequestParam(required = false) String subject,
                         HttpServletRequest request,
                         Model model) throws ExecutionException {
-
+        PersianDate today = PersianDate.now();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserInfo userInfo = new UserInfo();
         UUID uuid;
@@ -143,27 +147,65 @@ public class WebView {
             model.addAttribute("isMobile", "true");
             log.info("Mobile application found, version -> " + request.getHeader("exbord"));
         }
-
+        model.addAttribute("date", today);
         return "index";
     }
 
 
     @RequestMapping("/show")
-    public String showActivities(Model model) {
+    public String showActivities(@RequestParam(required = true) String date,
+                                 Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        PersianDate today = PersianDate.now();
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        String time = dateFormat.format(new Date());
+
+
+        try {
+            if (!date.isEmpty())
+                today = PersianDate.parse(date);
+        } catch (Exception e) {
+            // todo send  and show error in user  panel
+            e.printStackTrace();
+        }
         UserInfo userInfo;
         ArrayList<String> pics = new ArrayList<String>();
+        ArrayList<String> dirList = new ArrayList<>();
         if (auth.isAuthenticated()) {
+            model.addAttribute("username", auth.getName());
             userInfo = userRepo.findByUserName(auth.getName());
             String home = System.getProperty("user.home");
-            String imagePath = home + "/" + userInfo.getUuid();
-            File f = new File(imagePath);
-            String[] fileList = f.list();
-            assert fileList != null;
-            for (String item : fileList)
-                pics.add(userInfo.getUuid() + "/" + item);
+            File file = new File(home + "/" + userInfo.getUuid());
+            String[] directories = file.list(new FilenameFilter() {
+                @Override
+                public boolean accept(File current, String name) {
+                    return new File(current, name).isDirectory();
+                }
+            });
+
+            if (directories != null) {
+                Arrays.stream(directories).forEach(dirList::add);
+            }
+
+            String imagePath = home + "/" + userInfo.getUuid() + "/" + today;
+            if (Files.exists(Paths.get(imagePath))) {
+                File f = new File(imagePath);
+                String[] fileList = f.list();
+                assert fileList != null;
+                for (String item : fileList)
+                    pics.add(userInfo.getUuid() + "/" + today + "/" + item);
+
+            }
+        } else {
+            model.addAttribute("username", "Guest");
         }
+        pics.sort(Collections.reverseOrder());
+        dirList.sort(Collections.reverseOrder());
         model.addAttribute("pics", pics);
+        model.addAttribute("dayList", dirList);
+        model.addAttribute("today", today);
+        model.addAttribute("screenShotCount", pics.size());
+        model.addAttribute("time", time);
         return "show";
     }
 
@@ -448,4 +490,5 @@ public class WebView {
 
         }
     }
+
 }
