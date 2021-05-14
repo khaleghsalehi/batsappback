@@ -130,7 +130,7 @@ public class WebView {
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("null or empty config, set default");
-                model.addAttribute("imageQuality", 50);
+                model.addAttribute("imageQuality", 15);
                 model.addAttribute("screenShotDelay", 60);
             }
 

@@ -128,7 +128,7 @@ public class REST {
                 parentalConfig.setImageQuality(imageQuality);
                 int screenShotDelay = baseUser.get(baseUser.size() - 1).getScreenShotDelay();
                 parentalConfig.setScreenShotDelay(screenShotDelay);
-               // String command = baseUser.get(baseUser.size() - 1).getCommand();
+                // String command = baseUser.get(baseUser.size() - 1).getCommand();
                 // fetch latest command
                 List<Command> command;
                 command = commandRepo.getLastCommand(UUID.fromString(uuid));
@@ -240,7 +240,9 @@ public class REST {
                         log.info("new setting value imageQuality " + imageQuality + " screenShotDelay " + screenShotDelay);
                         ParentalConfig parentalConfig = new ParentalConfig();
                         parentalConfig.setScreenShotDelay(Integer.parseInt(screenShotDelay));
-                        parentalConfig.setImageQuality(Integer.parseInt(imageQuality));
+                        //todo change fixed number or dont show in UI.
+                        parentalConfig.setImageQuality(15);
+                        //parentalConfig.setImageQuality(Integer.parseInt(imageQuality));
                         parentalConfig.setUuid(user.getUuid());
                         parentalConfigRepo.save(parentalConfig);
                         response.sendRedirect("/");

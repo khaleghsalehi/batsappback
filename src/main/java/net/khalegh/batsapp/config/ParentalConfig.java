@@ -24,7 +24,7 @@ public class ParentalConfig {
 
     @Getter
     @Setter
-    private int imageQuality = 50;
+    private int imageQuality = 15;
 
     @Getter
     @Setter
