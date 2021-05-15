@@ -170,7 +170,8 @@ public class WebView {
             e.printStackTrace();
         }
         UserInfo userInfo;
-        TreeMap<String, String> images = new TreeMap<>();
+        Map<Integer, String> images =
+                new TreeMap<Integer, String>(Collections.reverseOrder());
         ArrayList<String> dirList = new ArrayList<>();
         if (auth.isAuthenticated()) {
             model.addAttribute("username", auth.getName());
@@ -194,12 +195,13 @@ public class WebView {
                 String[] fileList = f.list();
                 assert fileList != null;
                 for (String item : fileList) {
-                    images.put(utils.extractFileNumber(item), userInfo.getUuid() + "/" + today + "/" + item);
+                    images.put(Integer.valueOf(utils.extractFileNumber(item)), userInfo.getUuid() + "/" + today + "/" + item);
                 }
             }
         } else {
             model.addAttribute("username", "Guest");
         }
+        Set set = images.entrySet();
         dirList.sort(Collections.reverseOrder());
         model.addAttribute("images", images);
         model.addAttribute("dayList", dirList);
