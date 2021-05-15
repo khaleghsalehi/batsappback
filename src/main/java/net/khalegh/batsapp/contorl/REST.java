@@ -98,7 +98,7 @@ public class REST {
     ParentalConfigRepo parentalConfigRepo;
 
 
-    private final static String VERSION = "0.0.1";
+    private final static String VERSION = "0.0.6";
     private final static String TYPE_INVALID_ERROR = "Error, Invalid or empty type";
     public final static int SPACE_ERROR_USERNAME = -9;
     public final static int PASSWORD_NOT_SAME = -8;

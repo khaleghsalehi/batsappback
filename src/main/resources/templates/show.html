@@ -359,10 +359,10 @@
             </div>
         </div>
         <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div th:each="pic: ${pics}" class="ui-block">
+            <div th:each="pic: ${images}" class="ui-block">
                 <article class="hentry post">
                     <div class="post-video">
-                        <img th:src="${pic}">
+                        <img th:src="${pic.value}">
                     </div>
                 </article>
             </div>

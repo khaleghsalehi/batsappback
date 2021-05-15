@@ -29,6 +29,8 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class WebView {
@@ -160,7 +162,6 @@ public class WebView {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = dateFormat.format(new Date());
 
-
         try {
             if (!date.isEmpty())
                 today = PersianDate.parse(date);
@@ -169,7 +170,7 @@ public class WebView {
             e.printStackTrace();
         }
         UserInfo userInfo;
-        ArrayList<String> pics = new ArrayList<String>();
+        TreeMap<String, String> images = new TreeMap<>();
         ArrayList<String> dirList = new ArrayList<>();
         if (auth.isAuthenticated()) {
             model.addAttribute("username", auth.getName());
@@ -192,19 +193,18 @@ public class WebView {
                 File f = new File(imagePath);
                 String[] fileList = f.list();
                 assert fileList != null;
-                for (String item : fileList)
-                    pics.add(userInfo.getUuid() + "/" + today + "/" + item);
-
+                for (String item : fileList) {
+                    images.put(utils.extractFileNumber(item), userInfo.getUuid() + "/" + today + "/" + item);
+                }
             }
         } else {
             model.addAttribute("username", "Guest");
         }
-        pics.sort(Collections.reverseOrder());
         dirList.sort(Collections.reverseOrder());
-        model.addAttribute("pics", pics);
+        model.addAttribute("images", images);
         model.addAttribute("dayList", dirList);
         model.addAttribute("today", today);
-        model.addAttribute("screenShotCount", pics.size());
+        model.addAttribute("screenShotCount", images.size());
         model.addAttribute("time", time);
         return "show";
     }
@@ -490,5 +490,6 @@ public class WebView {
 
         }
     }
+
 
 }
