@@ -19,6 +19,15 @@
 		});
 
 
+
+
+
+
+
+
+
+
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -27,7 +36,7 @@
 
     <!-- Main Styles CSS -->
     <link rel="stylesheet" type="text/css" href="nui/css/main.min.css">
-<!--    autorefresh    -->
+    <!--    autorefresh    -->
     <meta http-equiv="refresh" content="300">
 
 </head>
@@ -172,7 +181,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/show">
+                    <a th:href="@{/show(date=${today},from='00',to='01')}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -270,7 +279,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/show">
+                    <a th:href="@{/show(date=${today},from='00',to='01')}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="اشتراک تجربه">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -338,8 +347,10 @@
             گزارش فعالیت‌های کودک بر اساس تاریخ روزانه
             <br>
             <br>
-            <a th:href="@{/show(date=${today})}" >
-                <button type="submit" class="btn btn-md-2 btn-border-think c-grey  custom-color">بروزرسانی و مشاهده عکس‌های جدید ارسالی</button>
+            <a th:href="@{/show(date=${today},from='00',to='01')}">
+                <button type="submit" class="btn btn-md-2 btn-border-think c-grey  custom-color">بروزرسانی و مشاهده
+                    عکس‌های جدید ارسالی
+                </button>
             </a>
             <br>
             <b th:text="${screenShotCount}+' عدد تعداد عکس‌های ارسال شده از گوشی کودک تا این لحظه'"></b>
@@ -350,14 +361,48 @@
     <br>
     <div class="row row-fluid">
         <!-- Main Content Post Versions -->
-
         <div th:each="day: ${dayList}">
             <div class="col-xs-4">
-                <a th:href="@{/show(date=${day})}">
-                    <button  type="submit" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color"> <b th:text="${day}"></b>&nbsp;</button>
+                <a th:href="@{/show(date=${today},from='00',to='01')}">
+                    <button type="submit" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color"><b
+                            th:text="${day}"></b>&nbsp;
+                    </button>
                 </a>
             </div>
         </div>
+        <!--            show time from - to -->
+        <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            ساعت فعالیت
+            <br>
+            <div class="ui-block">
+                <a th:href="@{/show(date=${today},from='00',to='01')}">01-00</a> |
+                <a th:href="@{/show(date=${today},from='01',to='02')}">02-01</a> |
+                <a th:href="@{/show(date=${today},from='02',to='03')}">03-02</a> |
+                <a th:href="@{/show(date=${today},from='03',to='04')}">04-03</a> |
+                <a th:href="@{/show(date=${today},from='04',to='05')}">05-04</a> |
+                <a th:href="@{/show(date=${today},from='05',to='06')}">06-05</a> |
+                <a th:href="@{/show(date=${today},from='06',to='07')}">07-06</a> |
+                <a th:href="@{/show(date=${today},from='07',to='08')}">08-07</a> |
+                <a th:href="@{/show(date=${today},from='08',to='09')}">09-08</a> |
+                <a th:href="@{/show(date=${today},from='09',to='10')}">10-09</a> |
+                <a th:href="@{/show(date=${today},from='10',to='11')}">11-10</a> |
+                <a th:href="@{/show(date=${today},from='11',to='12')}">12-11</a>
+                <hr>
+                <a th:href="@{/show(date=${today},from='12',to='13')}">13-12</a> |
+                <a th:href="@{/show(date=${today},from='13',to='14')}">14-13</a> |
+                <a th:href="@{/show(date=${today},from='14',to='15')}">15-14</a> |
+                <a th:href="@{/show(date=${today},from='15',to='16')}">16-15</a> |
+                <a th:href="@{/show(date=${today},from='16',to='17')}">17-16</a> |
+                <a th:href="@{/show(date=${today},from='17',to='18')}">18-17</a> |
+                <a th:href="@{/show(date=${today},from='18',to='19')}">19-18</a> |
+                <a th:href="@{/show(date=${today},from='19',to='20')}">20-19</a> |
+                <a th:href="@{/show(date=${today},from='20',to='21')}">21-20</a> |
+                <a th:href="@{/show(date=${today},from='21',to='22')}">22-21</a> |
+                <a th:href="@{/show(date=${today},from='22',to='23')}">23-22</a> |
+                <a th:href="@{/show(date=${today},from='23',to='24')}">24-23</a>
+            </div>
+        </div>
+
         <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div th:each="pic: ${images}" class="ui-block">
                 <article class="hentry post">

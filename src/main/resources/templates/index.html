@@ -72,6 +72,7 @@
 
 
 
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -104,7 +105,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/show">
+                    <a th:href="@{/show(date=${date},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -223,7 +224,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/show">
+                    <a th:href="@{/show(date=${date},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -321,7 +322,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/show">
+                    <a th:href="@{/show(date=${date},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="اشتراک تجربه">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -412,7 +413,7 @@
             </div>
             <div class="col-xs-1" align="center">
                 <div class="col-xs-12">
-                    <a th:href="@{/show(date=${date})}">
+                    <a th:href="@{/show(date=${date},from=${from},to=${to})}">
                         <button type="submit" class="btn btn-secondary btn-lg"> مشاهده فعالیت‌های کودک&nbsp;</button>
                     </a>
                 </div>
