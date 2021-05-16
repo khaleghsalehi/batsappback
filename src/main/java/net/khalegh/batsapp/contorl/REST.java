@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -123,6 +124,59 @@ public class REST {
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+
+    @GetMapping("/v1/passwd")
+    public int changePassword(Model model,
+                              @RequestParam(required = true) String uuid,
+                              @RequestParam(required = true) String oldPassword,
+                              @RequestParam(required = true) String newPassword,
+                              @RequestParam(required = true) String reNewPassword,
+
+                              HttpServletRequest request,
+                              HttpServletResponse response) throws IOException {
+
+        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
+        try {
+            if (user != null) {
+                if (oldPassword.equals(newPassword)) {
+                    log.warn("old and new password are same");
+                    response.sendRedirect("/setting?error=" + OLD_NEW_PASSWORD_SAME);
+                    return OLD_NEW_PASSWORD_SAME;
+                }
+
+                if (!newPassword.equals(reNewPassword)) {
+                    log.error("user not found!, Internal error.");
+                    response.sendRedirect("/setting?error=" + INPUT_IS_NOT_CORRECT);
+                    return INPUT_IS_NOT_CORRECT;
+                }
+
+                try {
+                    assert false;
+                    if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+                        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12); // Strength set as 12
+                        user.setPassword(encoder.encode(newPassword));
+                        userRepo.save(user);
+                        log.warn("password changed successfully.");
+                        response.sendRedirect("/logout");
+                        return RESPONSE_SUCCESS;
+                    } else {
+                        log.warn("error, password not matched.");
+                        response.sendRedirect("/setting?error=" + OLD_PASSWORD_NOT_MATCHED);
+                        return OLD_PASSWORD_NOT_MATCHED;
+                    }
+
+                } catch (Exception e) {
+                    return RESPONSE_ERROR;
+                }
+
+            }
+        } catch (Exception e) {
+            log.warn("user not found!, Internal error.");
+            response.sendRedirect("/setting?error=" + USER_NOT_FOUND_OR_NULL_ERROR);
+            return USER_NOT_FOUND_OR_NULL_ERROR;
+        }
+        return -1;
+    }
 
     @GetMapping("/v1/ws")
     public String whatsUp(@RequestParam(required = true) String uuid) {
@@ -356,56 +410,6 @@ public class REST {
         } catch (Exception e) {
             e.printStackTrace();
             return RESPONSE_SUCCESS;
-        }
-    }
-
-    @GetMapping("/v1/passwd")
-    public int changePassword(Model model,
-                              @RequestParam(required = true) String oldPassword,
-                              @RequestParam(required = true) String newPassword,
-                              @RequestParam(required = true) String reNewPassword,
-
-                              HttpServletRequest request,
-                              HttpServletResponse response) throws IOException {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (oldPassword.equals(newPassword)) {
-            log.warn("old and new password are same");
-            response.sendRedirect("/setting?error=" + OLD_NEW_PASSWORD_SAME);
-            return OLD_NEW_PASSWORD_SAME;
-        }
-        String savedPasswd = ((MyUserPrinciple) ((UsernamePasswordAuthenticationToken) auth).getPrincipal()).getPassword();
-        UserInfo qodQoDUserInfo = userRepo.findByUserName(auth.getName());
-        if (!newPassword.equals(reNewPassword)) {
-            System.out.println("user not found!, Internal error.");
-            response.sendRedirect("/setting?error=" + INPUT_IS_NOT_CORRECT);
-            return INPUT_IS_NOT_CORRECT;
-        }
-
-        if (qodQoDUserInfo == null) {
-            log.warn("user not found!, Internal error.");
-            response.sendRedirect("/setting?error=" + USER_NOT_FOUND_OR_NULL_ERROR);
-            return USER_NOT_FOUND_OR_NULL_ERROR;
-        }
-        try {
-            UserInfo userInfo = new UserInfo();
-            userInfo = userRepo.findByUserName(auth.getName());
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12); // Strength set as 12
-            userInfo.setPassword(encoder.encode(newPassword));
-            assert false;
-            if (encoder.matches(oldPassword, savedPasswd)) {
-                userRepo.save(userInfo);
-                log.warn("password changed successfully.");
-                response.sendRedirect("/logout");
-                return RESPONSE_SUCCESS;
-            } else {
-                log.warn("error, password not matched.");
-                response.sendRedirect("/setting?error=" + OLD_PASSWORD_NOT_MATCHED);
-                return OLD_PASSWORD_NOT_MATCHED;
-            }
-
-        } catch (Exception e) {
-            return RESPONSE_ERROR;
         }
     }
 
