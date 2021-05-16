@@ -1,8 +1,6 @@
 package net.khalegh.batsapp.dao;
 
 import net.khalegh.batsapp.entity.Command;
-import net.khalegh.batsapp.entity.DisLiked;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

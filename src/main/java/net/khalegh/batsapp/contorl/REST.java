@@ -1,5 +1,6 @@
 package net.khalegh.batsapp.contorl;
 
+import com.github.mfathi91.time.PersianDate;
 import com.google.gson.Gson;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
@@ -39,6 +40,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -97,6 +99,9 @@ public class REST {
     @Autowired
     ParentalConfigRepo parentalConfigRepo;
 
+    @Autowired
+    ActivityRepo activityRepo;
+
 
     private final static String VERSION = "0.0.6";
     private final static String TYPE_INVALID_ERROR = "Error, Invalid or empty type";
@@ -115,14 +120,27 @@ public class REST {
     private static final String DEFAULT_AVATAR = "avatar.png";
     private static final Gson gson = new Gson();
 
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     @GetMapping("/v1/ws")
     public String whatsUp(@RequestParam(required = true) String uuid) {
-        log.info("incoming ws command, check authentication code");
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         ParentalConfig parentalConfig = new ParentalConfig();
         try {
             if (user != null) {
+                log.info("incoming ws, username -> " + user.getUserName() + ", uuid " + user.getUuid());
+
+                // log ws ping history
+
+                //todo store in cache or queue for bulk save?
+                Activity activity = new Activity();
+                activity.setUuid(user.getUuid());
+                activity.setPingTime(LocalDateTime.now().format(timeFormatter));
+                activity.setPingDate(PersianDate.now().format(dtf));
+                activityRepo.save(activity);
+
                 List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));
                 int imageQuality = baseUser.get(baseUser.size() - 1).getImageQuality();
                 parentalConfig.setImageQuality(imageQuality);
