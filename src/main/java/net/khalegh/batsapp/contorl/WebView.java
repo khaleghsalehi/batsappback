@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -209,7 +210,7 @@ public class WebView {
                 assert fileList != null;
                 for (String item : fileList) {
                     images.put(Integer.valueOf(utils.extractFileNumber(item)),
-                            userInfo.getUuid() + "/" + today  + "/" + from + "-" + to+ "/" + item);
+                            userInfo.getUuid() + "/" + today + "/" + from + "-" + to + "/" + item);
                 }
             }
         } else {
@@ -246,6 +247,9 @@ public class WebView {
 
         return "setting";
     }
+
+
+
 
     @RequestMapping("/search")
     public String searchExperience(@RequestParam(required = false, defaultValue = "") String q,

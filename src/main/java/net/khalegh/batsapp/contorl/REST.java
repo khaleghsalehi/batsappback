@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
 import net.khalegh.batsapp.config.ParentalConfig;
+import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
 import net.khalegh.batsapp.service.FileUploadService;
@@ -120,6 +121,8 @@ public class REST {
     public static final int RESPONSE_ERROR = 500;
     private static final String DEFAULT_AVATAR = "avatar.png";
     private static final Gson gson = new Gson();
+    private static final int MAX_PING_DIFF = 10; // 10 second
+
 
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -195,6 +198,21 @@ public class REST {
                 activity.setPingDate(PersianDate.now().format(dtf));
                 activityRepo.save(activity);
 
+                // set ping time to cache
+                if (Service.LastPing.get(uuid).isEmpty()) {
+                    log.info("LastPing cache is null or empty for " + uuid);
+                    Service.LastPing.put(uuid, activity.getPingTime());
+
+                }
+                int diff = utils.getTimeDiff(activity.getPingTime(), Service.LastPing.get(uuid));
+                if (diff > MAX_PING_DIFF) {
+                    log.error("ping diff " + diff + " from " + uuid);
+                    utils.notifyParent(uuid);
+                } else {
+                    log.info("ping diff " + diff + " is ok " + uuid);
+                }
+                Service.LastPing.put(uuid, activity.getPingTime());
+
                 List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));
                 int imageQuality = baseUser.get(baseUser.size() - 1).getImageQuality();
                 parentalConfig.setImageQuality(imageQuality);
@@ -218,6 +236,7 @@ public class REST {
             return gson.toJson(parentalConfig);
         }
     }
+
 
     @GetMapping("/v1/getAuthKey")
     public String getAthKey(@RequestParam(required = true) String username,

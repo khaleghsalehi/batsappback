@@ -26,6 +26,7 @@ public class Service {
     }
 
     private static final int CACHE_TTL_DEFAULT = 10;
+
     public static LoadingCache<String, String> appCache = CacheBuilder
             .newBuilder()
             .expireAfterWrite(CACHE_TTL_DEFAULT, TimeUnit.SECONDS)
@@ -35,6 +36,7 @@ public class Service {
                     return "";
                 }
             });
+
     public static LoadingCache<String, String> hotCache = CacheBuilder
             .newBuilder()
             .expireAfterWrite(CACHE_TTL_DEFAULT, TimeUnit.SECONDS)
@@ -44,4 +46,16 @@ public class Service {
                     return "";
                 }
             });
+
+
+    public static LoadingCache<String, String> LastPing = CacheBuilder
+            .newBuilder()
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String s) throws Exception {
+                    return "";
+                }
+            });
+
+
 }
