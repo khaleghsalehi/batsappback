@@ -16,10 +16,11 @@ import java.util.Date;
 @Service
 public class FileUploadService {
     private static final Logger log = LoggerFactory.getLogger(WebView.class);
-    PersianDate today = PersianDate.now();
     SimpleDateFormat sdf = new SimpleDateFormat("HH");
 
     public void uploadFile(MultipartFile file, String uuid) {
+        PersianDate today = PersianDate.now();
+        log.info("screenshot from " + uuid + " filename " + file.getOriginalFilename());
         String from = sdf.format(new Date());
         int kk = Integer.parseInt(from) + 1;
         String to = String.format("%2s", kk).replace(' ', '0');
