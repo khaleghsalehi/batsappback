@@ -131,62 +131,69 @@ public class REST {
             return false;
         }
     }
+
     @GetMapping("/v1/ws")
     public String whatsUp(@RequestParam(required = true) String uuid,
                           HttpServletRequest request) {
         if (!isValidRequest(request))
             return "null";
-        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
-        ParentalConfig parentalConfig = new ParentalConfig();
-        try {
-            if (user != null) {
-                log.info("incoming ws, username -> " + user.getUserName() + ", uuid " + user.getUuid());
 
-                // log ws ping history
+        if (!(uuid.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) || (uuid.isEmpty())) {
+            log.error("ws uuid is null,empty or invalid , return null.");
+            return null;
+        } else {
+            Optional<UserInfo> user = Optional.ofNullable(userRepo.getUserByUuid(UUID.fromString(uuid)));
+            ParentalConfig parentalConfig = new ParentalConfig();
+            try {
+                if (user.isPresent()) {
+                    log.info("incoming ws, username -> " + user.get().getUserName() + ", uuid " + user.get().getUuid());
 
-                //todo store in cache or queue for bulk save?
-                Activity activity = new Activity();
-                activity.setUuid(user.getUuid());
-                activity.setPingTime(LocalDateTime.now().format(timeFormatter));
-                activity.setPingDate(PersianDate.now().format(dtf));
-                activityRepo.save(activity);
+                    // log ws ping history
 
-                // set ping time to cache
-                if (Service.LastPing.get(uuid).isEmpty()) {
-                    log.info("LastPing cache is null or empty for " + uuid);
+                    //todo store in cache or queue for bulk save?
+                    Activity activity = new Activity();
+                    activity.setUuid(user.get().getUuid());
+                    activity.setPingTime(LocalDateTime.now().format(timeFormatter));
+                    activity.setPingDate(PersianDate.now().format(dtf));
+                    activityRepo.save(activity);
+
+                    // set ping time to cache
+                    if (Service.LastPing.get(uuid).isEmpty()) {
+                        log.info("LastPing cache is null or empty for " + uuid);
+                        Service.LastPing.put(uuid, activity.getPingTime());
+
+                    }
+                    int diff = utils.getTimeDiff(activity.getPingTime(), Service.LastPing.get(uuid));
+                    if (diff > MAX_PING_DIFF) {
+                        log.error("ping diff " + diff + " from " + uuid);
+                        utils.notifyParent(uuid);
+                    } else {
+                        log.info("ping diff " + diff + " is ok " + uuid);
+                    }
                     Service.LastPing.put(uuid, activity.getPingTime());
 
-                }
-                int diff = utils.getTimeDiff(activity.getPingTime(), Service.LastPing.get(uuid));
-                if (diff > MAX_PING_DIFF) {
-                    log.error("ping diff " + diff + " from " + uuid);
-                    utils.notifyParent(uuid);
+                    List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));
+                    int imageQuality = baseUser.get(baseUser.size() - 1).getImageQuality();
+                    parentalConfig.setImageQuality(imageQuality);
+                    int screenShotDelay = baseUser.get(baseUser.size() - 1).getScreenShotDelay();
+                    parentalConfig.setScreenShotDelay(screenShotDelay);
+                    // String command = baseUser.get(baseUser.size() - 1).getCommand();
+                    // fetch latest command
+                    List<Command> command;
+                    command = commandRepo.getLastCommand(UUID.fromString(uuid));
+                    String commandName = command.get(command.size() - 1).getCommandName();
+                    parentalConfig.setCommand(commandName);
+                    log.info("send command to client " + commandName);
+                    return gson.toJson(parentalConfig);
                 } else {
-                    log.info("ping diff " + diff + " is ok " + uuid);
+                    log.error("user null or empty, return default config");
+                    return "ERROR";
                 }
-                Service.LastPing.put(uuid, activity.getPingTime());
-
-                List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));
-                int imageQuality = baseUser.get(baseUser.size() - 1).getImageQuality();
-                parentalConfig.setImageQuality(imageQuality);
-                int screenShotDelay = baseUser.get(baseUser.size() - 1).getScreenShotDelay();
-                parentalConfig.setScreenShotDelay(screenShotDelay);
-                // String command = baseUser.get(baseUser.size() - 1).getCommand();
-                // fetch latest command
-                List<Command> command;
-                command = commandRepo.getLastCommand(UUID.fromString(uuid));
-                String commandName = command.get(command.size() - 1).getCommandName();
-                parentalConfig.setCommand(commandName);
-                log.info("send command to client " + commandName);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("Oppooos, exception. return default config");
                 return gson.toJson(parentalConfig);
-            } else {
-                log.error("user null or empty, return default config");
-                return "ERROR";
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("Oppooos, exception. return default config");
-            return gson.toJson(parentalConfig);
         }
     }
 
@@ -205,6 +212,7 @@ public class REST {
             return null;
         }
     }
+
     @PostMapping("/v1/getPic")
     public void uploadFile(@RequestParam("file") MultipartFile file,
                            @RequestParam(required = true) String uuid,
@@ -280,7 +288,6 @@ public class REST {
         }
         return -1;
     }
-
 
 
     @GetMapping("/v1/getConfig")

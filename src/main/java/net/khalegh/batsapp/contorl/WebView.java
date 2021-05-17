@@ -135,6 +135,7 @@ public class WebView {
             // get config
             List<ParentalConfig> config = parentalConfigRepo.findConfigByUuid(uuid);
             try {
+                //fixme nullable value when there is not  config.get(config.size() - 1).getImageQuality()
                 model.addAttribute("imageQuality", config.get(config.size() - 1).getImageQuality());
                 model.addAttribute("screenShotDelay", config.get(config.size() - 1).getScreenShotDelay());
 
