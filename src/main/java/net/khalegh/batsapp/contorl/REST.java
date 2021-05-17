@@ -448,7 +448,21 @@ public class REST {
             }
             userRepo.save(userInfo);
 //            User.initUser(environment.getProperty("upload.path"), userInfo.getUuid());
-            log.info("user registered successfully.");
+
+            // init user
+            ParentalConfig parentalConfig = new ParentalConfig();
+            parentalConfig.setCommand("stop");
+            parentalConfig.setUuid(userInfo.getUuid());
+            parentalConfig.setImageQuality(15);
+            parentalConfig.setScreenShotDelay(60);
+            parentalConfigRepo.save(parentalConfig);
+
+            Command command = new Command();
+            command.setCommandName("stop");
+            command.setUserId(userInfo.getUuid());
+            commandRepo.save(command);
+
+            log.info("user register and initialized successfully.");
             response.sendRedirect("/login");
             return RESPONSE_SUCCESS;
         } catch (Exception e) {
