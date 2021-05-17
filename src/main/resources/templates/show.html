@@ -363,7 +363,7 @@
         <!-- Main Content Post Versions -->
         <div th:each="day: ${dayList}">
             <div class="col-xs-4">
-                <a th:href="@{/show(date=${today},from='00',to='01')}">
+                <a th:href="@{/show(date=${day},from='00',to='01')}">
                     <button type="submit" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color"><b
                             th:text="${day}"></b>&nbsp;
                     </button>
