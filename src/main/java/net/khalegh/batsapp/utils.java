@@ -18,6 +18,16 @@ public class utils {
         log.error("=======  notify parent implementation ===============");
     }
 
+
+    private static String reverseString(String str) {
+        char[] ch = str.toCharArray();
+        StringBuilder rev = new StringBuilder();
+        for (int i = ch.length - 1; i >= 0; i--) {
+            rev.append(ch[i]);
+        }
+        return rev.toString();
+    }
+
     public static int getTimeDiff(String now, String before) {
         String[] fractions1 = now.split(":");
         String[] fractions2 = before.split(":");

@@ -9,19 +9,13 @@ import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
 import net.khalegh.batsapp.service.FileUploadService;
-import net.khalegh.batsapp.service.MyUserPrinciple;
-import net.khalegh.batsapp.service.User;
 import net.khalegh.batsapp.tools.Video;
 import net.khalegh.batsapp.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,8 +24,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.management.remote.JMXAuthenticator;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -43,10 +36,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -137,7 +127,8 @@ public class REST {
 
                               HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
-
+        if (!isValidRequest(request))
+            return 0;
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         try {
             if (user != null) {
@@ -181,8 +172,26 @@ public class REST {
         return -1;
     }
 
+    private boolean isValidRequest(HttpServletRequest request) {
+        //fixme check in filter.
+        Optional<String> status = Optional.ofNullable(request.getHeader("auth"));
+        if (status.isPresent()) {
+            log.info("==== header auth ->  " + request.getHeader("auth"));
+            log.info("==== header ver  ->  " + request.getHeader("ver"));
+            //todo check and return true
+            return true;
+        } else {
+            log.info("==== header auth ERORR =========");
+            return false;
+        }
+    }
+
+
     @GetMapping("/v1/ws")
-    public String whatsUp(@RequestParam(required = true) String uuid) {
+    public String whatsUp(@RequestParam(required = true) String uuid,
+                          HttpServletRequest request) {
+        if (!isValidRequest(request))
+            return "null";
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         ParentalConfig parentalConfig = new ParentalConfig();
         try {
@@ -240,7 +249,10 @@ public class REST {
 
     @GetMapping("/v1/getAuthKey")
     public String getAthKey(@RequestParam(required = true) String username,
-                            @RequestParam(required = true) String password) {
+                            @RequestParam(required = true) String password,
+                            HttpServletRequest request) {
+        if (!isValidRequest(request))
+            return "null";
         log.info("authentication request");
         UserInfo user = userRepo.findByUserName(username);
         if (passwordEncoder.matches(password, user.getPassword())) {
@@ -253,7 +265,10 @@ public class REST {
 
     @PostMapping("/v1/getPic")
     public void uploadFile(@RequestParam("file") MultipartFile file,
-                           @RequestParam(required = true) String uuid) {
+                           @RequestParam(required = true) String uuid,
+                           HttpServletRequest request) {
+        if (!isValidRequest(request))
+            return;
         log.info("incoming upload request, check authentication code");
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         try {
@@ -271,7 +286,10 @@ public class REST {
 
 
     @GetMapping("/v1/getConfig")
-    public String getConfig(@RequestParam(required = true) String uuid) {
+    public String getConfig(@RequestParam(required = true) String uuid,
+                            HttpServletRequest request) {
+        if (!isValidRequest(request))
+            return "null";
         log.info("incoming getConfig, check authentication code");
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         ParentalConfig parentalConfig = new ParentalConfig();
@@ -297,7 +315,10 @@ public class REST {
     }
 
     @GetMapping("/v1/getCommand")
-    public String getCommand(@RequestParam(required = true) String uuid) {
+    public String getCommand(@RequestParam(required = true) String uuid,
+                             HttpServletRequest request) {
+        if (!isValidRequest(request))
+            return "null";
         log.info("incoming getCommand, check authentication code");
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         try {
@@ -322,7 +343,10 @@ public class REST {
     public int kidsControlSettings(@RequestParam(required = true) String screenShotDelay,
                                    @RequestParam(required = true) String imageQuality,
                                    @RequestParam(required = true) String uuid,
+                                   HttpServletRequest request,
                                    HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return -1;
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         try {
             if (user != null) {
@@ -365,6 +389,8 @@ public class REST {
 
                                HttpServletRequest request,
                                HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return -1;
         // TODO: 1/19/21 load/update user in memory cache for performance issue
         //todo check if password and repassword are same
         UserInfo qodQoDUserInfo = userRepo.findByUserName(username);
@@ -440,6 +466,8 @@ public class REST {
                        @RequestParam(required = false) MultipartFile image,
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return -1;
         // TODO: 2/6/21  get video thumbnail via background task inorder to  QoS enactment
         // TODO: 2/6/21 video thumbnail watermark
 
@@ -514,6 +542,8 @@ public class REST {
                             @RequestParam(required = true) UUID uuid,
                             HttpServletRequest request,
                             HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return "null";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserInfo userInfo = new UserInfo();
         userInfo = userRepo.findByUserName(auth.getName());
@@ -537,6 +567,8 @@ public class REST {
     public String likePost(@RequestParam(required = true) UUID uuid,
                            HttpServletRequest request,
                            HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return "null";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!auth.isAuthenticated())
             log.info("user not authenticated.");
@@ -567,6 +599,8 @@ public class REST {
     public String disLikePost(@RequestParam(required = true) UUID uuid,
                               HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return "null";
         if (uuid != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             UserInfo userInfo = userRepo.findByUserName(auth.getName());
@@ -598,6 +632,8 @@ public class REST {
                          @RequestParam(required = true) ReportType reportType,
                          HttpServletRequest request,
                          HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return "null";
 
         if (uuid != null && reportType != null) {
             log.info("get new report -> " + reportType);
@@ -616,6 +652,7 @@ public class REST {
 
     public static void saveFile(String uploadDir, String fileName,
                                 MultipartFile multipartFile) throws IOException {
+
         Path uploadPath = Paths.get(uploadDir);
 
         if (!Files.exists(uploadPath)) {
@@ -685,7 +722,10 @@ public class REST {
     public int postMan(@RequestParam(required = false) String subject,
                        @RequestParam(required = false) String body,
                        @RequestParam(required = false) UUID uuid,
+                       HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return -1;
         if (subject.isEmpty() && body.isEmpty() && uuid.toString().isEmpty()) {
             log.error("postmen error, null or empty content");
             response.sendRedirect("/");
@@ -711,7 +751,10 @@ public class REST {
 
     @GetMapping("/v1/flow")
     public int flowUser(@RequestParam(required = true) UUID uuid,
+                        HttpServletRequest request,
                         HttpServletResponse response) throws IOException {
+        if (!isValidRequest(request))
+            return -1;
         if (uuid == null) {
             log.error("null or empty uuid.");
             response.sendRedirect("/");
@@ -748,7 +791,10 @@ public class REST {
                              @RequestParam(required = true) String body,
                              @RequestParam(required = true) String phoneOrMail,
                              HttpServletResponse response,
+                             HttpServletRequest request,
                              Model model) throws IOException {
+        if (!isValidRequest(request))
+            return "null";
         if (firstName == null &&
                 lastName == null &&
                 subject == null &&
@@ -776,7 +822,9 @@ public class REST {
     }
 
     @GetMapping("/v1/ver")
-    public String version() {
+    public String version(HttpServletRequest request) {
+        if (!isValidRequest(request))
+            return "null";
         return VERSION;
     }
 
