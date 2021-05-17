@@ -117,61 +117,7 @@ public class REST {
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-
-    @GetMapping("/v1/passwd")
-    public int changePassword(Model model,
-                              @RequestParam(required = true) String uuid,
-                              @RequestParam(required = true) String oldPassword,
-                              @RequestParam(required = true) String newPassword,
-                              @RequestParam(required = true) String reNewPassword,
-
-                              HttpServletRequest request,
-                              HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return 0;
-        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
-        try {
-            if (user != null) {
-                if (oldPassword.equals(newPassword)) {
-                    log.warn("old and new password are same");
-                    response.sendRedirect("/setting?error=" + OLD_NEW_PASSWORD_SAME);
-                    return OLD_NEW_PASSWORD_SAME;
-                }
-
-                if (!newPassword.equals(reNewPassword)) {
-                    log.error("user not found!, Internal error.");
-                    response.sendRedirect("/setting?error=" + INPUT_IS_NOT_CORRECT);
-                    return INPUT_IS_NOT_CORRECT;
-                }
-
-                try {
-                    assert false;
-                    if (passwordEncoder.matches(oldPassword, user.getPassword())) {
-                        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12); // Strength set as 12
-                        user.setPassword(encoder.encode(newPassword));
-                        userRepo.save(user);
-                        log.warn("password changed successfully.");
-                        response.sendRedirect("/logout");
-                        return RESPONSE_SUCCESS;
-                    } else {
-                        log.warn("error, password not matched.");
-                        response.sendRedirect("/setting?error=" + OLD_PASSWORD_NOT_MATCHED);
-                        return OLD_PASSWORD_NOT_MATCHED;
-                    }
-
-                } catch (Exception e) {
-                    return RESPONSE_ERROR;
-                }
-
-            }
-        } catch (Exception e) {
-            log.warn("user not found!, Internal error.");
-            response.sendRedirect("/setting?error=" + USER_NOT_FOUND_OR_NULL_ERROR);
-            return USER_NOT_FOUND_OR_NULL_ERROR;
-        }
-        return -1;
-    }
-
+    /////////////// BatsApp normal app
     private boolean isValidRequest(HttpServletRequest request) {
         //fixme check in filter.
         Optional<String> status = Optional.ofNullable(request.getHeader("auth"));
@@ -185,8 +131,6 @@ public class REST {
             return false;
         }
     }
-
-
     @GetMapping("/v1/ws")
     public String whatsUp(@RequestParam(required = true) String uuid,
                           HttpServletRequest request) {
@@ -246,7 +190,6 @@ public class REST {
         }
     }
 
-
     @GetMapping("/v1/getAuthKey")
     public String getAthKey(@RequestParam(required = true) String username,
                             @RequestParam(required = true) String password,
@@ -262,7 +205,6 @@ public class REST {
             return null;
         }
     }
-
     @PostMapping("/v1/getPic")
     public void uploadFile(@RequestParam("file") MultipartFile file,
                            @RequestParam(required = true) String uuid,
@@ -285,11 +227,65 @@ public class REST {
     }
 
 
+    ////////////// WebView
+
+    @GetMapping("/v1/passwd")
+    public int changePassword(Model model,
+                              @RequestParam(required = true) String uuid,
+                              @RequestParam(required = true) String oldPassword,
+                              @RequestParam(required = true) String newPassword,
+                              @RequestParam(required = true) String reNewPassword,
+
+                              HttpServletRequest request,
+                              HttpServletResponse response) throws IOException {
+        UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
+        try {
+            if (user != null) {
+                if (oldPassword.equals(newPassword)) {
+                    log.warn("old and new password are same");
+                    response.sendRedirect("/setting?error=" + OLD_NEW_PASSWORD_SAME);
+                    return OLD_NEW_PASSWORD_SAME;
+                }
+
+                if (!newPassword.equals(reNewPassword)) {
+                    log.error("user not found!, Internal error.");
+                    response.sendRedirect("/setting?error=" + INPUT_IS_NOT_CORRECT);
+                    return INPUT_IS_NOT_CORRECT;
+                }
+
+                try {
+                    assert false;
+                    if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+                        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12); // Strength set as 12
+                        user.setPassword(encoder.encode(newPassword));
+                        userRepo.save(user);
+                        log.warn("password changed successfully.");
+                        response.sendRedirect("/logout");
+                        return RESPONSE_SUCCESS;
+                    } else {
+                        log.warn("error, password not matched.");
+                        response.sendRedirect("/setting?error=" + OLD_PASSWORD_NOT_MATCHED);
+                        return OLD_PASSWORD_NOT_MATCHED;
+                    }
+
+                } catch (Exception e) {
+                    return RESPONSE_ERROR;
+                }
+
+            }
+        } catch (Exception e) {
+            log.warn("user not found!, Internal error.");
+            response.sendRedirect("/setting?error=" + USER_NOT_FOUND_OR_NULL_ERROR);
+            return USER_NOT_FOUND_OR_NULL_ERROR;
+        }
+        return -1;
+    }
+
+
+
     @GetMapping("/v1/getConfig")
     public String getConfig(@RequestParam(required = true) String uuid,
                             HttpServletRequest request) {
-        if (!isValidRequest(request))
-            return "null";
         log.info("incoming getConfig, check authentication code");
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         ParentalConfig parentalConfig = new ParentalConfig();
@@ -317,8 +313,7 @@ public class REST {
     @GetMapping("/v1/getCommand")
     public String getCommand(@RequestParam(required = true) String uuid,
                              HttpServletRequest request) {
-        if (!isValidRequest(request))
-            return "null";
+
         log.info("incoming getCommand, check authentication code");
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         try {
@@ -345,8 +340,6 @@ public class REST {
                                    @RequestParam(required = true) String uuid,
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return -1;
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         try {
             if (user != null) {
@@ -389,8 +382,7 @@ public class REST {
 
                                HttpServletRequest request,
                                HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return -1;
+
         // TODO: 1/19/21 load/update user in memory cache for performance issue
         //todo check if password and repassword are same
         UserInfo qodQoDUserInfo = userRepo.findByUserName(username);
@@ -466,8 +458,6 @@ public class REST {
                        @RequestParam(required = false) MultipartFile image,
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return -1;
         // TODO: 2/6/21  get video thumbnail via background task inorder to  QoS enactment
         // TODO: 2/6/21 video thumbnail watermark
 
@@ -542,8 +532,6 @@ public class REST {
                             @RequestParam(required = true) UUID uuid,
                             HttpServletRequest request,
                             HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return "null";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserInfo userInfo = new UserInfo();
         userInfo = userRepo.findByUserName(auth.getName());
@@ -567,8 +555,7 @@ public class REST {
     public String likePost(@RequestParam(required = true) UUID uuid,
                            HttpServletRequest request,
                            HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return "null";
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!auth.isAuthenticated())
             log.info("user not authenticated.");
@@ -599,8 +586,6 @@ public class REST {
     public String disLikePost(@RequestParam(required = true) UUID uuid,
                               HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return "null";
         if (uuid != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             UserInfo userInfo = userRepo.findByUserName(auth.getName());
@@ -632,8 +617,6 @@ public class REST {
                          @RequestParam(required = true) ReportType reportType,
                          HttpServletRequest request,
                          HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return "null";
 
         if (uuid != null && reportType != null) {
             log.info("get new report -> " + reportType);
@@ -724,8 +707,6 @@ public class REST {
                        @RequestParam(required = false) UUID uuid,
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return -1;
         if (subject.isEmpty() && body.isEmpty() && uuid.toString().isEmpty()) {
             log.error("postmen error, null or empty content");
             response.sendRedirect("/");
@@ -753,8 +734,6 @@ public class REST {
     public int flowUser(@RequestParam(required = true) UUID uuid,
                         HttpServletRequest request,
                         HttpServletResponse response) throws IOException {
-        if (!isValidRequest(request))
-            return -1;
         if (uuid == null) {
             log.error("null or empty uuid.");
             response.sendRedirect("/");
@@ -793,8 +772,6 @@ public class REST {
                              HttpServletResponse response,
                              HttpServletRequest request,
                              Model model) throws IOException {
-        if (!isValidRequest(request))
-            return "null";
         if (firstName == null &&
                 lastName == null &&
                 subject == null &&
@@ -823,8 +800,6 @@ public class REST {
 
     @GetMapping("/v1/ver")
     public String version(HttpServletRequest request) {
-        if (!isValidRequest(request))
-            return "null";
         return VERSION;
     }
 

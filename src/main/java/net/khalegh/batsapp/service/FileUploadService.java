@@ -18,7 +18,18 @@ public class FileUploadService {
     private static final Logger log = LoggerFactory.getLogger(WebView.class);
     SimpleDateFormat sdf = new SimpleDateFormat("HH");
 
-    public void uploadFile(MultipartFile file, String uuid) {
+    private static void checkOrCreateDirectory(String dirName) throws Exception {
+        File directory = new File(dirName);
+        if (!directory.exists()) {
+            boolean result = directory.mkdir();
+            if (result) {
+                log.info("make dir  " + directory);
+            } else
+                log.error(" error while make  " + directory);
+        }
+    }
+
+    public void uploadFile(MultipartFile file, String uuid) throws Exception {
         PersianDate today = PersianDate.now();
         log.info("screenshot from " + uuid + " filename " + file.getOriginalFilename());
         String from = sdf.format(new Date());
@@ -27,28 +38,21 @@ public class FileUploadService {
         try {
             String home = System.getProperty("user.home");
 
+            // Step 1, check if user home dir exists
+            String userHomePath = home + "/" + uuid;
+            checkOrCreateDirectory(userHomePath);
 
-            String userDirPath = home + "/" + uuid + "/" + today;
-            // check if dir exist or not
-            File dateDirectory = new File(userDirPath);
-            if (!dateDirectory.exists()) {
-                boolean result = dateDirectory.mkdir();
-                if (result) {
-                    log.info("make dir  " + dateDirectory);
-                } else
-                    log.error(" error while make dir  " + dateDirectory);
-            }
+            // Step 2, check if user home_dir/date exists
+            String userDateDirectory = userHomePath + "/" + today;
+            checkOrCreateDirectory(userDateDirectory);
 
-            String timeDirectory = dateDirectory + "/" + from + "-" + to;
-            File subChildDir = new File(timeDirectory);
-            boolean subStatus;
-            if (!subChildDir.exists()) {
-                subStatus = subChildDir.mkdir();
-                if (!subStatus)
-                    log.error("error while mkdir() subDir");
-            }
 
-            file.transferTo(new File(FilenameUtils.normalize(userDirPath + "/" + from + "-" + to + "/" + file.getOriginalFilename())));
+            // Step 2, check if user home_dir/date/from-to exists
+            String timeDirectory = userDateDirectory + "/" + from + "-" + to;
+            checkOrCreateDirectory(timeDirectory);
+
+
+            file.transferTo(new File(FilenameUtils.normalize(userDateDirectory + "/" + from + "-" + to + "/" + file.getOriginalFilename())));
             log.info("Upload successfully done.");
         } catch (IOException e) {
             e.printStackTrace();
