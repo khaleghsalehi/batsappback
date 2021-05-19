@@ -191,6 +191,20 @@ public class WebView {
         if (auth.isAuthenticated()) {
             model.addAttribute("username", auth.getName());
             userInfo = userRepo.findByUserName(auth.getName());
+
+            // check if there is suspected alarm
+            boolean isSuspectedUser = Service.suspectedClients
+                    .asMap()
+                    .containsKey(String.valueOf(userInfo.getUuid()));
+            if (isSuspectedUser) {
+                try {
+                    String suspensionDetails = Service.suspectedClients.get(String.valueOf(userInfo.getUuid()));
+                    model.addAttribute("suspected", suspensionDetails);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
             String home = System.getProperty("user.home");
             File file = new File(home + "/" + userInfo.getUuid());
             String[] directories = file.list(new FilenameFilter() {
@@ -248,8 +262,6 @@ public class WebView {
 
         return "setting";
     }
-
-
 
 
     @RequestMapping("/search")

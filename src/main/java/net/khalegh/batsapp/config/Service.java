@@ -48,7 +48,7 @@ public class Service {
             });
 
 
-    public static LoadingCache<String, String> LastPing = CacheBuilder
+    public static LoadingCache<String, String> lastPing = CacheBuilder
             .newBuilder()
             .build(new CacheLoader<String, String>() {
                 @Override
@@ -57,7 +57,7 @@ public class Service {
                 }
             });
 
-    public static LoadingCache<String, String> LastUpload = CacheBuilder
+    public static LoadingCache<String, String> lastUpload = CacheBuilder
             .newBuilder()
             .build(new CacheLoader<String, String>() {
                 @Override
@@ -65,6 +65,16 @@ public class Service {
                     return "";
                 }
             });
+
+    public static LoadingCache<String, String> suspectedClients = CacheBuilder
+            .newBuilder()
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String s) throws Exception {
+                    return "";
+                }
+            });
+
 
 
 }

@@ -2,21 +2,21 @@ package net.khalegh.batsapp;
 
 
 import net.khalegh.batsapp.contorl.WebView;
+import net.khalegh.batsapp.kids.SuspectedAction;
+import net.khalegh.batsapp.kids.SuspectedActivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class utils {
     private static final Logger log = LoggerFactory.getLogger(utils.class);
 
-    public static void notifyParent(String uuid) {
-        //todo implement
-        log.error("=======  notify parent implementation ===============");
-    }
 
 
     private static String reverseString(String str) {

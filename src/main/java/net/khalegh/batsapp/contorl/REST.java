@@ -8,6 +8,8 @@ import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
+import net.khalegh.batsapp.kids.SuspectedAction;
+import net.khalegh.batsapp.kids.SuspectedActivity;
 import net.khalegh.batsapp.service.FileUploadService;
 import net.khalegh.batsapp.tools.Video;
 import net.khalegh.batsapp.utils;
@@ -24,7 +26,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -94,6 +95,9 @@ public class REST {
     @Autowired
     ActivityRepo activityRepo;
 
+    @Autowired
+    SuspectedActivityRepo suspectedActivityRepo;
+
 
     public final static String VERSION = "0.0.7";
     private final static String TYPE_INVALID_ERROR = "Error, Invalid or empty type";
@@ -135,8 +139,8 @@ public class REST {
     @GetMapping("/v1/ws")
     public String whatsUp(@RequestParam(required = true) String uuid,
                           HttpServletRequest request) {
-        if (!isValidRequest(request))
-            return "null";
+//        if (!isValidRequest(request))
+//            return "null";
 
         if (!(uuid.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) || (uuid.isEmpty())) {
             log.error("ws uuid is null,empty or invalid , return null.");
@@ -158,19 +162,36 @@ public class REST {
                     activityRepo.save(activity);
 
                     // set ping time to cache
-                    if (Service.LastPing.get(uuid).isEmpty()) {
+                    if (Service.lastPing.get(uuid).isEmpty()) {
                         log.info("LastPing cache is null or empty for " + uuid);
-                        Service.LastPing.put(uuid, activity.getPingTime());
+                        Service.lastPing.put(uuid, activity.getPingTime());
 
                     }
-                    int diff = utils.getTimeDiff(activity.getPingTime(), Service.LastPing.get(uuid));
+                    int diff = utils.getTimeDiff(activity.getPingTime(), Service.lastPing.get(uuid));
                     if (diff > MAX_PING_DIFF) {
                         log.error("ping diff " + diff + " from " + uuid);
-                        utils.notifyParent(uuid);
+                        log.info(" =====  suspected action =====");
+                        SuspectedActivity suspectedActivity = new SuspectedActivity();
+                        suspectedActivity.setUuid(UUID.fromString(uuid));
+                        suspectedActivity.setLocalDateTime(LocalDateTime.now());
+                        suspectedActivity.setSuspectedAction(SuspectedAction.NO_PING);
+
+                        suspectedActivityRepo.save(suspectedActivity);
+                        int count;
+                        if (!Service.suspectedClients.asMap().containsKey(uuid))
+                            count = 1;
+                        else {
+                            count = Integer.parseInt(Service.suspectedClients.get(uuid));
+                            count++;
+                        }
+                        Service.suspectedClients.put(uuid, String.valueOf(count));
+
+                        log.info("log suspected count " + count + " type " + SuspectedAction.NO_PING + " for " + uuid);
+
                     } else {
                         log.info("ping diff " + diff + " is ok " + uuid);
                     }
-                    Service.LastPing.put(uuid, activity.getPingTime());
+                    Service.lastPing.put(uuid, activity.getPingTime());
 
                     List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));
                     int imageQuality = baseUser.get(baseUser.size() - 1).getImageQuality();

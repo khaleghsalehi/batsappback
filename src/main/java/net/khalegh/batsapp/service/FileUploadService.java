@@ -58,7 +58,7 @@ public class FileUploadService {
             file.transferTo(new File(FilenameUtils.normalize(userDateDirectory + "/" +
                     from + "-" + to + "/" +
                     file.getOriginalFilename())));
-            net.khalegh.batsapp.config.Service.LastUpload.put(uuid,
+            net.khalegh.batsapp.config.Service.lastUpload.put(uuid,
                     LocalDateTime.now().format(timeFormatter));
             log.info("Upload successfully done.");
         } catch (IOException e) {

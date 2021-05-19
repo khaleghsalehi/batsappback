@@ -37,11 +37,11 @@ public class management {
         if (!adminToken.equals(ADMIN_TOKEN))
             return null;
         List<LiveUser> list = new ArrayList<>();
-        Service.LastPing.asMap().forEach((k, v) -> {
+        Service.lastPing.asMap().forEach((k, v) -> {
             LiveUser liveUser = new LiveUser();
             liveUser.setUserName(userRepo.getUserNameByUuid(UUID.fromString(k)));
             try {
-                liveUser.setLastUpload(Service.LastUpload.get(k));
+                liveUser.setLastUpload(Service.lastUpload.get(k));
             } catch (ExecutionException e) {
                 e.printStackTrace();
                 liveUser.setLastUpload("unknown");

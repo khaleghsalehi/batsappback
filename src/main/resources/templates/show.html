@@ -30,6 +30,7 @@
 
 
 
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -354,6 +355,19 @@
                     عکس‌های جدید ارسالی
                 </button>
             </a>
+            <br>
+            <div  th:if="${suspected!=null}" class="row">
+                <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <a  th:href="@{/suspect(uuid=${uuid})}">
+                        <button type="submit"
+                                class="btn btn-md btn-danger"
+                        >
+                            از گوشی کودک برای مدتی گزارش ارسال نشده است. مشاهده جزییات
+                        </button>
+                    </a>
+                </div>
+
+            </div>
             <br>
             <b th:text="${screenShotCount}+' عدد تعداد عکس‌های ارسال شده از گوشی کودک تا این لحظه'"></b>
             <br>
