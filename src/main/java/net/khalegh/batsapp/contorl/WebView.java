@@ -5,6 +5,7 @@ import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
+import net.khalegh.batsapp.kids.SuspectedActivity;
 import net.khalegh.batsapp.utils;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
@@ -19,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -30,8 +30,6 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 public class WebView {
@@ -50,6 +48,7 @@ public class WebView {
     private static final String INCORRECT_USERNAME_OR_PASSWORD = "خطا: نام کاربری یا کلمه عبور اشتباه است.";
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HH");
+    private static final int SUSPENSION_MAX_POLICY = 1;
 
 
     @Autowired
@@ -69,6 +68,9 @@ public class WebView {
 
     @Autowired
     CommandRepo commandRepo;
+
+    @Autowired
+    SuspectedActivityRepo suspectedActivityRepo;
 
     @Autowired
     ParentalConfigRepo parentalConfigRepo;
@@ -167,6 +169,25 @@ public class WebView {
     }
 
 
+    @RequestMapping("/suspect")
+    public String showActivities(@RequestParam(required = true) String uuid,
+                                 Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.isAuthenticated()) {
+            model.addAttribute("username", auth.getName());
+            try {
+                Service.suspectedClients.invalidate(uuid);
+                List<SuspectedActivity> activity = suspectedActivityRepo.getByUuid(UUID.fromString(uuid));
+                model.addAttribute("activity", activity);
+                return "suspect";
+            } catch (Exception e) {
+                return "/";
+            }
+        } else {
+            return "/";
+        }
+    }
+
     @RequestMapping("/show")
     public String showActivities(@RequestParam(required = true) String date,
                                  @RequestParam(required = true) String from,
@@ -198,8 +219,12 @@ public class WebView {
                     .containsKey(String.valueOf(userInfo.getUuid()));
             if (isSuspectedUser) {
                 try {
-                    String suspensionDetails = Service.suspectedClients.get(String.valueOf(userInfo.getUuid()));
-                    model.addAttribute("suspected", suspensionDetails);
+                    int count = Integer.parseInt(Service.suspectedClients
+                            .get(String.valueOf(userInfo.getUuid())));
+                    if (count > SUSPENSION_MAX_POLICY) {
+                        model.addAttribute("suspected", "yup");
+                        model.addAttribute("uuid", userInfo.getUuid());
+                    }
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }

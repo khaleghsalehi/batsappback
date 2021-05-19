@@ -120,6 +120,7 @@ public class REST {
 
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    DateTimeFormatter suspectedActivityFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /////////////// BatsApp normal app
     private boolean isValidRequest(HttpServletRequest request) {
@@ -139,8 +140,8 @@ public class REST {
     @GetMapping("/v1/ws")
     public String whatsUp(@RequestParam(required = true) String uuid,
                           HttpServletRequest request) {
-//        if (!isValidRequest(request))
-//            return "null";
+        if (!isValidRequest(request))
+            return "null";
 
         if (!(uuid.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) || (uuid.isEmpty())) {
             log.error("ws uuid is null,empty or invalid , return null.");
@@ -173,7 +174,9 @@ public class REST {
                         log.info(" =====  suspected action =====");
                         SuspectedActivity suspectedActivity = new SuspectedActivity();
                         suspectedActivity.setUuid(UUID.fromString(uuid));
-                        suspectedActivity.setLocalDateTime(LocalDateTime.now());
+                        suspectedActivity.setLocalDateTime(LocalDateTime
+                                .now()
+                                .format(suspectedActivityFormat));
                         suspectedActivity.setSuspectedAction(SuspectedAction.NO_PING);
 
                         suspectedActivityRepo.save(suspectedActivity);

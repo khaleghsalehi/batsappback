@@ -27,7 +27,7 @@ public class SuspectedActivity {
 
     @Getter
     @Setter
-    LocalDateTime localDateTime;
+    String localDateTime;
 
     @Getter
     @Setter

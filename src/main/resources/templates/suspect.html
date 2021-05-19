@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>باتساپ</title>
+
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Main Font -->
+    <script src="nui/js/webfontloader.min.js"></script>
+    <script>
+		WebFont.load({
+			google: {
+				families: ['Roboto:300,400,500,700:latin']
+			}
+		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-grid.css">
+
+    <!-- Main Styles CSS -->
+    <link rel="stylesheet" type="text/css" href="nui/css/main.min.css">
+    <!--    autorefresh    -->
+    <meta http-equiv="refresh" content="300">
+
+</head>
+
+<body>
+<div class="fixed-sidebar">
+    <div class="fixed-sidebar-left sidebar--small" id="sidebar-left">
+
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="باتساپ">
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="بازکردن منو">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="/show">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="گزارش فعالیت‌های کودک">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنظیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-logout-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exbord">
+                        <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
+                             data-placement="right"
+                             data-original-title="درباره باتساپ">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
+                        </svg>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1">
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="باتساپ">
+            </div>
+            <div class="title-block">
+                <h6 class="logo-title">باتساپ</h6>
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-close-icon left-menu-icon">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">بستن منو</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/">
+                        <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خانه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خانه</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ثبت نام</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ورود</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خروج</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنطیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">تنظیمات</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/show(date=${today},from='00',to='01')}">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="گزارش فعالیت‌های کودک">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">گزارش فعالیت‌های کودک</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exbord">
+                        <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
+                             data-placement="right"
+                             data-original-title="درباره باتساپ">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">درباره باتساپ</span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+<div class="fixed-sidebar fixed-sidebar-responsive">
+
+    <div class="fixed-sidebar-left sidebar--small" id="sidebar-left-responsive">
+        <a href="/" class="logo js-sidebar-open">
+            <img src="nui/img/logo.png" alt="باتساپ">
+        </a>
+
+    </div>
+
+    <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1-responsive">
+        <a href="/" class="logo">
+            <div class="img-wrap">
+                <img src="nui/img/logo.png" alt="باتساپ">
+            </div>
+            <div class="title-block">
+                <h6 class="logo-title">باتساپ</h6>
+            </div>
+        </a>
+
+        <div class="mCustomScrollbar" data-mcs-theme="dark">
+            <ul class="left-menu">
+                <li>
+                    <a href="#" class="js-sidebar-open">
+                        <svg class="olymp-close-icon left-menu-icon">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">بستن منو</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/signup">
+                        <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خانه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خانه</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/signup">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ثبت نام">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ثبت نام</span>
+                    </a>
+                </li>
+                <li th:if="${username == 'anonymousUser' or  username ==null }">
+                    <a href="/login">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="ورود">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">ورود</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/logout">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="خروج">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">خروج</span>
+                    </a>
+                </li>
+                <li th:if="${username != 'anonymousUser' and  username !=null }">
+                    <a href="/setting">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="تنطیمات">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">تنظیمات</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/show(date=${today},from='00',to='01')}">
+                        <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
+                             data-original-title="اشتراک تجربه">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">گزارش فعالیت‌های کودک</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/exbord">
+                        <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
+                             data-placement="right"
+                             data-original-title="درباره باتساپ">
+                            <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
+                        </svg>
+                        <span class="left-menu-title">درباره باتساپ</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="fixed-sidebar right fixed-sidebar-responsive">
+
+    <!--    <div class="fixed-sidebar-right sidebar&#45;&#45;small" id="sidebar-right-responsive_1">-->
+    <!--        <a th:if="${isMobile=='true'}" href="/show" class="olympus-chat inline-items">-->
+    <!--            <svg class="olymp-chat-&#45;&#45;messages-icon">-->
+    <!--                <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-camera-icon"></use>-->
+    <!--            </svg>-->
+    <!--        </a>-->
+
+    <!--        <a class="olympus-chat inline-items" th:if="${isMobile=='false'}" href="nui/download/exbord.apk"><i-->
+    <!--                class="fa fa-2x fa-android" aria-hidden="true"></i>برنامه موبایل</a>-->
+
+    <!--    </div>-->
+</div>
+
+<header class="header" id="site-header">
+
+    <div class="page-title">
+        <h6>
+            صفحه کنترل والدین
+        </h6>
+    </div>
+    <div class="page-download-app">
+        <h3>
+            <a href="nui/download/exbord.apk"><i class="fa fa-android" aria-hidden="true"></i></a>
+            <a href="#"><i class="fa fa-apple" aria-hidden="true"></i></a>
+        </h3>
+    </div>
+</header>
+
+
+<header class="header header-responsive" id="site-header-responsive">
+
+</header>
+
+<!-- ... end Responsive Header-BP -->
+<div class="header-spacer"></div>
+
+<div class="container">
+    <div class="row row-fluid">
+
+
+        <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div th:each="item: ${activity}" class="ui-block">
+<!--                        <b th:text="${item.uuid}"></b>-->
+<!--                        <b th:text="${item.suspectedAction}"></b>-->
+                        <b th:text="${item.localDateTime}"></b>
+            </div>
+        </div>
+        <!-- footer       -->
+        <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="sub-footer-copyright" style="color: #ffff;">
+						<span>
+							<a href="/" style="color: #ffff;">BATSAPP</a> تمام حقوق مادی و معنوی سایت محفوظ است
+						</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<a class="back-to-top" href="#">
+    <img src="nui/svg-icons/back-to-top.svg" alt="arrow" class="back-icon">
+</a>
+
+
+<!-- JS Scripts -->
+<script src="nui/js/jquery-3.2.1.js"></script>
+<script src="nui/js/jquery.appear.js"></script>
+<script src="nui/js/jquery.mousewheel.js"></script>
+<script src="nui/js/perfect-scrollbar.js"></script>
+<script src="nui/js/jquery.matchHeight.js"></script>
+<script src="nui/js/svgxuse.js"></script>
+<script src="nui/js/imagesloaded.pkgd.js"></script>
+<script src="nui/js/Headroom.js"></script>
+<script src="nui/js/velocity.js"></script>
+<script src="nui/js/ScrollMagic.js"></script>
+<script src="nui/js/jquery.waypoints.js"></script>
+<script src="nui/js/jquery.countTo.js"></script>
+<script src="nui/js/popper.min.js"></script>
+<script src="nui/js/material.min.js"></script>
+<script src="nui/js/bootstrap-select.js"></script>
+<script src="nui/js/smooth-scroll.js"></script>
+<script src="nui/js/selectize.js"></script>
+<script src="nui/js/swiper.jquery.js"></script>
+<script src="nui/js/moment.js"></script>
+<script src="nui/js/daterangepicker.js"></script>
+<script src="nui/js/simplecalendar.js"></script>
+<script src="nui/js/fullcalendar.js"></script>
+<script src="nui/js/isotope.pkgd.js"></script>
+<script src="nui/js/ajax-pagination.js"></script>
+<script src="nui/js/Chart.js"></script>
+<script src="nui/js/chartjs-plugin-deferred.js"></script>
+<script src="nui/js/circle-progress.js"></script>
+<script src="nui/js/loader.js"></script>
+<script src="nui/js/run-chart.js"></script>
+<script src="nui/js/jquery.magnific-popup.js"></script>
+<script src="nui/js/jquery.gifplayer.js"></script>
+<script src="nui/js/mediaelement-و-player.js"></script>
+<script src="nui/js/mediaelement-playlist-plugin.min.js"></script>
+<script src="nui/js/ha-solardate.min.js"></script>
+<script src="nui/js/ha-datetimepicker.min.js"></script>
+<!--<script src="nui/js/BATSAPP-utils.js"></script>-->
+<script src="nui/js/base-init.js"></script>
+<script defer src="fonts/fontawesome-all.js"></script>
+<script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>
