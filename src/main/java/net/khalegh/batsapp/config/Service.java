@@ -57,5 +57,14 @@ public class Service {
                 }
             });
 
+    public static LoadingCache<String, String> LastUpload = CacheBuilder
+            .newBuilder()
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String s) throws Exception {
+                    return "";
+                }
+            });
+
 
 }

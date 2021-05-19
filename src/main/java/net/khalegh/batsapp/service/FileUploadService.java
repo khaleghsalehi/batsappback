@@ -11,11 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Service
 public class FileUploadService {
     private static final Logger log = LoggerFactory.getLogger(WebView.class);
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     SimpleDateFormat sdf = new SimpleDateFormat("HH");
 
     private static void checkOrCreateDirectory(String dirName) throws Exception {
@@ -52,7 +55,11 @@ public class FileUploadService {
             checkOrCreateDirectory(timeDirectory);
 
 
-            file.transferTo(new File(FilenameUtils.normalize(userDateDirectory + "/" + from + "-" + to + "/" + file.getOriginalFilename())));
+            file.transferTo(new File(FilenameUtils.normalize(userDateDirectory + "/" +
+                    from + "-" + to + "/" +
+                    file.getOriginalFilename())));
+            net.khalegh.batsapp.config.Service.LastUpload.put(uuid,
+                    LocalDateTime.now().format(timeFormatter));
             log.info("Upload successfully done.");
         } catch (IOException e) {
             e.printStackTrace();
