@@ -60,6 +60,21 @@ public class FileUploadService {
                     file.getOriginalFilename())));
             net.khalegh.batsapp.config.Service.lastUpload.put(uuid,
                     LocalDateTime.now().format(timeFormatter));
+            boolean containsKey = net.khalegh.batsapp.config.Service.uploadCount.asMap().containsKey(uuid);
+            if (containsKey) {
+                String s = net.khalegh.batsapp.config.Service.uploadCount.get(uuid);
+                int value;
+                if (s.equals(""))
+                    value = 1;
+                else {
+                    value = Integer.parseInt(s);
+                    value = value + 1;
+                }
+                net.khalegh.batsapp.config.Service.uploadCount.put(uuid, String.valueOf(value));
+            } else {
+                net.khalegh.batsapp.config.Service.uploadCount.put(uuid, String.valueOf(1));
+            }
+
             log.info("Upload successfully done.");
         } catch (IOException e) {
             e.printStackTrace();

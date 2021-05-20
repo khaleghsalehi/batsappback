@@ -47,6 +47,18 @@ public class management {
                 liveUser.setLastUpload("unknown");
             }
             liveUser.setUuid(UUID.fromString(k));
+            try {
+                String s = net.khalegh.batsapp.config.Service.uploadCount.get(k);
+                int value;
+                if (s.equals(""))
+                    value = 0;
+                else
+                    value = Integer.parseInt(s);
+                liveUser.setUploadCount(value);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                liveUser.setUploadCount(0);
+            }
             liveUser.setLastPing(v);
             list.add(liveUser);
         });

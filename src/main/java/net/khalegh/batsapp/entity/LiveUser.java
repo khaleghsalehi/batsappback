@@ -22,4 +22,8 @@ public class LiveUser {
     @Getter
     @Setter
     String lastUpload;
+
+    @Getter
+    @Setter
+    int uploadCount;
 }

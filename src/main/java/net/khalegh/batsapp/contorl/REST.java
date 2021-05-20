@@ -228,6 +228,8 @@ public class REST {
         if (!isValidRequest(request))
             return "null";
         log.info("authentication request");
+        //todo username uppercase/lowercase issue, fix it
+        // cause nullPointerException
         UserInfo user = userRepo.findByUserName(username);
         if (passwordEncoder.matches(password, user.getPassword())) {
             log.info("user matched ");

@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -50,6 +51,7 @@ public class Service {
 
     public static LoadingCache<String, String> lastPing = CacheBuilder
             .newBuilder()
+            .expireAfterWrite(CACHE_TTL_DEFAULT, TimeUnit.SECONDS)
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(String s) throws Exception {
@@ -66,7 +68,7 @@ public class Service {
                 }
             });
 
-    public static LoadingCache<String, String> suspectedClients = CacheBuilder
+    public static LoadingCache<String, String> uploadCount = CacheBuilder
             .newBuilder()
             .build(new CacheLoader<String, String>() {
                 @Override
@@ -75,6 +77,14 @@ public class Service {
                 }
             });
 
+    public static LoadingCache<String, String> suspectedClients = CacheBuilder
+            .newBuilder()
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String s) throws Exception {
+                    return "";
+                }
+            });
 
 
 }
