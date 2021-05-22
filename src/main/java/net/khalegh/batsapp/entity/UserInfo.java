@@ -74,4 +74,8 @@ public class UserInfo {
     @Setter
     private long lastSeen;
 
+    @Getter
+    @Setter
+    private boolean sendSMS;
+
 }
