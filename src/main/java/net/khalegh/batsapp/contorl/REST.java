@@ -122,7 +122,17 @@ public class REST {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter suspectedActivityFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+
     /////////////// BatsApp normal app
+
+    private String getClientVersion(HttpServletRequest request) {
+        Optional<String> status = Optional.ofNullable(request.getHeader("auth"));
+        if (status.isPresent()) {
+            return request.getHeader("ver");
+        }
+        return "unknown";
+    }
+
     private boolean isValidRequest(HttpServletRequest request) {
         //fixme check in filter.
         Optional<String> status = Optional.ofNullable(request.getHeader("auth"));
@@ -152,7 +162,7 @@ public class REST {
             try {
                 if (user.isPresent()) {
                     log.info("incoming ws, username -> " + user.get().getUserName() + ", uuid " + user.get().getUuid());
-
+                    Service.versionList.put(String.valueOf(user.get().getUuid()),getClientVersion(request));
                     // log ws ping history
 
                     //todo store in cache or queue for bulk save?

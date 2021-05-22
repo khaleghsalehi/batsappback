@@ -26,4 +26,8 @@ public class LiveUser {
     @Getter
     @Setter
     int uploadCount;
+
+    @Getter
+    @Setter
+    String installedVersion;
 }

@@ -48,6 +48,12 @@ public class management {
             }
             liveUser.setUuid(UUID.fromString(k));
             try {
+                liveUser.setInstalledVersion(Service.versionList.get(k));
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            try {
                 String s = net.khalegh.batsapp.config.Service.uploadCount.get(k);
                 int value;
                 if (s.equals(""))
@@ -67,6 +73,7 @@ public class management {
         statistical.setLiveUsers(list);
         statistical.setVersion(REST.VERSION);
         statistical.setUserCount(list.size());
+
 
         log.info(gson.toJson(statistical));
         return gson.toJson(statistical);

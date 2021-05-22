@@ -87,4 +87,14 @@ public class Service {
             });
 
 
+    public static LoadingCache<String, String> versionList = CacheBuilder
+            .newBuilder()
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String s) throws Exception {
+                    return "";
+                }
+            });
+
+
 }
