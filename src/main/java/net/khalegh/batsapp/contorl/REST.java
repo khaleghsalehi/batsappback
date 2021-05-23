@@ -147,6 +147,27 @@ public class REST {
         }
     }
 
+
+    @GetMapping("/v1/checkPass")
+    public String checkPassword(@RequestParam(required = true) String uuid,
+                                @RequestParam(required = true) String password,
+                                HttpServletRequest request) {
+        if (!isValidRequest(request))
+            return "null";
+        Optional<UserInfo> user = Optional.ofNullable(userRepo.getUserByUuid(UUID.fromString(uuid)));
+        if (user.isPresent()) {
+            if (passwordEncoder.matches(password, user.get().getPassword())) {
+                log.info("password matched for  uuid " + uuid);
+                return "AUTHORIZED";
+            } else {
+                log.error("password not matched for uuid " + uuid);
+                return "NULL";
+            }
+        } else {
+            return "NULL";
+        }
+    }
+
     @GetMapping("/v1/ws")
     public String whatsUp(@RequestParam(required = true) String uuid,
                           HttpServletRequest request) {
@@ -162,7 +183,7 @@ public class REST {
             try {
                 if (user.isPresent()) {
                     log.info("incoming ws, username -> " + user.get().getUserName() + ", uuid " + user.get().getUuid());
-                    Service.versionList.put(String.valueOf(user.get().getUuid()),getClientVersion(request));
+                    Service.versionList.put(String.valueOf(user.get().getUuid()), getClientVersion(request));
                     // log ws ping history
 
                     //todo store in cache or queue for bulk save?
