@@ -152,8 +152,12 @@ public class REST {
     public String checkPassword(@RequestParam(required = true) String uuid,
                                 @RequestParam(required = true) String password,
                                 HttpServletRequest request) {
-        if (!isValidRequest(request))
+        log.info("===================================== checkPass ======================");
+        log.info(" uuid and password" + uuid + " == " + password);
+        if (!isValidRequest(request)) {
+            log.info("request is not valid, return null");
             return "null";
+        }
         Optional<UserInfo> user = Optional.ofNullable(userRepo.getUserByUuid(UUID.fromString(uuid)));
         if (user.isPresent()) {
             if (passwordEncoder.matches(password, user.get().getPassword())) {
@@ -261,12 +265,12 @@ public class REST {
         log.info("authentication request");
         //todo username uppercase/lowercase issue, fix it
         // cause nullPointerException
-        UserInfo user = userRepo.findByUserName(username);
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        Optional<UserInfo> user = Optional.ofNullable(userRepo.findByUserName(username));
+        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
             log.info("user matched ");
-            return user.getUuid().toString();
+            return user.get().getUuid().toString();
         } else {
-            return null;
+            return "";
         }
     }
 

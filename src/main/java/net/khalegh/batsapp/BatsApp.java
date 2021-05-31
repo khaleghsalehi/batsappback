@@ -20,7 +20,7 @@ public class BatsApp implements CommandLineRunner {
         TimerTask timerTask = new ParentSMSNotification();
         Timer timer=new Timer(true);
         // evey 5 second send sms
-        timer.scheduleAtFixedRate(timerTask,0,5*1000);
+        timer.scheduleAtFixedRate(timerTask,0,30*1000);
 
     }
 }
