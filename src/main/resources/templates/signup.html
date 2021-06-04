@@ -34,6 +34,7 @@
 
 
 
+
     </script>
 
     <!-- Bootstrap CSS -->
@@ -52,42 +53,6 @@
 <div class="content-bg-wrap"></div>
 
 
-<!-- Header Standard Landing  -->
-
-<div class="header--standard header--standard-landing" id="header--standard">
-    <div class="container">
-        <div class="header--standard-wrap">
-
-            <a href="/" class="logo">
-                <div class="img-wrap">
-                    <img src="nui/img/logo.png" alt="باتساپ">
-                    <img src="nui/img/logo-colored-small.png" alt="Olympus" class="logo-colored">
-                </div>
-                <div class="title-block">
-                    <h6 class="logo-title">باتساپ | BATSAPP</h6>
-                    <div class="sub-title">سامانه نظارت بر فعالیت‌های کودکان </div>
-                </div>
-            </a>
-
-            <a href="#" class="open-responsive-menu js-open-responsive-menu">
-                <svg class="olymp-menu-icon">
-                    <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
-                </svg>
-            </a>
-
-            <div class="nav nav-pills nav1 header-menu">
-                <div class="mCustomScrollbar">
-                    <ul>
-                        <li class="nav-item">
-                            <a href="/" class="nav-link">صفحه اصلی</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- ... end Header Standard Landing  -->
 <div class="header-spacer--standard"></div>
 
@@ -97,15 +62,13 @@
             <div class="landing-content">
                 <h1>به باتساپ خوش آمدید!</h1>
                 <h5>
-                    باتساپ یک شبکه اجتماعی برای اشتراک تجربیات است.
-                    تجربیات خودت رو با #هشتک در بین میلیون‌ها تجربه دیگر به اشتراک بگذار
+                    اپلیکیشن هوشمند نظارت بر فعالیت‌های کودکان و نوجوانان
                 </h5>
-                <!--                <a href="#signup" class="btn btn-md btn-border c-white">ثبت نام کنید!</a>-->
-
+                <a href="/exbord" class="btn btn-md btn-border c-white">در مورد باستاپ بیشتر بدانید</a>
             </div>
         </div>
 
-        <div class="col col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12">
+        <div class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 
             <!-- Login-Registration Form  -->
 
@@ -117,36 +80,30 @@
                             <div class="text-center" th:if="${msg!= null} ">
                                 <p style="color: #dc0b0b" th:text="${msg}"></p>
                             </div>
-                            <div class="row">
+                            <div class="row display-flex">
                                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="form-group label-floating is-empty">
-                                        <label class="control-label"> نام کاربری ( فقط حروف انگلیسی و اعداد)</label>
-                                        <input name="username" class="form-control" placeholder="" type="text">
+                                        <label class="control-label"> نام کاربری (حروف انگلیسی و عدد)</label>
+                                        <input  name="username" class="form-control" placeholder="" type="text">
                                     </div>
-                                </div>
-                                <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="form-group label-floating is-empty">
                                         <label class="control-label">رمز عبور</label>
                                         <input name="password" class="form-control" placeholder="" type="password">
                                     </div>
                                     <div class="form-group label-floating is-empty">
                                         <label class="control-label">تکرار رمز عبور</label>
-                                        <input name="rePassword" class="form-control" placeholder="" type="password">
+                                        <input  name="rePassword" class="form-control" placeholder="" type="password">
                                     </div>
-
-
-                                    <div class="remember">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input name="optionsCheckboxes" type="checkbox">
-                                                تمام <a href="#">شرایط و ضوابط</a> وبسایت را می پذیرم.
-                                            </label>
-                                        </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="optionsCheckboxes" type="checkbox">
+                                            تمام <a href="/exbord#privacy">شرایط و ضوابط</a> باستاپ را می پذیرم.
+                                        </label>
                                     </div>
                                     <button type="submit" class="btn btn-purple btn-lg full-width">ایجاد حساب کاربری
                                     </button>
-                                    <a href="/">خانه</a> |
-                                    <a href="/login">ورود به باتساپ</a>
+                                    <a class="linker h5" href="/">خانه</a> |
+                                    <a class="linker h5" href="/login">ورود</a>
 
                                 </div>
                             </div>

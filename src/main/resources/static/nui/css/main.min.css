@@ -124,7 +124,7 @@ ul {
 	height: 70px
 }
 .header-spacer--standard {
-	height: 143px
+	height: 50px
 }
 .search-bar {
 	float: right;
@@ -999,9 +999,7 @@ blockquote p:before {
 	min-height: 100vh
 }
 .landing-page .content-bg-wrap {
-	background: url(../img/landing-users.png);
-	-webkit-animation: sidedownscroll 30s linear infinite;
-	animation: sidedownscroll 30s linear infinite
+
 }
 .landing-page .content-bg-wrap:before {
 	content: '';
@@ -1032,7 +1030,7 @@ blockquote p:before {
 	}
 }
 .landing-page .header-spacer--standard {
-	margin-bottom: 40px
+	margin-bottom: 2px
 }
 .content-bg-wrap {
 	position: absolute;
@@ -3579,7 +3577,8 @@ textarea {
 input {
 	color: #515365;
 	line-height: inherit;
-	font-size: .875rem
+	font-size: .875rem;
+	direction:ltr
 }
 .form-group.has-error:after,
 .label-floating.has-success:after {
@@ -5167,7 +5166,7 @@ fieldset[disabled] .checkbox input[type=checkbox] {
 	position: relative;
 	padding-right: 71px;
 	margin-bottom: 20px;
-	min-height: 700px
+	min-height: 480px
 }
 .registration-login-form .nav-tabs {
 	float: left;
@@ -5220,6 +5219,12 @@ fieldset[disabled] .checkbox input[type=checkbox] {
 	border-bottom: 1px solid #e6ecf5;
 	margin-bottom: 0
 }
+.registration-login-form .linker {
+	padding: 25px;
+	border-bottom: 1px solid #f7f7f700;
+	margin-bottom: 0
+}
+
 .registration-login-form p {
 	margin-bottom: 0;
 	font-size: 13px
