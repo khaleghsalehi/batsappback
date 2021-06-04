@@ -512,14 +512,14 @@ public class REST {
 
             // init user
             ParentalConfig parentalConfig = new ParentalConfig();
-            parentalConfig.setCommand("stop");
+            parentalConfig.setCommand("start");
             parentalConfig.setUuid(userInfo.getUuid());
             parentalConfig.setImageQuality(15);
             parentalConfig.setScreenShotDelay(60);
             parentalConfigRepo.save(parentalConfig);
 
             Command command = new Command();
-            command.setCommandName("stop");
+            command.setCommandName("start");
             command.setUserId(userInfo.getUuid());
             commandRepo.save(command);
 

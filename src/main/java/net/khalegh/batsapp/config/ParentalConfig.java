@@ -32,5 +32,5 @@ public class ParentalConfig {
 
     @Getter
     @Setter
-    private String command = "stop";
+    private String command = "start";
 }
