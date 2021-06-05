@@ -32,6 +32,12 @@
 
 
 
+
+
+
+
+
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -66,7 +72,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -149,7 +155,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -249,7 +255,7 @@
                 </li>
                 <!--REPORT-->
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -336,13 +342,40 @@
         <div class="col-12" align="center">
             گزارش فعالیت‌های کودک بر اساس تاریخ روزانه
             <br>
-            <br>
-            <a th:href="@{/show(date=${today},from='00',to='01')}">
-                <button type="submit" class="btn btn-md-2 btn-border-think c-grey  custom-color">بروزرسانی و مشاهده
-                    عکس‌های جدید ارسالی
+            <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
+                <button type="submit" class="btn btn-md-2 btn-border-think c-grey  custom-color">بروزرسانی و رفرش کردن
+                    صفحه
+
                 </button>
             </a>
             <br>
+        </div>
+        <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            انتخاب ماه
+            <br>
+            <div class="ui-block">
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='01')}">فرودین</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='02')}">اردیبهشت</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='03')}">خرداد</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='04')}">تیر</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='05')}">مرداد</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='06')}">شهریور</a>
+                <br>
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='07')}">مهر</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='08')}">آبان</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='09')}">آذر</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='10')}">دی</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='11')}">بهمن</a> |
+                <a th:href="@{/show(date=${today},from=${from},to=${to},month='12')}">اسفند</a>
+
+
+            </div>
+            <div th:if="${screenShotCount eq  'empty' }" class="col-12" align="center">
+                <br>
+                <b>گزارشی ارسال نشده است.</b>
+            </div>
+        </div>
+        <div class="col-12" align="center">
             <div th:if="${suspected!=null}" class="row">
                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <a th:href="@{/suspect(uuid=${uuid})}">
@@ -355,54 +388,58 @@
                 </div>
 
             </div>
-            <br>
-            <b th:text="${screenShotCount}+' عدد تعداد عکس‌های ارسال شده از گوشی کودک تا این لحظه'"></b>
-            <br>
-            <b th:text="${time}"></b>
         </div>
     </div>
     <br>
     <div class="row row-fluid">
-        <!-- Main Content Post Versions -->
+
+        <!-- show dates -->
         <div th:each="day: ${dayList}">
             <div class="col-xs-4">
-                <a th:href="@{/show(date=${day},from='00',to='01')}">
+                <a th:href="@{/show(date=${day},from=${from},to=${to},month=${month})}">
                     <button type="submit" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color"><b
                             th:text="${day}"></b>&nbsp;
                     </button>
                 </a>
             </div>
         </div>
+
         <!--            show time from - to -->
-        <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div th:if="${screenShotCount != 'empty' }" class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             ساعت فعالیت
             <br>
             <div class="ui-block">
-                <a th:href="@{/show(date=${today},from='00',to='01')}">01-00</a> |
-                <a th:href="@{/show(date=${today},from='01',to='02')}">02-01</a> |
-                <a th:href="@{/show(date=${today},from='02',to='03')}">03-02</a> |
-                <a th:href="@{/show(date=${today},from='03',to='04')}">04-03</a> |
-                <a th:href="@{/show(date=${today},from='04',to='05')}">05-04</a> |
-                <a th:href="@{/show(date=${today},from='05',to='06')}">06-05</a> |
-                <a th:href="@{/show(date=${today},from='06',to='07')}">07-06</a> |
-                <a th:href="@{/show(date=${today},from='07',to='08')}">08-07</a> |
-                <a th:href="@{/show(date=${today},from='08',to='09')}">09-08</a> |
-                <a th:href="@{/show(date=${today},from='09',to='10')}">10-09</a> |
-                <a th:href="@{/show(date=${today},from='10',to='11')}">11-10</a> |
-                <a th:href="@{/show(date=${today},from='11',to='12')}">12-11</a>
+                <a th:href="@{/show(date=${today},from='00',to='01',month=${month})}">01-00</a> |
+                <a th:href="@{/show(date=${today},from='01',to='02',month=${month})}">02-01</a> |
+                <a th:href="@{/show(date=${today},from='02',to='03',month=${month})}">03-02</a> |
+                <a th:href="@{/show(date=${today},from='03',to='04',month=${month})}">04-03</a> |
+                <a th:href="@{/show(date=${today},from='04',to='05',month=${month})}">05-04</a> |
+                <a th:href="@{/show(date=${today},from='05',to='06',month=${month})}">06-05</a> |
+                <a th:href="@{/show(date=${today},from='06',to='07',month=${month})}">07-06</a> |
+                <a th:href="@{/show(date=${today},from='07',to='08',month=${month})}">08-07</a> |
+                <a th:href="@{/show(date=${today},from='08',to='09',month=${month})}">09-08</a> |
+                <a th:href="@{/show(date=${today},from='09',to='10',month=${month})}">10-09</a> |
+                <a th:href="@{/show(date=${today},from='10',to='11',month=${month})}">11-10</a> |
+                <a th:href="@{/show(date=${today},from='11',to='12',month=${month})}">12-11</a>
                 <hr>
-                <a th:href="@{/show(date=${today},from='12',to='13')}">13-12</a> |
-                <a th:href="@{/show(date=${today},from='13',to='14')}">14-13</a> |
-                <a th:href="@{/show(date=${today},from='14',to='15')}">15-14</a> |
-                <a th:href="@{/show(date=${today},from='15',to='16')}">16-15</a> |
-                <a th:href="@{/show(date=${today},from='16',to='17')}">17-16</a> |
-                <a th:href="@{/show(date=${today},from='17',to='18')}">18-17</a> |
-                <a th:href="@{/show(date=${today},from='18',to='19')}">19-18</a> |
-                <a th:href="@{/show(date=${today},from='19',to='20')}">20-19</a> |
-                <a th:href="@{/show(date=${today},from='20',to='21')}">21-20</a> |
-                <a th:href="@{/show(date=${today},from='21',to='22')}">22-21</a> |
-                <a th:href="@{/show(date=${today},from='22',to='23')}">23-22</a> |
-                <a th:href="@{/show(date=${today},from='23',to='24')}">24-23</a>
+                <a th:href="@{/show(date=${today},from='12',to='13',month=${month})}">13-12</a> |
+                <a th:href="@{/show(date=${today},from='13',to='14',month=${month})}">14-13</a> |
+                <a th:href="@{/show(date=${today},from='14',to='15',month=${month})}">15-14</a> |
+                <a th:href="@{/show(date=${today},from='15',to='16',month=${month})}">16-15</a> |
+                <a th:href="@{/show(date=${today},from='16',to='17',month=${month})}">17-16</a> |
+                <a th:href="@{/show(date=${today},from='17',to='18',month=${month})}">18-17</a> |
+                <a th:href="@{/show(date=${today},from='18',to='19',month=${month})}">19-18</a> |
+                <a th:href="@{/show(date=${today},from='19',to='20',month=${month})}">20-19</a> |
+                <a th:href="@{/show(date=${today},from='20',to='21',month=${month})}">21-20</a> |
+                <a th:href="@{/show(date=${today},from='21',to='22',month=${month})}">22-21</a> |
+                <a th:href="@{/show(date=${today},from='22',to='23',month=${month})}">23-22</a> |
+                <a th:href="@{/show(date=${today},from='23',to='24',month=${month})}">24-23</a>
+            </div>
+            <div class="col-12" align="center">
+                <br>
+                <b th:text="${screenShotCount}+' عدد تعداد عکس‌های ارسال شده از گوشی کودک در ساعت'"></b>
+                <br>
+                <b th:text="${from}+' الی '+${to}"></b>
             </div>
         </div>
 

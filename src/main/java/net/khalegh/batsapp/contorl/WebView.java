@@ -1,6 +1,7 @@
 package net.khalegh.batsapp.contorl;
 
 import com.github.mfathi91.time.PersianDate;
+import com.github.mfathi91.time.PersianMonth;
 import com.google.common.hash.Hashing;
 import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.Service;
@@ -32,6 +33,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
 @Controller
 public class WebView {
@@ -166,6 +168,8 @@ public class WebView {
         model.addAttribute("date", today);
         model.addAttribute("from", from);
         model.addAttribute("to", to);
+        int currentMonth = today.getMonthValue();
+        model.addAttribute("month", currentMonth);
 
         return "index";
     }
@@ -189,6 +193,9 @@ public class WebView {
                 model.addAttribute("date", today);
                 model.addAttribute("from", from);
                 model.addAttribute("to", to);
+                int currentMonth = today.getMonthValue();
+                model.addAttribute("month", currentMonth);
+
 
                 return "suspect";
             } catch (Exception e) {
@@ -203,6 +210,7 @@ public class WebView {
     public String showActivities(@RequestParam(required = true) String date,
                                  @RequestParam(required = true) String from,
                                  @RequestParam(required = true) String to,
+                                 @RequestParam(required = false) String month,
                                  Model model) {
 
         Authentication auth = SecurityContextHolder.getContext()
@@ -218,6 +226,13 @@ public class WebView {
             // todo send  and show error in user  panel
             e.printStackTrace();
         }
+
+        int currentMonth;
+        if (month.isEmpty())
+            currentMonth = today.getMonthValue();
+        else
+            currentMonth = Integer.parseInt(month);
+
         UserInfo userInfo;
         Map<Integer, String> images =
                 new TreeMap<Integer, String>(Collections.reverseOrder());
@@ -254,36 +269,54 @@ public class WebView {
             });
 
             if (directories != null) {
-                Arrays.stream(directories).forEach(dirList::add);
+                Stream<String> latestItem = Arrays.stream(directories)
+                        .sorted(Collections.reverseOrder());
+                latestItem.forEach(day -> {
+                    String[] getDay = day.split("-");
+                    int i = Integer.parseInt(getDay[1]);
+                    if (i == currentMonth)
+                        dirList.add(day);
+                });
             }
-
-
             String imagePath = home + "/" + uuidHash + "/" + today + "/" + from + "-" + to;
+
             if (Files.exists(Paths.get(imagePath))) {
                 File f = new File(imagePath);
                 String[] fileList = f.list();
                 assert fileList != null;
+
                 for (String item : fileList) {
-                    images.put(Integer.valueOf(utils.extractFileNumber(item)),
-                            uuidHash + "/" + today + "/" + from + "-" + to + "/" + item);
+                    if (!month.isEmpty()) {
+                        if (currentMonth == today.getMonthValue()) {
+                            images.put(Integer.valueOf(utils.extractFileNumber(item)),
+                                    uuidHash + "/" + today + "/" + from + "-" + to + "/" + item);
+                        } else {
+                            images.put(Integer.valueOf(utils.extractFileNumber(item)),
+                                    uuidHash + "/" + today + "/" + from + "-" + to + "/" + item);
+                        }
+                    }
                 }
             }
+
         } else {
             model.addAttribute("username", "Guest");
         }
-        dirList.sort(Collections.reverseOrder());
-        model.addAttribute("images", images.entrySet());
         model.addAttribute("dayList", dirList);
+        if (dirList.size() > 0) {
+            model.addAttribute("images", images.entrySet());
+            model.addAttribute("screenShotCount", images.size());
+        } else {
+            model.addAttribute("screenShotCount", "empty");
+        }
+
         model.addAttribute("today", today);
-        model.addAttribute("screenShotCount", images.size());
         model.addAttribute("time", time);
 
-        from = sdf.format(new Date());
-        int kk = Integer.parseInt(from) + 1;
-        to = String.format("%2s", kk).replace(' ', '0');
+
         model.addAttribute("date", today);
         model.addAttribute("from", from);
         model.addAttribute("to", to);
+        model.addAttribute("month", currentMonth);
 
 
         return "show";
@@ -317,6 +350,8 @@ public class WebView {
         model.addAttribute("date", today);
         model.addAttribute("from", from);
         model.addAttribute("to", to);
+        int currentMonth = today.getMonthValue();
+        model.addAttribute("month", currentMonth);
 
         return "setting";
     }

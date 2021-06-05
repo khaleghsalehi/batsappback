@@ -66,7 +66,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -149,7 +149,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -249,7 +249,7 @@
                 </li>
                 <!--REPORT-->
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -358,7 +358,7 @@
             </div>
             <div class="col-xs-1" align="center">
                 <div class="col-xs-12">
-                    <a th:href="@{/show(date=${date},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${date},from=${from},to=${to},month=${month})}">
                         <button type="submit" class="btn btn-secondary btn-lg"> مشاهده فعالیت‌های کودک&nbsp;</button>
                     </a>
                 </div>
