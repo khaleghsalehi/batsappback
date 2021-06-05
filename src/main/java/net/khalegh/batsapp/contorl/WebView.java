@@ -1,6 +1,7 @@
 package net.khalegh.batsapp.contorl;
 
 import com.github.mfathi91.time.PersianDate;
+import com.google.common.hash.Hashing;
 import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -242,7 +244,8 @@ public class WebView {
             }
 
             String home = System.getProperty("user.home");
-            File file = new File(home + "/" + userInfo.getUuid());
+            String uuidHash = utils.getUuidHash(String.valueOf(userInfo.getUuid()));
+            File file = new File(home + "/" + uuidHash);
             String[] directories = file.list(new FilenameFilter() {
                 @Override
                 public boolean accept(File current, String name) {
@@ -254,14 +257,15 @@ public class WebView {
                 Arrays.stream(directories).forEach(dirList::add);
             }
 
-            String imagePath = home + "/" + userInfo.getUuid() + "/" + today + "/" + from + "-" + to;
+
+            String imagePath = home + "/" + uuidHash + "/" + today + "/" + from + "-" + to;
             if (Files.exists(Paths.get(imagePath))) {
                 File f = new File(imagePath);
                 String[] fileList = f.list();
                 assert fileList != null;
                 for (String item : fileList) {
                     images.put(Integer.valueOf(utils.extractFileNumber(item)),
-                            userInfo.getUuid() + "/" + today + "/" + from + "-" + to + "/" + item);
+                            uuidHash + "/" + today + "/" + from + "-" + to + "/" + item);
                 }
             }
         } else {
@@ -437,6 +441,5 @@ public class WebView {
 
         }
     }
-
 
 }

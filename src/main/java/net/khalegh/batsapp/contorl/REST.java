@@ -458,6 +458,7 @@ public class REST {
         Pattern pattern = Pattern.compile("\\s");
         Matcher matcher = pattern.matcher(username);
         boolean found = matcher.find();
+        username = username.toLowerCase();
         if (found) {
             response.sendRedirect("/signup?error=" + SPACE_ERROR_USERNAME);
             return SPACE_ERROR_USERNAME;

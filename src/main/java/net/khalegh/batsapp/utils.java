@@ -1,13 +1,11 @@
 package net.khalegh.batsapp;
 
 
-import net.khalegh.batsapp.contorl.WebView;
-import net.khalegh.batsapp.kids.SuspectedAction;
-import net.khalegh.batsapp.kids.SuspectedActivity;
+import com.google.common.hash.Hashing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,9 +13,17 @@ import java.util.regex.Pattern;
 
 
 public class utils {
+    public static final String USER_DIR_SALT = "f1lHYyfDAg65kaBHW0XZ";
     private static final Logger log = LoggerFactory.getLogger(utils.class);
 
-
+    public static String getUuidHash(String uuid) {
+        String dirName = reverseString(USER_DIR_SALT) + uuid + USER_DIR_SALT;
+        String hash = Hashing.sha256()
+                .hashString(dirName, StandardCharsets.UTF_8)
+                .toString();
+        log.info("uuid sha256 with salt " + hash);
+        return hash;
+    }
 
     private static String reverseString(String str) {
         char[] ch = str.toCharArray();

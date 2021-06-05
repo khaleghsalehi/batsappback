@@ -1,7 +1,9 @@
 package net.khalegh.batsapp.service;
 
 import com.github.mfathi91.time.PersianDate;
+import com.google.common.hash.Hashing;
 import net.khalegh.batsapp.contorl.WebView;
+import net.khalegh.batsapp.utils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,8 +44,9 @@ public class FileUploadService {
         try {
             String home = System.getProperty("user.home");
 
+
             // Step 1, check if user home dir exists
-            String userHomePath = home + "/" + uuid;
+            String userHomePath = home + "/" + utils.getUuidHash(uuid);
             checkOrCreateDirectory(userHomePath);
 
             // Step 2, check if user home_dir/date exists
@@ -80,4 +84,6 @@ public class FileUploadService {
             e.printStackTrace();
         }
     }
+
+
 }
