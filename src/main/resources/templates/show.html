@@ -51,7 +51,7 @@
 
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" alt="باتساپ">
             </div>
         </a>
 
@@ -66,7 +66,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/show">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -122,10 +122,10 @@
     <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1">
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" alt="باتساپ">
             </div>
             <div class="title-block">
-                <h6 class="logo-title">باتساپ</h6>
+                <h6 class="logo-title"></h6>
             </div>
         </a>
 
@@ -149,7 +149,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from='00',to='01')}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -213,7 +213,7 @@
 
     <div class="fixed-sidebar-left sidebar--small" id="sidebar-left-responsive">
         <a href="/" class="logo js-sidebar-open">
-            <img src="nui/img/logo.png" alt="باتساپ">
+            <img src="nui/img/logo-colored.png" alt="باتساپ">
         </a>
 
     </div>
@@ -221,10 +221,10 @@
     <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1-responsive">
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" alt="باتساپ">
             </div>
             <div class="title-block">
-                <h6 class="logo-title">باتساپ</h6>
+                <h6 class="logo-title"></h6>
             </div>
         </a>
 
@@ -249,7 +249,7 @@
                 </li>
                 <!--REPORT-->
                 <li>
-                    <a th:href="@{/show(date=${today},from='00',to='01')}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -317,16 +317,8 @@
 </div>
 
 <header class="header" id="site-header">
-
-    <div class="page-title">
-        <h6>
-            صفحه کنترل والدین
-        </h6>
-    </div>
     <div class="page-download-app">
         <h3>
-            <a href="nui/download/exbord.apk"><i class="fa fa-android" aria-hidden="true"></i></a>
-            <a href="#"><i class="fa fa-apple" aria-hidden="true"></i></a>
         </h3>
     </div>
 </header>

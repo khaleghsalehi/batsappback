@@ -179,6 +179,15 @@ public class WebView {
                 Service.suspectedClients.invalidate(uuid);
                 List<SuspectedActivity> activity = suspectedActivityRepo.getByUuid(UUID.fromString(uuid));
                 model.addAttribute("activity", activity);
+                PersianDate today = PersianDate.now();
+
+                String from = sdf.format(new Date());
+                int kk = Integer.parseInt(from) + 1;
+                String to = String.format("%2s", kk).replace(' ', '0');
+                model.addAttribute("date", today);
+                model.addAttribute("from", from);
+                model.addAttribute("to", to);
+
                 return "suspect";
             } catch (Exception e) {
                 return "/";
@@ -193,7 +202,9 @@ public class WebView {
                                  @RequestParam(required = true) String from,
                                  @RequestParam(required = true) String to,
                                  Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
         PersianDate today = PersianDate.now();
         final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = dateFormat.format(new Date());
@@ -262,6 +273,15 @@ public class WebView {
         model.addAttribute("today", today);
         model.addAttribute("screenShotCount", images.size());
         model.addAttribute("time", time);
+
+        from = sdf.format(new Date());
+        int kk = Integer.parseInt(from) + 1;
+        to = String.format("%2s", kk).replace(' ', '0');
+        model.addAttribute("date", today);
+        model.addAttribute("from", from);
+        model.addAttribute("to", to);
+
+
         return "show";
     }
 
@@ -285,126 +305,18 @@ public class WebView {
             Service.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
         }
 
+        PersianDate today = PersianDate.now();
+
+        String from = sdf.format(new Date());
+        int kk = Integer.parseInt(from) + 1;
+        String to = String.format("%2s", kk).replace(' ', '0');
+        model.addAttribute("date", today);
+        model.addAttribute("from", from);
+        model.addAttribute("to", to);
+
         return "setting";
     }
 
-
-    @RequestMapping("/search")
-    public String searchExperience(@RequestParam(required = false, defaultValue = "") String q,
-                                   @RequestParam(required = false, defaultValue = "0") int page,
-                                   @RequestParam(required = false) UUID userId,
-                                   Model model) throws ExecutionException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        int totalMatchedResult;
-        if (page < 0)
-            page = 0;
-
-        if (auth.isAuthenticated()) {
-            model.addAttribute("username", auth.getName());
-        } else {
-            model.addAttribute("username", "Guest");
-        }
-
-        @Nullable String hotCacheCanary = Service.hotCache.get(IS_EMPTY_GAP);
-        if (hotCacheCanary == null || hotCacheCanary.isEmpty()) {
-            log.info("NullOrEmpty hot catch, fetch db");
-            List<Object[]> Obj = experienceRepo.getHotTags();
-            for (Object[] row : Obj) {
-                Service.hotCache.put(row[0].toString(), (row[1].toString()));
-                Service.hotCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
-            }
-        }
-
-        @Nullable String appCacheCanary = Service.appCache.get(IS_EMPTY_GAP);
-        if (appCacheCanary == null || appCacheCanary.isEmpty()) {
-            log.info("NullOrEmpty catch found, fetch db");
-            Service.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
-            Service.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
-            Service.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
-            Service.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
-        }
-
-        model.addAttribute(ALL_TAGS, Service.appCache.get(ALL_TAGS));
-        model.addAttribute(ALL_USERS, Service.appCache.get(ALL_USERS));
-        model.addAttribute(ALL_COMMUNES, Service.appCache.get(ALL_COMMUNES));
-
-        Map<String, String> trends = new HashMap<>();
-        Service.hotCache.asMap().forEach((k, v) -> {
-            if (!k.equals(IS_EMPTY_GAP))
-                trends.put(k, v);
-        });
-
-        List<Experience> experienceList = new ArrayList<>();
-        Pageable pageable = PageRequest.of(page, PAGINATION_COUNT);
-        if (userId != null) {
-            totalMatchedResult = experienceRepo.countUserPost(userId);
-            experienceList = experienceRepo.findExperienceByUserId(userId, pageable);
-        } else {
-            if (q != null) {
-                totalMatchedResult = experienceRepo.countMatchedItem(q);
-                experienceList = experienceRepo.findByString(q, pageable);
-                model.addAttribute("experienceCount", experienceRepo.countMatchedItem(q));
-            } else {
-                totalMatchedResult = (int) experienceRepo.count();
-                experienceList = experienceRepo.getAllItems(pageable);
-                model.addAttribute("experienceCount", (long) experienceList.size());
-
-            }
-        }
-        model.addAttribute("trends", trends);
-        model.addAttribute("experienceList", experienceList);
-        log.info("total matched count > " + totalMatchedResult);
-        if (page * PAGINATION_COUNT >= totalMatchedResult)
-            model.addAttribute("nextPage", page);
-        else
-            model.addAttribute("nextPage", page + 1);
-
-        model.addAttribute("q", q);
-        if (page > 0)
-            model.addAttribute("prevPage", page - 1);
-        else
-            model.addAttribute("prevPage", page);
-
-
-        return "result";
-    }
-
-    @RequestMapping("/profile")
-    public String getProfile(Model model,
-                             @RequestParam(required = false) String username) throws ExecutionException {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.isAuthenticated()) {
-            model.addAttribute("username", auth.getName());
-        } else {
-            model.addAttribute("username", "Guest");
-        }
-        if (username == null) {
-            return "/";
-        }
-        @Nullable String appCacheCanary = Service.appCache.get(IS_EMPTY_GAP);
-        if (appCacheCanary == null || appCacheCanary.isEmpty()) {
-            log.info("NullOrEmpty catch found, fetch db");
-            Service.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
-            Service.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
-            Service.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
-            Service.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
-        }
-        model.addAttribute(ALL_TAGS, Service.appCache.get(ALL_TAGS));
-        model.addAttribute(ALL_USERS, Service.appCache.get(ALL_USERS));
-        model.addAttribute(ALL_COMMUNES, Service.appCache.get(ALL_COMMUNES));
-
-        UserInfo userInfo = new UserInfo();
-        userInfo = userRepo.findByUserName(username);
-        int userPostCount = experienceRepo.countUserPost(userInfo.getUuid());
-        model.addAttribute("user", userInfo);
-        model.addAttribute("userPostCount", userPostCount);
-        model.addAttribute("flower", flowerRepo.getFlowerCount(userInfo.getUuid()));
-        Pageable pageable = PageRequest.of(0, 10);
-        model.addAttribute("latestPost", experienceRepo.findExperienceByUserId(userInfo.getUuid(), pageable));
-        return "profile";
-
-    }
 
     @RequestMapping("/login")
     public String loginPage(@RequestParam(required = false, defaultValue = "0") String error,
@@ -451,28 +363,6 @@ public class WebView {
         return "signup";
     }
 
-    @RequestMapping("/share")
-    public String newPost(Model model) throws ExecutionException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.isAuthenticated()) {
-            model.addAttribute("username", auth.getName());
-        } else {
-            model.addAttribute("username", "Guest");
-        }
-        @Nullable String appCacheCanary = Service.appCache.get(IS_EMPTY_GAP);
-        if (appCacheCanary == null || appCacheCanary.isEmpty()) {
-            log.info("NullOrEmpty catch found, fetch db");
-            Service.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
-            Service.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
-            Service.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
-            Service.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
-        }
-        model.addAttribute(ALL_TAGS, Service.appCache.get(ALL_TAGS));
-        model.addAttribute(ALL_USERS, Service.appCache.get(ALL_USERS));
-        model.addAttribute(ALL_COMMUNES, Service.appCache.get(ALL_COMMUNES));
-
-        return "share";
-    }
 
     @RequestMapping("/response")
     public String responsePost(Model model, @RequestParam(required = true) UUID uuid) throws ExecutionException {
