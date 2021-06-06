@@ -206,32 +206,45 @@ public class WebView {
         }
     }
 
+    private static String changEnglish(String str) {
+        str.replaceAll("۰", "0");
+        str.replaceAll("۱", "1");
+        str.replaceAll("۲", "2");
+        str.replaceAll("۳", "3");
+        str.replaceAll("۴", "4");
+        str.replaceAll("۵", "5");
+        str.replaceAll("۶", "6");
+        str.replaceAll("۷", "7");
+        str.replaceAll("۸", "8");
+        str.replaceAll("۹", "9");
+        return str;
+
+    }
+
     @RequestMapping("/show")
     public String showActivities(@RequestParam(required = true) String date,
                                  @RequestParam(required = true) String from,
                                  @RequestParam(required = true) String to,
-                                 @RequestParam(required = false) String month,
                                  Model model) {
 
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
+        ArrayList<String> times = new ArrayList<>();
+
+
+        String originalRequestedDate = changEnglish(date);
         PersianDate today = PersianDate.now();
         final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = dateFormat.format(new Date());
 
-        try {
-            if (!date.isEmpty())
-                today = PersianDate.parse(date);
-        } catch (Exception e) {
-            // todo send  and show error in user  panel
-            e.printStackTrace();
-        }
+//        try {
+//            if (!date.isEmpty())
+//                today = PersianDate.parse(date);
+//        } catch (Exception e) {
+//            // todo send  and show error in user  panel
+//            e.printStackTrace();
+//        }
 
-        int currentMonth;
-        if (month.isEmpty())
-            currentMonth = today.getMonthValue();
-        else
-            currentMonth = Integer.parseInt(month);
 
         UserInfo userInfo;
         Map<Integer, String> images =
@@ -271,36 +284,58 @@ public class WebView {
             if (directories != null) {
                 Stream<String> latestItem = Arrays.stream(directories)
                         .sorted(Collections.reverseOrder());
-                latestItem.forEach(day -> {
-                    String[] getDay = day.split("-");
-                    int i = Integer.parseInt(getDay[1]);
-                    if (i == currentMonth)
-                        dirList.add(day);
-                });
+                latestItem.forEach(dirList::add);
             }
-            String imagePath = home + "/" + uuidHash + "/" + today + "/" + from + "-" + to;
 
-            if (Files.exists(Paths.get(imagePath))) {
-                File f = new File(imagePath);
-                String[] fileList = f.list();
-                assert fileList != null;
+            int startTime = Integer.parseInt(from);
+            int endTime = Integer.parseInt(to);
+            if (startTime > endTime) {
+                int temp;
+                temp = endTime;
+                endTime = startTime;
+                startTime = temp;
 
-                for (String item : fileList) {
-                    if (!month.isEmpty()) {
-                        if (currentMonth == today.getMonthValue()) {
+                String sTemp;
+                sTemp = from;
+                from = to;
+                to = sTemp;
+            }
+            int diff = endTime - startTime;
+            log.info("get from to diff ->" + diff);
+            if (diff > 1) {
+                for (int i = startTime; i < endTime; i++) {
+                    String l1 = String.format("%2s", i).replace(' ', '0');
+                    String l2 = String.format("%2s", i + 1).replace(' ', '0');
+                    log.info("calc diff times -> " + l1 + "-" + l2);
+                    String e = l1 + "-" + l2;
+                    times.add(e);
+                }
+            } else {
+                times.add(from + "-" + to);
+            }
+            times.forEach(s -> {
+                String pathCandidate = s;
+
+                String imagePath = home + "/" + uuidHash + "/" + today + "/" + pathCandidate;
+
+                if (Files.exists(Paths.get(imagePath))) {
+                    File f = new File(imagePath);
+                    String[] fileList = f.list();
+                    assert fileList != null;
+
+                    for (String item : fileList) {
+                        if (originalRequestedDate.equals(date)) {
                             images.put(Integer.valueOf(utils.extractFileNumber(item)),
-                                    uuidHash + "/" + today + "/" + from + "-" + to + "/" + item);
-                        } else {
-                            images.put(Integer.valueOf(utils.extractFileNumber(item)),
-                                    uuidHash + "/" + today + "/" + from + "-" + to + "/" + item);
+                                    uuidHash + "/" + today + "/" + s + "/" + item);
                         }
                     }
                 }
-            }
+            });
 
         } else {
             model.addAttribute("username", "Guest");
         }
+        System.out.println("ad");
         model.addAttribute("dayList", dirList);
         if (dirList.size() > 0) {
             model.addAttribute("images", images.entrySet());
@@ -316,7 +351,6 @@ public class WebView {
         model.addAttribute("date", today);
         model.addAttribute("from", from);
         model.addAttribute("to", to);
-        model.addAttribute("month", currentMonth);
 
 
         return "show";
