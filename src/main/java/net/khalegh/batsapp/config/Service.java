@@ -58,6 +58,14 @@ public class Service {
                     return "";
                 }
             });
+    public static LoadingCache<String, String> lastActivity = CacheBuilder
+            .newBuilder()
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String s) throws Exception {
+                    return "";
+                }
+            });
 
     public static LoadingCache<String, String> lastUpload = CacheBuilder
             .newBuilder()

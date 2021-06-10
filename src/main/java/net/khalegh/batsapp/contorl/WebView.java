@@ -263,7 +263,7 @@ public class WebView {
                     int count = Integer.parseInt(Service.suspectedClients
                             .get(String.valueOf(userInfo.getUuid())));
                     if (count > SUSPENSION_MAX_POLICY) {
-                        model.addAttribute("suspected", "yup");
+                        model.addAttribute("suspected", "yes");
                         model.addAttribute("uuid", userInfo.getUuid());
                     }
                 } catch (ExecutionException e) {

@@ -451,8 +451,11 @@
             </div>
         </div>
 
+    </div>
+    <br>
+    <div class="row row-fluid">
         <div class="col-12" align="center">
-            <div th:if="${suspected!=null}" class="row">
+            <div th:if="${suspected} != null" class="row">
                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <a th:href="@{/suspect(uuid=${uuid})}">
                         <button type="submit"
@@ -465,9 +468,7 @@
 
             </div>
         </div>
-    </div>
-    <br>
-    <div class="row row-fluid">
+
         <div th:if="${screenShotCount != 'empty' }" class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="col-12" align="center">
                 <br>

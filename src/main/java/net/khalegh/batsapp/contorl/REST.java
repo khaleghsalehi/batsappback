@@ -199,11 +199,14 @@ public class REST {
 
                     // set ping time to cache
                     if (Service.lastPing.get(uuid).isEmpty()) {
-                        log.info("LastPing cache is null or empty for " + uuid);
+                        log.info("lastPing is null or empty for " + uuid +", then init...");
                         Service.lastPing.put(uuid, activity.getPingTime());
+                        //keep redundant for next compares.
+                        if (Service.lastActivity.get(uuid).isEmpty())
+                            Service.lastActivity.put(uuid, activity.getPingTime());
 
                     }
-                    int diff = utils.getTimeDiff(activity.getPingTime(), Service.lastPing.get(uuid));
+                    int diff = utils.getTimeDiff(activity.getPingTime(), Service.lastActivity.get(uuid));
                     if (diff > MAX_PING_DIFF) {
                         log.error("ping diff " + diff + " from " + uuid);
                         log.info(" =====  suspected action =====");
@@ -230,6 +233,8 @@ public class REST {
                         log.info("ping diff " + diff + " is ok " + uuid);
                     }
                     Service.lastPing.put(uuid, activity.getPingTime());
+                    Service.lastActivity.put(uuid, activity.getPingTime());
+
 
                     List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));
                     int imageQuality = baseUser.get(baseUser.size() - 1).getImageQuality();
