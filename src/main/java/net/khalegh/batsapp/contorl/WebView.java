@@ -261,10 +261,28 @@ public class WebView {
 
 
             model.addAttribute("uuid", uuid);
+
+            PersianDate today = PersianDate.now();
+
+            String from = sdf.format(new Date());
+            int kk = Integer.parseInt(from) + 1;
+            String to = String.format("%2s", kk).replace(' ', '0');
+
+            model.addAttribute("date", today);
+            model.addAttribute("from", from);
+            model.addAttribute("to", to);
+            int currentMonth = today.getMonthValue();
+            model.addAttribute("month", currentMonth);
+
+            UserInfo userInfo = userRepo.findByUserName(auth.getName());
+            model.addAttribute("uuid", userInfo.getUuid());
+            model.addAttribute("username", userInfo.getUserName());
+
             return "analyze";
         } else {
-            return "/";
+            model.addAttribute("username", "Guest");
         }
+        return "analyze";
     }
 
     @RequestMapping("/suspect")
