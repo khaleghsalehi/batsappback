@@ -32,11 +32,57 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-grid.css">
+
+
+    <link rel="stylesheet" href="nui/css/jquery.md.bootstrap.datetimepicker.style.css"/>
+
 
     <!-- Main Styles CSS -->
     <link rel="stylesheet" type="text/css" href="nui/css/main.min.css">
@@ -66,7 +112,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -149,7 +195,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -249,7 +295,7 @@
                 </li>
                 <!--REPORT-->
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
                              data-original-title="گزارش فعالیت‌های کودک">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
@@ -330,65 +376,130 @@
 
 <!-- ... end Responsive Header-BP -->
 <div class="header-spacer"></div>
+
 <div class="container">
     <div class="row">
-        <div class="col-12">
-            <h5 th:text="${username}+' خوش آمدید.'"></h5>
+        <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="col-12" align="center">
+                    <div class="row">
+                        <div class="ui-block">
+                            <!--      neutral -->
+                            <div class="ui-block-content">
+                                <ul class="statistics-list-count">
+                                    <li>
+                                        <div class="points">
+									<span>
+										محتوای نرمال
+									</span>
+                                        </div>
+                                        <div class="count-stat">
+                                            <th:block th:text="${neutralCount}"></th:block>
+                                        </div>
+                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='NEUTRAL')}">مشاهده و بررسی جزییات</a>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="ui-block">
+                            <!--      porn -->
+                            <div class="ui-block-content">
+                                <ul class="statistics-list-count">
+                                    <li>
+                                        <div class="points">
+									<span>
+										محتوای پورن کامل
+									</span>
+                                        </div>
+                                        <div class="count-stat">
+                                            <th:block th:text="${pornCount}"></th:block>
+                                        </div>
+                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='PORN')}">مشاهده و بررسی جزییات</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="ui-block">
+                            <!--   sexy and erotic    -->
+                            <div class="ui-block-content">
+                                <ul class="statistics-list-count">
+                                    <li>
+                                        <div class="points">
+									<span>
+										محتوای جنسی، برهنه و تحریک کننده
+									</span>
+                                        </div>
+                                        <div class="count-stat">
+                                            <th:block th:text="${sexCount}"></th:block>
+                                        </div>
+                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='SEXY')}">مشاهده و بررسی جزییات</a>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="ui-block">
+                            <!--       hentai     -->
+                            <div class="ui-block-content">
+                                <ul class="statistics-list-count">
+                                    <li>
+                                        <div class="points">
+									<span>
+										محتوای انیمیشن سکسی و کارتون جنسی
+									</span>
+                                        </div>
+                                        <div class="count-stat">
+                                            <th:block th:text="${hentaiCount}"></th:block>
+                                        </div>
+                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='HENTAI')}">مشاهده و بررسی جزییات</a>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="ui-block">
+                            <!--         drawin  -->
+                            <div class="ui-block-content">
+                                <ul class="statistics-list-count">
+                                    <li>
+                                        <div class="points">
+									<span>
+										عکس (غیر جنسی و اشیا)، نقاشی و طراحی
+									</span>
+                                        </div>
+                                        <div class="count-stat">
+                                            <th:block th:text="${drawingCount}"></th:block>
+                                        </div>
+                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='DRAWING')}">مشاهده و بررسی جزییات</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
         </div>
-        <div class="col col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div th:if="${controlStatus=='on'}" class="col-xs-1" align="center">
-                <div class="col-xs-12">
-                    <h5>وضعیت کنترل فعال است.</h5>
-                </div>
-                <div class="col-xs-12">
-                    <a href="setCommand?cmd=stop">
-                        <button type="submit" class="btn btn-danger btn-lg">خاموش</button>
-                    </a>
-                </div>
-            </div>
-            <div th:if="${controlStatus=='off'}" class="col-xs-1" align="center">
-                <div class="col-xs-12">
-                    <h5>وضعیت کنترل غیرفعال است.</h5>
-                </div>
-                <div class="col-xs-12">
-                    <a href="setCommand?cmd=start">
-                        <button type="submit" class="btn btn-success btn-lg">&nbsp;روشن&nbsp;</button>
-                    </a>
-                </div>
-            </div>
-            <div class="col-xs-1" align="center">
-                <div class="col-xs-12">
-                    <a th:href="@{/show(date=${date},from=${from},to=${to},month=${month})}">
-                        <button type="submit" class="btn btn-secondary btn-lg"> مشاهده فعالیت‌های کودک&nbsp;</button>
-                    </a>
-                </div>
-            </div>
-            <div class="col-xs-1" align="center">
-                <div class="col-xs-12">
-                    <a th:href="@{/imageAnalyze(uuid=${uuid},type=UNKNOWN)}">
-                        <button type="submit" class="btn btn-secondary btn-lg"> تحلیل هوشمند  محتوایی مشاهدات کودک&nbsp;</button>
-                    </a>
-                </div>
-            </div>
 
-            <br>
-            <hr>
-            <div class="col-xs-1" align="center">
-                <div class="col-xs-12">
-                    <h5 th:text="'بازه زمانی ثبت تصاویر در هر '+${screenShotDelay}+' ثانیه تنظیم شده است'"></h5>
-                </div>
-                <div class="col-xs-12">
-                    <h5 th:text="'کیفیت عکس ثبت شده با '+${imageQuality}+'% وضوح تنظیم شده است'"></h5>
-                </div>
-                <div class="col-xs-12">
-                    <a href="/setting">
-                        <button type="submit" class="btn btn-secondary btn-lg">&nbsp;تغییر تنظیمات&nbsp;</button>
-                    </a>
-                </div>
-            </div>
+    </div>
+    <br>
+    <div class="row row-fluid">
 
+
+        <div th:each="pic: ${images}" class="ui-block">
+            <article class="hentry post">
+                <div class="post-video">
+                    <img th:src="${pic.value}">
+                </div>
+            </article>
         </div>
-
+    </div>
+    <!-- footer       -->
+    <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="sub-footer-copyright" style="color: #ffff;">
+						<span>
+							<a href="/" style="color: #ffff;">BATSAPP</a> تمام حقوق مادی و معنوی سایت محفوظ است
+						</span>
+        </div>
     </div>
 </div>
 </div>
@@ -435,10 +546,63 @@
 <script src="nui/js/mediaelement-playlist-plugin.min.js"></script>
 <script src="nui/js/ha-solardate.min.js"></script>
 <script src="nui/js/ha-datetimepicker.min.js"></script>
-<!--<script src="nui/js/exbord-utils.js"></script>-->
+<!--<script src="nui/js/BATSAPP-utils.js"></script>-->
 <script src="nui/js/base-init.js"></script>
 <script defer src="fonts/fontawesome-all.js"></script>
 <script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+<!--Calendar-->
+<script src="nui/js/jquery.md.bootstrap.datetimepicker.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+        $('#date1').MdPersianDateTimePicker({
+            targetTextSelector: '#inputDate1-text',
+            targetDateSelector: '#inputDate1-date',
+            dateFormat: 'yyyy-MM-dd',
+            textFormat: 'yyyy-MM-dd',
+
+            enableTimePicker: false
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
 </body>
 
 </html>

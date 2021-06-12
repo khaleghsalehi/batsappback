@@ -1,20 +1,19 @@
 package net.khalegh.batsapp.contorl;
 
 import com.github.mfathi91.time.PersianDate;
-import com.github.mfathi91.time.PersianMonth;
 import com.google.common.hash.Hashing;
 import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
+import net.khalegh.batsapp.inspection.ContentType;
 import net.khalegh.batsapp.kids.SuspectedActivity;
+import net.khalegh.batsapp.sys.ImageAnalyzer;
 import net.khalegh.batsapp.utils;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -27,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -78,6 +76,9 @@ public class WebView {
 
     @Autowired
     ParentalConfigRepo parentalConfigRepo;
+
+    @Autowired
+    ScreenShotRepo screenShotRepo;
 
     @RequestMapping("/setCommand")
     public void setCommand(@RequestParam(required = true) String cmd,
@@ -170,10 +171,101 @@ public class WebView {
         model.addAttribute("to", to);
         int currentMonth = today.getMonthValue();
         model.addAttribute("month", currentMonth);
+        model.addAttribute("uuid", userInfo.getUuid());
 
         return "index";
     }
 
+    /**
+     * parents ask content control manually
+     *
+     * @param uuid
+     * @return
+     */
+    @RequestMapping("/imageAnalyze")
+    public String imageAnalyzer(@RequestParam(required = true) String uuid,
+                                @RequestParam(required = false, defaultValue = "") String type,
+                                Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.isAuthenticated()) {
+            // ImageAnalyzer imageAnalyzer = new ImageAnalyzer(screenShotRepo, userRepo);
+            //    imageAnalyzer.inspectNow(UUID.fromString(uuid), 0, 3);
+
+            Optional<List<ScreenShot>> pornCount = screenShotRepo.getType(UUID.fromString(uuid),
+                    ContentType.PORN);
+            Optional<List<ScreenShot>> hentaiCount = screenShotRepo.getType(UUID.fromString(uuid),
+                    ContentType.HENTAI);
+            Optional<List<ScreenShot>> sexCount = screenShotRepo.getType(UUID.fromString(uuid),
+                    ContentType.SEXY);
+
+            Optional<List<ScreenShot>> neutralCount = screenShotRepo.getType(UUID.fromString(uuid),
+                    ContentType.NEUTRAL);
+
+            Optional<List<ScreenShot>> drawingCount = screenShotRepo.getType(UUID.fromString(uuid),
+                    ContentType.DRAWING);
+
+            model.addAttribute("pornCount", 0);
+            model.addAttribute("hentaiCount", 0);
+            model.addAttribute("sexCount", 0);
+            model.addAttribute("drawingCount", 0);
+            model.addAttribute("neutralCount", 0);
+
+            log.info("=============== REPORT ==============================");
+            if (pornCount.isPresent()) {
+                int size = pornCount.get().size();
+                log.info("pornCount " + size);
+                model.addAttribute("pornCount", size);
+
+            }
+            if (hentaiCount.isPresent()) {
+                int size = hentaiCount.get().size();
+                log.info("hentaiCount " + size);
+                model.addAttribute("hentaiCount", size);
+
+            }
+            if (sexCount.isPresent()) {
+                int size = sexCount.get().size();
+                log.info("sexCount " + size);
+                model.addAttribute("sexCount", size);
+
+            }
+
+            if (drawingCount.isPresent()) {
+                int size = drawingCount.get().size();
+                log.info("drawingCount " + size);
+                model.addAttribute("drawingCount", size);
+            }
+
+
+            if (neutralCount.isPresent()) {
+                int size = neutralCount.get().size();
+                log.info("neutralCount " + size);
+                model.addAttribute("neutralCount", size);
+            }
+            log.info("=============== REPORT ==============================");
+
+            Optional<List<ScreenShot>> images = screenShotRepo.getType(UUID.fromString(uuid),
+                    ContentType.valueOf(type));
+            HashMap<String, String> imageList = new HashMap<>();
+
+            String home = System.getProperty("user.home");
+
+            if (images.isPresent()) {
+                images.get().forEach(screenShot -> {
+                    //WTF!!!!!!!! fix the home path!
+                    String fileName = screenShot.getFileName().replace(home, "");
+                    imageList.put(fileName, fileName);
+                });
+                model.addAttribute("images", imageList);
+            }
+
+
+            model.addAttribute("uuid", uuid);
+            return "analyze";
+        } else {
+            return "/";
+        }
+    }
 
     @RequestMapping("/suspect")
     public String showActivities(@RequestParam(required = true) String uuid,

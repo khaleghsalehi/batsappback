@@ -8,6 +8,7 @@ import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.Service;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
+import net.khalegh.batsapp.inspection.FilterImage;
 import net.khalegh.batsapp.kids.SuspectedAction;
 import net.khalegh.batsapp.kids.SuspectedActivity;
 import net.khalegh.batsapp.service.FileUploadService;
@@ -285,6 +286,8 @@ public class REST {
                            HttpServletRequest request) {
         if (!isValidRequest(request))
             return;
+
+
         log.info("incoming upload request, check authentication code");
         UserInfo user = userRepo.getUserByUuid(UUID.fromString(uuid));
         try {

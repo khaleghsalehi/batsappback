@@ -1,7 +1,8 @@
-package net.khalegh.batsapp.inspection;
+package net.khalegh.batsapp.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.khalegh.batsapp.inspection.ContentType;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,9 +34,13 @@ public class ScreenShot {
 
     @Getter
     @Setter
-    ContentType  contentType;
+    ContentType contentType;
 
     @Getter
     @Setter
-    boolean  isChecked;
+    double probability;
+
+    @Getter
+    @Setter
+    boolean isChecked;
 }
