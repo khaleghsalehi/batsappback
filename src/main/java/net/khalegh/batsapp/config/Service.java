@@ -4,17 +4,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-
 public class Service {
 
 

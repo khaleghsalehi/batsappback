@@ -1,11 +1,10 @@
 package net.khalegh.batsapp.service;
 
 import com.github.mfathi91.time.PersianDate;
-import com.google.common.hash.Hashing;
 import net.khalegh.batsapp.contorl.WebView;
-import net.khalegh.batsapp.dao.ScreenshotRepo;
+import net.khalegh.batsapp.dao.ScreenShotRepo;
+import net.khalegh.batsapp.entity.ScreenShot;
 import net.khalegh.batsapp.inspection.ContentType;
-import net.khalegh.batsapp.inspection.ScreenShot;
 import net.khalegh.batsapp.utils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -16,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,11 +26,12 @@ import java.util.UUID;
 public class FileUploadService {
 
     @Autowired
-    ScreenshotRepo screenshotRepo;
+    ScreenShotRepo screenshotRepo;
 
     private static final Logger log = LoggerFactory.getLogger(WebView.class);
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     SimpleDateFormat sdf = new SimpleDateFormat("HH");
+
 
     private static void checkOrCreateDirectory(String dirName) throws Exception {
         File directory = new File(dirName);

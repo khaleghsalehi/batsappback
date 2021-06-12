@@ -2,6 +2,7 @@ package net.khalegh.batsapp.sys;
 
 
 import net.khalegh.batsapp.config.Service;
+import net.khalegh.batsapp.dao.ScreenShotRepo;
 import net.khalegh.batsapp.dao.UserRepo;
 import net.khalegh.batsapp.entity.UserInfo;
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import java.util.UUID;
 public class ParentSMSNotification extends TimerTask {
     @Autowired
     UserRepo userRepo;
+
+
     private static final Logger log = LoggerFactory
             .getLogger(ParentSMSNotification.class);
 
