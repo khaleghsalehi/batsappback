@@ -32,6 +32,10 @@
 
 
 
+
+
+
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -335,14 +339,14 @@
         <div class="col-12">
             <h5 th:text="${username}+' خوش آمدید.'"></h5>
         </div>
-        <div class="col col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div th:if="${controlStatus=='on'}" class="col-xs-1" align="center">
                 <div class="col-xs-12">
                     <h5>وضعیت کنترل فعال است.</h5>
                 </div>
                 <div class="col-xs-12">
                     <a href="setCommand?cmd=stop">
-                        <button type="submit" class="btn btn-danger btn-lg">خاموش</button>
+                        <button type="submit" class="btn btn-danger btn-lg">خاموش کردن نظارت</button>
                     </a>
                 </div>
             </div>
@@ -352,21 +356,27 @@
                 </div>
                 <div class="col-xs-12">
                     <a href="setCommand?cmd=start">
-                        <button type="submit" class="btn btn-success btn-lg">&nbsp;روشن&nbsp;</button>
+                        <button type="submit" class="btn btn-success btn-lg">روشن کردن نظارت</button>
                     </a>
                 </div>
             </div>
+            <hr>
+            <div class="col-xs-12" align="center">
+                <h5>دسترسی سریع و نظارت</h5>
+            </div>
+            <br>
             <div class="col-xs-1" align="center">
                 <div class="col-xs-12">
                     <a th:href="@{/show(date=${date},from=${from},to=${to},month=${month})}">
-                        <button type="submit" class="btn btn-secondary btn-lg"> مشاهده فعالیت‌های کودک&nbsp;</button>
+                        <button type="submit" class="btn btn-secondary btn-lg">مشاهده فعالیت‌های کودک</button>
                     </a>
                 </div>
-            </div>
-            <div class="col-xs-1" align="center">
+
                 <div class="col-xs-12">
                     <a th:href="@{/imageAnalyze(uuid=${uuid},type=UNKNOWN)}">
-                        <button type="submit" class="btn btn-secondary btn-lg"> تحلیل هوشمند  محتوایی مشاهدات کودک&nbsp;</button>
+                        <button type="submit" class="btn btn-secondary btn-lg">&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;تحلیل
+                            هوشمند محتوا&nbsp;
+                        </button>
                     </a>
                 </div>
             </div>
@@ -380,17 +390,27 @@
                 <div class="col-xs-12">
                     <h5 th:text="'کیفیت عکس ثبت شده با '+${imageQuality}+'% وضوح تنظیم شده است'"></h5>
                 </div>
+                <br>
                 <div class="col-xs-12">
                     <a href="/setting">
-                        <button type="submit" class="btn btn-secondary btn-lg">&nbsp;تغییر تنظیمات&nbsp;</button>
+                        <button type="submit" class="btn btn-secondary btn-lg">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            تغییر تنظیمات&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </button>
                     </a>
                 </div>
             </div>
 
         </div>
-
     </div>
 </div>
+<div class="footer footer-full-width" id="footer">
+    <div class="sub-footer-copyright" style="color: #171414">
+						<span>
+							<a href="/" style="color: #171414;">باتساپ |</a> تمام حقوق مادی و معنوی محفوظ است
+						</span>
+    </div>
 </div>
 
 
