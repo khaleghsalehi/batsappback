@@ -1,8 +1,7 @@
 package net.khalegh.batsapp.sys;
 
 
-import net.khalegh.batsapp.config.Service;
-import net.khalegh.batsapp.dao.ScreenShotRepo;
+import net.khalegh.batsapp.config.MemoryCache;
 import net.khalegh.batsapp.dao.UserRepo;
 import net.khalegh.batsapp.entity.UserInfo;
 import org.slf4j.Logger;
@@ -28,11 +27,11 @@ public class ParentSMSNotification extends TimerTask {
     @Override
     public void run() {
         //todo send sms to parent ( from cache)
-        if (Service.suspectedClients.size() <= 0) {
+        if (MemoryCache.suspectedClients.size() <= 0) {
             log.info("empty sms notification queue");
             return;
         }
-        Service.suspectedClients.asMap().forEach((uuid, count) -> {
+        MemoryCache.suspectedClients.asMap().forEach((uuid, count) -> {
             UserInfo userInfo = new UserInfo();
             userInfo = userRepo.getUserByUuid(UUID.fromString(uuid));
 

@@ -1,6 +1,7 @@
 package net.khalegh.batsapp.config;
 
 import net.khalegh.batsapp.service.UserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -87,5 +88,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sameOrigin();
 
     }
+
 
 }

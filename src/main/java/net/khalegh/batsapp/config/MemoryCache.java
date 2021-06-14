@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class Service {
+public class MemoryCache {
 
 
     @Autowired
@@ -100,5 +100,25 @@ public class Service {
                 }
             });
 
+
+    public static LoadingCache<String, String> OTP = CacheBuilder
+            .newBuilder()
+            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String s) throws Exception {
+                    return "";
+                }
+            });
+
+    public static LoadingCache<String, String> AuthenticatedByOTP =
+            CacheBuilder.newBuilder()
+                    .expireAfterWrite(24, TimeUnit.HOURS)
+                    .build(new CacheLoader<String, String>() {
+                        @Override
+                        public String load(String s) throws Exception {
+                            return "";
+                        }
+                    });
 
 }

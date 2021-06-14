@@ -5,10 +5,9 @@ import com.google.gson.Gson;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
 import net.khalegh.batsapp.config.ParentalConfig;
-import net.khalegh.batsapp.config.Service;
+import net.khalegh.batsapp.config.MemoryCache;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
-import net.khalegh.batsapp.inspection.FilterImage;
 import net.khalegh.batsapp.kids.SuspectedAction;
 import net.khalegh.batsapp.kids.SuspectedActivity;
 import net.khalegh.batsapp.service.FileUploadService;
@@ -26,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +39,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -173,6 +174,28 @@ public class REST {
         }
     }
 
+    @PostMapping("/v1/otp")
+    public String otpCheck(@RequestParam(required = true) String username,
+                           @RequestParam(required = true) String otp,
+                           HttpServletResponse response,
+                           HttpServletRequest request) throws ExecutionException,
+            IOException {
+        String value = MemoryCache.OTP.get(username);
+        if (value.equals(otp)) {
+            LocalDateTime now = LocalDateTime.now();
+            MemoryCache.AuthenticatedByOTP.put(username,
+                    String.valueOf(now));
+            MemoryCache.OTP.invalidate(username);
+            log.info(username + " authorized by OTP success.");
+            response.sendRedirect("/");
+            return String.valueOf(RESPONSE_SUCCESS);
+        } else {
+            log.info(username + " authorized by OTP failed.");
+            response.sendRedirect("/");
+            return String.valueOf(RESPONSE_ERROR);
+        }
+    }
+
     @GetMapping("/v1/ws")
     public String whatsUp(@RequestParam(required = true) String uuid,
                           HttpServletRequest request) {
@@ -188,7 +211,7 @@ public class REST {
             try {
                 if (user.isPresent()) {
                     log.info("incoming ws, username -> " + user.get().getUserName() + ", uuid " + user.get().getUuid());
-                    Service.versionList.put(String.valueOf(user.get().getUuid()), getClientVersion(request));
+                    MemoryCache.versionList.put(String.valueOf(user.get().getUuid()), getClientVersion(request));
                     // log ws ping history
 
                     //todo store in cache or queue for bulk save?
@@ -199,15 +222,15 @@ public class REST {
                     activityRepo.save(activity);
 
                     // set ping time to cache
-                    if (Service.lastPing.get(uuid).isEmpty()) {
-                        log.info("lastPing is null or empty for " + uuid +", then init...");
-                        Service.lastPing.put(uuid, activity.getPingTime());
+                    if (MemoryCache.lastPing.get(uuid).isEmpty()) {
+                        log.info("lastPing is null or empty for " + uuid + ", then init...");
+                        MemoryCache.lastPing.put(uuid, activity.getPingTime());
                         //keep redundant for next compares.
-                        if (Service.lastActivity.get(uuid).isEmpty())
-                            Service.lastActivity.put(uuid, activity.getPingTime());
+                        if (MemoryCache.lastActivity.get(uuid).isEmpty())
+                            MemoryCache.lastActivity.put(uuid, activity.getPingTime());
 
                     }
-                    int diff = utils.getTimeDiff(activity.getPingTime(), Service.lastActivity.get(uuid));
+                    int diff = utils.getTimeDiff(activity.getPingTime(), MemoryCache.lastActivity.get(uuid));
                     if (diff > MAX_PING_DIFF) {
                         log.error("ping diff " + diff + " from " + uuid);
                         log.info(" =====  suspected action =====");
@@ -220,21 +243,21 @@ public class REST {
 
                         suspectedActivityRepo.save(suspectedActivity);
                         int count;
-                        if (!Service.suspectedClients.asMap().containsKey(uuid))
+                        if (!MemoryCache.suspectedClients.asMap().containsKey(uuid))
                             count = 1;
                         else {
-                            count = Integer.parseInt(Service.suspectedClients.get(uuid));
+                            count = Integer.parseInt(MemoryCache.suspectedClients.get(uuid));
                             count++;
                         }
-                        Service.suspectedClients.put(uuid, String.valueOf(count));
+                        MemoryCache.suspectedClients.put(uuid, String.valueOf(count));
 
                         log.info("log suspected count " + count + " type " + SuspectedAction.NO_PING + " for " + uuid);
 
                     } else {
                         log.info("ping diff " + diff + " is ok " + uuid);
                     }
-                    Service.lastPing.put(uuid, activity.getPingTime());
-                    Service.lastActivity.put(uuid, activity.getPingTime());
+                    MemoryCache.lastPing.put(uuid, activity.getPingTime());
+                    MemoryCache.lastActivity.put(uuid, activity.getPingTime());
 
 
                     List<ParentalConfig> baseUser = parentalConfigRepo.findConfigByUuid(UUID.fromString(uuid));

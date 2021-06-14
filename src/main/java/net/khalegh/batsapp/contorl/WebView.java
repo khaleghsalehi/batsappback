@@ -1,14 +1,13 @@
 package net.khalegh.batsapp.contorl;
 
 import com.github.mfathi91.time.PersianDate;
-import com.google.common.hash.Hashing;
 import net.khalegh.batsapp.config.ParentalConfig;
-import net.khalegh.batsapp.config.Service;
+import net.khalegh.batsapp.config.MemoryCache;
 import net.khalegh.batsapp.dao.*;
 import net.khalegh.batsapp.entity.*;
 import net.khalegh.batsapp.inspection.ContentType;
 import net.khalegh.batsapp.kids.SuspectedActivity;
-import net.khalegh.batsapp.sys.ImageAnalyzer;
+import net.khalegh.batsapp.service.Security;
 import net.khalegh.batsapp.utils;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
@@ -80,17 +79,35 @@ public class WebView {
     @Autowired
     ScreenShotRepo screenShotRepo;
 
+    boolean checkIfAuthorizedByOTP(String userName) throws ExecutionException {
+        if (!MemoryCache.AuthenticatedByOTP.asMap().containsKey(userName)) {
+            Security.sendSMS(userName);
+            log.info(userName + " need OTP verification, redirect... ");
+            return false;
+        }
+        log.info(userName + "has been verified by OTP  at ",
+                MemoryCache.AuthenticatedByOTP.get(userName));
+        return true;
+    }
+
     @RequestMapping("/setCommand")
     public void setCommand(@RequestParam(required = true) String cmd,
-                           HttpServletResponse response) throws IOException {
+                           HttpServletResponse response) throws IOException, ExecutionException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!auth.isAuthenticated()) {
             response.sendRedirect("/login");
             return;
         }
+        String userName = auth.getName();
+        if (!checkIfAuthorizedByOTP(userName)) {
+            response.sendRedirect("/");
+        }
+
         UserInfo userInfo = new UserInfo();
         userInfo = userRepo.findByUserName(auth.getName());
+
+
         log.info("incoming setCommand from " + userInfo.getUuid());
         Command command = new Command();
         if (cmd.equals("start") || cmd.equals("stop")) {
@@ -100,6 +117,7 @@ public class WebView {
             response.sendRedirect("/");
         }
     }
+
 
     @RequestMapping(value = {"", "/", "/index"})
     public String index(@RequestParam(required = false, defaultValue = "") String q,
@@ -119,8 +137,16 @@ public class WebView {
         UserInfo userInfo = new UserInfo();
         UUID uuid;
         if (auth.isAuthenticated()) {
-            model.addAttribute("username", auth.getName());
-            userInfo = userRepo.findByUserName(auth.getName());
+
+            String userName = auth.getName();
+            if (!checkIfAuthorizedByOTP(userName)) {
+                model.addAttribute("userName", userName);
+                return "auth";
+            }
+
+
+            model.addAttribute("username", userName);
+            userInfo = userRepo.findByUserName(userName);
             uuid = userInfo.getUuid();
             log.info("user uuid -> " + uuid);
             List<Command> command;
@@ -176,6 +202,7 @@ public class WebView {
         return "index";
     }
 
+
     /**
      * parents ask content control manually
      *
@@ -185,11 +212,16 @@ public class WebView {
     @RequestMapping("/imageAnalyze")
     public String imageAnalyzer(@RequestParam(required = true) String uuid,
                                 @RequestParam(required = false, defaultValue = "") String type,
-                                Model model) {
+                                Model model) throws ExecutionException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
-            // ImageAnalyzer imageAnalyzer = new ImageAnalyzer(screenShotRepo, userRepo);
-            //    imageAnalyzer.inspectNow(UUID.fromString(uuid), 0, 3);
+
+            String userName = auth.getName();
+            if (!checkIfAuthorizedByOTP(userName)) {
+                model.addAttribute("userName", userName);
+                return "auth";
+            }
+
 
             Optional<List<ScreenShot>> pornCount = screenShotRepo.getType(UUID.fromString(uuid),
                     ContentType.PORN);
@@ -287,12 +319,19 @@ public class WebView {
 
     @RequestMapping("/suspect")
     public String showActivities(@RequestParam(required = true) String uuid,
-                                 Model model) {
+                                 Model model) throws ExecutionException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
+
+            String userName = auth.getName();
+            if (!checkIfAuthorizedByOTP(userName)) {
+                model.addAttribute("userName", userName);
+                return "auth";
+            }
+
             model.addAttribute("username", auth.getName());
             try {
-                Service.suspectedClients.invalidate(uuid);
+                MemoryCache.suspectedClients.invalidate(uuid);
                 List<SuspectedActivity> activity = suspectedActivityRepo.getByUuid(UUID.fromString(uuid));
                 model.addAttribute("activity", activity);
                 PersianDate today = PersianDate.now();
@@ -335,7 +374,7 @@ public class WebView {
     public String showActivities(@RequestParam(required = true) String date,
                                  @RequestParam(required = true) String from,
                                  @RequestParam(required = true) String to,
-                                 Model model) {
+                                 Model model) throws ExecutionException {
 
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
@@ -347,30 +386,29 @@ public class WebView {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = dateFormat.format(new Date());
 
-//        try {
-//            if (!date.isEmpty())
-//                today = PersianDate.parse(date);
-//        } catch (Exception e) {
-//            // todo send  and show error in user  panel
-//            e.printStackTrace();
-//        }
-
 
         UserInfo userInfo;
         Map<Integer, String> images =
                 new TreeMap<Integer, String>(Collections.reverseOrder());
         ArrayList<String> dirList = new ArrayList<>();
         if (auth.isAuthenticated()) {
+
+            String userName = auth.getName();
+            if (!checkIfAuthorizedByOTP(userName)) {
+                model.addAttribute("userName", userName);
+                return "auth";
+            }
+
             model.addAttribute("username", auth.getName());
             userInfo = userRepo.findByUserName(auth.getName());
 
             // check if there is suspected alarm
-            boolean isSuspectedUser = Service.suspectedClients
+            boolean isSuspectedUser = MemoryCache.suspectedClients
                     .asMap()
                     .containsKey(String.valueOf(userInfo.getUuid()));
             if (isSuspectedUser) {
                 try {
-                    int count = Integer.parseInt(Service.suspectedClients
+                    int count = Integer.parseInt(MemoryCache.suspectedClients
                             .get(String.valueOf(userInfo.getUuid())));
                     if (count > SUSPENSION_MAX_POLICY) {
                         model.addAttribute("suspected", "yes");
@@ -471,19 +509,26 @@ public class WebView {
     public String setting(Model model) throws ExecutionException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
+            String userName = auth.getName();
+            if (!checkIfAuthorizedByOTP(userName)) {
+                model.addAttribute("userName", userName);
+                return "auth";
+            }
+
+
             model.addAttribute("username", auth.getName());
             UserInfo baseUser = userRepo.findByUserName(auth.getName());
             model.addAttribute("uuid", baseUser.getUuid());
         } else {
             model.addAttribute("username", "Guest");
         }
-        @Nullable String appCacheCanary = Service.appCache.get(IS_EMPTY_GAP);
+        @Nullable String appCacheCanary = MemoryCache.appCache.get(IS_EMPTY_GAP);
         if (appCacheCanary == null || appCacheCanary.isEmpty()) {
             log.info("NullOrEmpty catch found, fetch db");
-            Service.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
-            Service.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
-            Service.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
-            Service.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
+            MemoryCache.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
+            MemoryCache.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
+            MemoryCache.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
+            MemoryCache.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
         }
 
         PersianDate today = PersianDate.now();
@@ -513,6 +558,12 @@ public class WebView {
 
     @RequestMapping("/logout")
     public String logoutPage() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.isAuthenticated()) {
+            String userName = auth.getName();
+            MemoryCache.AuthenticatedByOTP.invalidate(userName);
+            log.debug("invalidate user authorized by OTP -> " + userName);
+        }
         SecurityContextHolder.getContext().setAuthentication(null);
         SecurityContextHolder.clearContext();
         return "redirect:/";
@@ -532,17 +583,17 @@ public class WebView {
             model.addAttribute("msg", SPACE_ERROR_USERNAME);
             return "signup";
         }
-        @Nullable String appCacheCanary = Service.appCache.get(IS_EMPTY_GAP);
+        @Nullable String appCacheCanary = MemoryCache.appCache.get(IS_EMPTY_GAP);
         if (appCacheCanary == null || appCacheCanary.isEmpty()) {
             log.info("NullOrEmpty catch found, fetch db");
-            Service.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
-            Service.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
-            Service.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
-            Service.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
+            MemoryCache.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
+            MemoryCache.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
+            MemoryCache.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
+            MemoryCache.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
         }
-        model.addAttribute(ALL_TAGS, Service.appCache.get(ALL_TAGS));
-        model.addAttribute(ALL_USERS, Service.appCache.get(ALL_USERS));
-        model.addAttribute(ALL_COMMUNES, Service.appCache.get(ALL_COMMUNES));
+        model.addAttribute(ALL_TAGS, MemoryCache.appCache.get(ALL_TAGS));
+        model.addAttribute(ALL_USERS, MemoryCache.appCache.get(ALL_USERS));
+        model.addAttribute(ALL_COMMUNES, MemoryCache.appCache.get(ALL_COMMUNES));
         return "signup";
     }
 
@@ -553,17 +604,17 @@ public class WebView {
             return "/";
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        @Nullable String appCacheCanary = Service.appCache.get(IS_EMPTY_GAP);
+        @Nullable String appCacheCanary = MemoryCache.appCache.get(IS_EMPTY_GAP);
         if (appCacheCanary == null || appCacheCanary.isEmpty()) {
             log.info("NullOrEmpty catch found, fetch db");
-            Service.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
-            Service.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
-            Service.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
-            Service.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
+            MemoryCache.appCache.put(ALL_TAGS, String.valueOf(experienceRepo.count()));
+            MemoryCache.appCache.put(ALL_USERS, String.valueOf(userRepo.count()));
+            MemoryCache.appCache.put(ALL_COMMUNES, String.valueOf(replyRepo.count()));
+            MemoryCache.appCache.put(IS_EMPTY_GAP, IS_EMPTY_GAP);
         }
-        model.addAttribute(ALL_TAGS, Service.appCache.get(ALL_TAGS));
-        model.addAttribute(ALL_USERS, Service.appCache.get(ALL_USERS));
-        model.addAttribute(ALL_COMMUNES, Service.appCache.get(ALL_COMMUNES));
+        model.addAttribute(ALL_TAGS, MemoryCache.appCache.get(ALL_TAGS));
+        model.addAttribute(ALL_USERS, MemoryCache.appCache.get(ALL_USERS));
+        model.addAttribute(ALL_COMMUNES, MemoryCache.appCache.get(ALL_COMMUNES));
 
         List<Reply> replyList = replyRepo.findByString(uuid);
         if (auth.isAuthenticated()) {

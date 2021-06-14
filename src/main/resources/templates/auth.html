@@ -28,13 +28,6 @@
 
 
 
-
-
-
-
-
-
-
     </script>
 
     <!-- Bootstrap CSS -->
@@ -53,18 +46,18 @@
 <div class="content-bg-wrap"></div>
 
 
-<!-- ... end Header Standard Landing  -->
 <div class="header-spacer--standard"></div>
 
 <div class="container">
     <div class="row display-flex">
         <div class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
             <div class="landing-content">
-                <h1>به باتساپ خوش آمدید!</h1>
+                <h2>به باتساپ خوش آمدید!</h2>
                 <h5>
-                    اپلیکیشن هوشمند نظارت بر فعالیت‌های کودکان و نوجوانان
+                    اپلیکیشن هوشمند نظارت بر فعالیت‌های کودکان و نوجوانان در دنیای مجازی
                 </h5>
                 <a href="/exbord" class="btn btn-md btn-border c-white">در مورد باستاپ بیشتر بدانید</a>
+
             </div>
         </div>
 
@@ -73,38 +66,27 @@
             <!-- Login-Registration Form  -->
 
             <div class="registration-login-form">
+                <!-- Nav tabs -->
+
+                <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane active" id="signup" role="tabpanel" data-mh="log-tab">
-                        <div class="title h6">ایجاد حساب کاربری در باتساپ</div>
-                        <form class="content" action="/v1/reg" method="get">
-                            <div class="text-center" th:if="${msg!= null} ">
-                                <p style="color: #dc0b0b" th:text="${msg}"></p>
-                            </div>
-                            <div class="row display-flex">
+
+                    <div class="tab-pane  active" id="login" role="tabpanel" data-mh="log-tab">
+                        <div class="title h6">تایید هویت دو ‌عامله</div>
+                        <form class="content" action="/v1/otp" method="post">
+                            <div class="row">
                                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="form-group label-floating is-empty">
-                                        <label class="control-label">شماره تلفن همراه ( شکل صحیح 09123456789 )</label>
-                                        <input  name="username" class="form-control" placeholder="" type="text">
-                                    </div>
-                                    <div class="form-group label-floating is-empty">
-                                        <label class="control-label">رمز عبور</label>
-                                        <input name="password" class="form-control" placeholder="" type="password">
-                                    </div>
-                                    <div class="form-group label-floating is-empty">
-                                        <label class="control-label">تکرار رمز عبور</label>
-                                        <input  name="rePassword" class="form-control" placeholder="" type="password">
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="optionsCheckboxes" type="checkbox">
-                                            تمام <a href="/exbord#privacy">شرایط و ضوابط</a> باستاپ را می پذیرم.
-                                        </label>
-                                    </div>
-                                    <button type="submit" class="btn btn-purple btn-lg full-width">ایجاد حساب کاربری
-                                    </button>
-                                    <a class="linker h5" href="/">خانه</a> |
-                                    <a class="linker h5" href="/login">ورود</a>
+                                        <label class="control-label"> لطفا کد امنیتی را که به گوشی شما پیامک شده، وارد کنید </label>
 
+                                        <input name="username" class="form-control"  type="hidden"
+                                        th:value="${userName}">
+
+                                        <input name="otp" class="form-control" placeholder="" type="text">
+                                    </div>
+                                    <button type="submit" class="btn btn-purple btn-lg full-width">
+                                        تایید
+                                    </button>
                                 </div>
                             </div>
                         </form>

@@ -1,7 +1,7 @@
 package net.khalegh.batsapp.superuser;
 
 import com.google.gson.Gson;
-import net.khalegh.batsapp.config.Service;
+import net.khalegh.batsapp.config.MemoryCache;
 import net.khalegh.batsapp.contorl.REST;
 import net.khalegh.batsapp.contorl.WebView;
 import net.khalegh.batsapp.dao.UserRepo;
@@ -37,24 +37,24 @@ public class management {
         if (!adminToken.equals(ADMIN_TOKEN))
             return null;
         List<LiveUser> list = new ArrayList<>();
-        Service.lastPing.asMap().forEach((k, v) -> {
+        MemoryCache.lastPing.asMap().forEach((k, v) -> {
             LiveUser liveUser = new LiveUser();
             liveUser.setUserName(userRepo.getUserNameByUuid(UUID.fromString(k)));
             try {
-                liveUser.setLastUpload(Service.lastUpload.get(k));
+                liveUser.setLastUpload(MemoryCache.lastUpload.get(k));
             } catch (ExecutionException e) {
                 e.printStackTrace();
                 liveUser.setLastUpload("unknown");
             }
             liveUser.setUuid(UUID.fromString(k));
             try {
-                liveUser.setInstalledVersion(Service.versionList.get(k));
+                liveUser.setInstalledVersion(MemoryCache.versionList.get(k));
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
 
             try {
-                String s = net.khalegh.batsapp.config.Service.uploadCount.get(k);
+                String s = MemoryCache.uploadCount.get(k);
                 int value;
                 if (s.equals(""))
                     value = 0;

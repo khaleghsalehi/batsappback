@@ -1,6 +1,7 @@
 package net.khalegh.batsapp.service;
 
 import com.github.mfathi91.time.PersianDate;
+import net.khalegh.batsapp.config.MemoryCache;
 import net.khalegh.batsapp.contorl.WebView;
 import net.khalegh.batsapp.dao.ScreenShotRepo;
 import net.khalegh.batsapp.entity.ScreenShot;
@@ -73,11 +74,11 @@ public class FileUploadService {
 
             String filename = userDateDirectory + "/" + from + "-" + to + "/" + originalFilename;
             file.transferTo(new File(FilenameUtils.normalize(filename)));
-            net.khalegh.batsapp.config.Service.lastUpload.put(uuid,
+            MemoryCache.lastUpload.put(uuid,
                     LocalDateTime.now().format(timeFormatter));
-            boolean containsKey = net.khalegh.batsapp.config.Service.uploadCount.asMap().containsKey(uuid);
+            boolean containsKey = MemoryCache.uploadCount.asMap().containsKey(uuid);
             if (containsKey) {
-                String s = net.khalegh.batsapp.config.Service.uploadCount.get(uuid);
+                String s = MemoryCache.uploadCount.get(uuid);
                 int value;
                 if (s.equals(""))
                     value = 1;
@@ -85,9 +86,9 @@ public class FileUploadService {
                     value = Integer.parseInt(s);
                     value = value + 1;
                 }
-                net.khalegh.batsapp.config.Service.uploadCount.put(uuid, String.valueOf(value));
+                MemoryCache.uploadCount.put(uuid, String.valueOf(value));
             } else {
-                net.khalegh.batsapp.config.Service.uploadCount.put(uuid, String.valueOf(1));
+                MemoryCache.uploadCount.put(uuid, String.valueOf(1));
             }
 
 
