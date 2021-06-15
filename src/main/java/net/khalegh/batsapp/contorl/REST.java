@@ -11,6 +11,7 @@ import net.khalegh.batsapp.entity.*;
 import net.khalegh.batsapp.kids.SuspectedAction;
 import net.khalegh.batsapp.kids.SuspectedActivity;
 import net.khalegh.batsapp.service.FileUploadService;
+import net.khalegh.batsapp.service.Security;
 import net.khalegh.batsapp.tools.Video;
 import net.khalegh.batsapp.utils;
 import org.slf4j.Logger;
@@ -113,6 +114,7 @@ public class REST {
     public final static int INPUT_IS_NOT_CORRECT = -2;
     public final static int USER_EXIST = -1;
     public final static int ERROR_USER_OR_PASSWORD = -1;
+    public final static int REGISTER_SUCCESS = 200;
     public final static int RESPONSE_SUCCESS = 200;
     public static final int RESPONSE_ERROR = 500;
     private static final String DEFAULT_AVATAR = "avatar.png";
@@ -471,8 +473,45 @@ public class REST {
         return RESPONSE_ERROR;
     }
 
-    // TODO: 1/28/21 change GET to POST, also control the input size
-    // FIXME: 1/28/21  body size is a large in DB, cause 500 error, fix it
+    @PostMapping("/v1/regcode")
+    public ModelAndView registerNewUserGetCode(Model model,
+                                               @RequestParam(required = true) String username,
+                                               HttpServletRequest request,
+                                               HttpServletResponse response) throws IOException,
+            ExecutionException {
+        if (MemoryCache.signUpOTP.asMap().containsKey(username)) {
+            log.info("reg otp already sent to " + username);
+            return new ModelAndView("redirect:/signupOTP?username=" + username);
+        } else {
+            Security.sendSMSForSignUp(username);
+            return new ModelAndView("redirect:/signupOTP?username=" + username);
+
+        }
+
+    }
+
+
+    @PostMapping("/v1/signupOTP")
+    public ModelAndView signupOTPCheck(Model model,
+                                       @RequestParam(required = true) String username,
+                                       @RequestParam(required = true) String otp,
+                                       HttpServletResponse response,
+                                       HttpServletRequest request) throws ExecutionException,
+            IOException {
+        String value = MemoryCache.signUpOTP.get(username);
+        if (value.equals(otp)) {
+            LocalDateTime now = LocalDateTime.now();
+            MemoryCache.signupDoneByOTP.put(username, String.valueOf(now));
+            MemoryCache.signUpOTP.invalidate(username);
+            log.info(username + " (signup) authorized by OTP success.");
+            return new ModelAndView("redirect:/signup2?username=" + username);
+        } else {
+            log.info(username + " (signup) authorized by OTP failed.");
+            model.addAttribute("username", username);
+            return new ModelAndView("redirect:/signupOTP?username=" + username);
+        }
+    }
+
     @GetMapping("/v1/reg")
     public int registerNewUser(Model model,
                                @RequestParam(required = true) String username,
@@ -484,6 +523,7 @@ public class REST {
 
         // TODO: 1/19/21 load/update user in memory cache for performance issue
         //todo check if password and repassword are same
+
         UserInfo qodQoDUserInfo = userRepo.findByUserName(username);
         // check for withspace
         Pattern pattern = Pattern.compile("\\s");
@@ -556,7 +596,7 @@ public class REST {
             commandRepo.save(command);
 
             log.info("user register and initialized successfully.");
-            response.sendRedirect("/login");
+            response.sendRedirect("/login?error=200");
             return RESPONSE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

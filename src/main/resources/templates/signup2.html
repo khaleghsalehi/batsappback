@@ -35,6 +35,8 @@
 
 
 
+
+
     </script>
 
     <!-- Bootstrap CSS -->
@@ -76,23 +78,25 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="signup" role="tabpanel" data-mh="log-tab">
                         <div class="title h6">ایجاد حساب کاربری در باتساپ</div>
-                        <form class="content" action="/v1/regcode" method="POST">
+                        <form class="content" action="/v1/reg" method="get">
                             <div class="text-center" th:if="${msg!= null} ">
                                 <p style="color: #dc0b0b" th:text="${msg}"></p>
                             </div>
                             <div class="row display-flex">
                                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="form-group label-floating is-empty">
-                                        <label class="control-label">تلفن همراه (مثال 09123456789 )</label>
-                                        <input  name="username" class="form-control" placeholder="" type="text">
+                                        <input name="username" class="form-control" th:value="${username}"
+                                               type="hidden">
                                     </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="optionsCheckboxes" type="checkbox">
-                                            تمام <a href="/exbord#privacy">شرایط و ضوابط</a> باستاپ را می پذیرم.
-                                        </label>
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label">رمز عبور</label>
+                                        <input name="password" class="form-control" placeholder="" type="password">
                                     </div>
-                                    <button type="submit" class="btn btn-purple btn-lg full-width">ایجاد حساب کاربری
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label">تکرار رمز عبور</label>
+                                        <input name="rePassword" class="form-control" placeholder="" type="password">
+                                    </div>
+                                    <button type="submit" class="btn btn-purple btn-lg full-width">تکمیل ثبت‌نام
                                     </button>
                                     <a class="linker h5" href="/">خانه</a> |
                                     <a class="linker h5" href="/login">ورود</a>

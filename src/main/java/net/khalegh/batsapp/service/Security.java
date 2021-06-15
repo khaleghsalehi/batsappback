@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 
 public class Security {
     private static final Logger log = LoggerFactory.getLogger(Security.class);
-    private static final String Alphabet="0123456789";
+    private static final String Alphabet = "0123456789";
 
 
     private static String createRandomCode(int codeLength, String id) {
         List<Character> temp = id.chars()
-                .mapToObj(i -> (char)i)
+                .mapToObj(i -> (char) i)
                 .collect(Collectors.toList());
         Collections.shuffle(temp, new SecureRandom());
         return temp.stream()
@@ -27,8 +27,9 @@ public class Security {
                 .limit(codeLength)
                 .collect(Collectors.joining());
     }
+
     private static String getCode() {
-        String code =createRandomCode(5,Alphabet);
+        String code = createRandomCode(5, Alphabet);
         log.info("random otp -> " + code);
         return code;
     }
@@ -48,4 +49,21 @@ public class Security {
             log.info(code + " send to userPhone by " + userName + " failed!");
         }
     }
+
+    public static void sendSMSForSignUp(String userName) throws ExecutionException, IOException {
+        if (MemoryCache.signUpOTP.asMap().containsKey(userName) &&
+                !MemoryCache.signupDoneByOTP.get(userName).isEmpty()) {
+            log.info("code ->  " + MemoryCache.signUpOTP.get(userName) +
+                    " already sent to " + userName + ", return...");
+            return;
+        }
+        String code = getCode();
+        MemoryCache.signUpOTP.put(userName, code);
+//        if (SmsDotIR.sendVerificationCode(userName, code)) {
+//            log.info(code + " send (signup) to userPhone by " + userName + " done!");
+//        } else {
+//            log.info(code + " send (signup) to userPhone by " + userName + " failed!");
+//        }
+    }
+
 }

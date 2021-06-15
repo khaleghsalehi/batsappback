@@ -122,6 +122,24 @@ public class MemoryCache {
                     });
 
 
+    public static LoadingCache<String, String> signupDoneByOTP =
+            CacheBuilder.newBuilder()
+                    .build(new CacheLoader<String, String>() {
+                        @Override
+                        public String load(String s) throws Exception {
+                            return "";
+                        }
+                    });
+
+    public static LoadingCache<String, String> signUpOTP =
+            CacheBuilder.newBuilder()
+                    .expireAfterWrite(1, TimeUnit.HOURS)
+                    .build(new CacheLoader<String, String>() {
+                        @Override
+                        public String load(String s) throws Exception {
+                            return "";
+                        }
+                    });
     public static LoadingCache<String, String> SMS_DOT_IR_TokenKey = CacheBuilder
             .newBuilder()
             .expireAfterWrite(20, TimeUnit.MINUTES)

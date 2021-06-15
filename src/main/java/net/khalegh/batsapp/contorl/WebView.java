@@ -1,6 +1,7 @@
 package net.khalegh.batsapp.contorl;
 
 import com.github.mfathi91.time.PersianDate;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import net.khalegh.batsapp.config.ParentalConfig;
 import net.khalegh.batsapp.config.MemoryCache;
 import net.khalegh.batsapp.dao.*;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +49,7 @@ public class WebView {
     private static final String SPACE_ERROR_USERNAME = "خطا: امکان استفاده از فاصله در نام کاربری مجاز نیست.";
     private static final String PASSWORD_ARE_NOT_MATCHED = "خطا: رمز عبور یکسان نیست.";
     private static final String INCORRECT_USERNAME_OR_PASSWORD = "خطا: نام کاربری یا کلمه عبور اشتباه است.";
+    private static final String REGISTER_DONE = "پیام: ثبت نام با موفقیت انجام شد!";
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HH");
     private static final int SUSPENSION_MAX_POLICY = 1;
@@ -88,6 +91,23 @@ public class WebView {
         log.info(userName + "has been verified by OTP  at ",
                 MemoryCache.AuthenticatedByOTP.get(userName));
         return true;
+    }
+
+
+    @RequestMapping("/signup2")
+    public String signup2(@RequestParam(required = true) String username,
+                          Model model,
+                          HttpServletResponse response) throws IOException, ExecutionException {
+        model.addAttribute("username", username);
+        return "signup2";
+    }
+
+    @RequestMapping("/signupOTP")
+    public String signupOTP(@RequestParam(required = true) String username,
+                            Model model,
+                            HttpServletResponse response) throws IOException, ExecutionException {
+        model.addAttribute("username", username);
+        return "signupOTP";
     }
 
     @RequestMapping("/setCommand")
