@@ -35,6 +35,9 @@
 
 
 
+
+
+
     </script>
 
     <!-- Bootstrap CSS -->
@@ -84,8 +87,9 @@
                                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="form-group label-floating is-empty">
                                         <label class="control-label">تلفن همراه (مثال 09123456789 )</label>
-                                        <input  name="username" class="form-control" placeholder="" type="text">
+                                        <input name="username" class="form-control" placeholder="" type="text">
                                     </div>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <div class="checkbox">
                                         <label>
                                             <input name="optionsCheckboxes" type="checkbox">

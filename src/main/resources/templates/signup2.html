@@ -96,6 +96,7 @@
                                         <label class="control-label">تکرار رمز عبور</label>
                                         <input name="rePassword" class="form-control" placeholder="" type="password">
                                     </div>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <button type="submit" class="btn btn-purple btn-lg full-width">تکمیل ثبت‌نام
                                     </button>
                                     <a class="linker h5" href="/">خانه</a> |

@@ -85,6 +85,7 @@
                                         <input name="otp" class="form-control" placeholder="" type="text">
                                     </div>
                                     <br>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <div class="title h6"><span id="time">05:00</span>&nbsp;زمان باقی‌مانده تا اعتبار کد&nbsp;
                                     </div>
                                     <button type="submit" class="btn btn-purple btn-lg full-width">
