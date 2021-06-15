@@ -79,7 +79,7 @@ public class WebView {
     @Autowired
     ScreenShotRepo screenShotRepo;
 
-    boolean checkIfAuthorizedByOTP(String userName) throws ExecutionException {
+    boolean checkIfAuthorizedByOTP(String userName) throws ExecutionException, IOException {
         if (!MemoryCache.AuthenticatedByOTP.asMap().containsKey(userName)) {
             Security.sendSMS(userName);
             log.info(userName + " need OTP verification, redirect... ");
@@ -125,7 +125,7 @@ public class WebView {
                         @RequestParam(required = false) UUID userId,
                         @RequestParam(required = false) String subject,
                         HttpServletRequest request,
-                        Model model) throws ExecutionException {
+                        Model model) throws ExecutionException, IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         PersianDate today = PersianDate.now();
 
@@ -212,7 +212,7 @@ public class WebView {
     @RequestMapping("/imageAnalyze")
     public String imageAnalyzer(@RequestParam(required = true) String uuid,
                                 @RequestParam(required = false, defaultValue = "") String type,
-                                Model model) throws ExecutionException {
+                                Model model) throws ExecutionException, IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
 
@@ -319,7 +319,7 @@ public class WebView {
 
     @RequestMapping("/suspect")
     public String showActivities(@RequestParam(required = true) String uuid,
-                                 Model model) throws ExecutionException {
+                                 Model model) throws ExecutionException, IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
 
@@ -374,7 +374,7 @@ public class WebView {
     public String showActivities(@RequestParam(required = true) String date,
                                  @RequestParam(required = true) String from,
                                  @RequestParam(required = true) String to,
-                                 Model model) throws ExecutionException {
+                                 Model model) throws ExecutionException, IOException {
 
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
@@ -506,7 +506,7 @@ public class WebView {
 
 
     @RequestMapping("/setting")
-    public String setting(Model model) throws ExecutionException {
+    public String setting(Model model) throws ExecutionException, IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
             String userName = auth.getName();

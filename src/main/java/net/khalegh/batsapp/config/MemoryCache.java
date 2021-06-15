@@ -121,4 +121,15 @@ public class MemoryCache {
                         }
                     });
 
+
+    public static LoadingCache<String, String> SMS_DOT_IR_TokenKey = CacheBuilder
+            .newBuilder()
+            .expireAfterWrite(20, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, String>() {
+                @Override
+                public String load(String s) throws Exception {
+                    return "";
+                }
+            });
+
 }
