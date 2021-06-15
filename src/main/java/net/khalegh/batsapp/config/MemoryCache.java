@@ -103,7 +103,7 @@ public class MemoryCache {
 
     public static LoadingCache<String, String> OTP = CacheBuilder
             .newBuilder()
-            .expireAfterWrite(10, TimeUnit.MINUTES)
+            .expireAfterWrite(5, TimeUnit.MINUTES)
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(String s) throws Exception {
@@ -133,7 +133,7 @@ public class MemoryCache {
 
     public static LoadingCache<String, String> signUpOTP =
             CacheBuilder.newBuilder()
-                    .expireAfterWrite(1, TimeUnit.HOURS)
+                    .expireAfterWrite(5, TimeUnit.HOURS)
                     .build(new CacheLoader<String, String>() {
                         @Override
                         public String load(String s) throws Exception {

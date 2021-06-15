@@ -24,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -102,8 +103,8 @@ public class REST {
     SuspectedActivityRepo suspectedActivityRepo;
 
 
-    public final static String VERSION = "Batsapp 0.85 ALPAHA";
-    private final static String TYPE_INVALID_ERROR = "Error, Invalid or empty type";
+    public final static String VERSION = "Batsapp 0.1 ALPAHA";
+    private final static String TYPE_INVALID_ERROR = "Error, Invalid or empty type ";
     public final static int SPACE_ERROR_USERNAME = -9;
     public final static int PASSWORD_NOT_SAME = -8;
     public final static int FILE_SIZE_TOO_LARGE = -7;
@@ -479,6 +480,25 @@ public class REST {
                                                HttpServletRequest request,
                                                HttpServletResponse response) throws IOException,
             ExecutionException {
+        // regex  that validate phone number
+        String regex = "^(\\+98|0|0098)?9\\d{9}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(username);
+        if (!matcher.find()) {
+            log.info("phone number invalid, " + username);
+            return new ModelAndView("redirect:/signup?error=" + INPUT_IS_NOT_CORRECT);
+        }
+
+        // check if user already registerd or not!
+        UserInfo qodQoDUserInfo = userRepo.findByUserName(username);
+        if (qodQoDUserInfo != null || username.isEmpty()) {
+            // TODO: 1/19/21  alert in signup page
+            log.warn("user already registered.");
+            return new ModelAndView("redirect:/signup?error=" + USER_EXIST);
+        }
+
+
+
         if (MemoryCache.signUpOTP.asMap().containsKey(username)) {
             log.info("reg otp already sent to " + username);
             return new ModelAndView("redirect:/signupOTP?username=" + username);

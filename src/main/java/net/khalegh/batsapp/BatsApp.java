@@ -34,10 +34,10 @@ public class BatsApp implements CommandLineRunner {
         timer1.scheduleAtFixedRate(timerTask, 0, 30 * 1000);
 
         // inspect contents for  every user per 10 second, periodic
-//
-//        TimerTask timerTaskInspect = new ImageAnalyzer(screenShotRepo, userRepo);
-//        Timer timer2 = new Timer(true);
-//        timer2.scheduleAtFixedRate(timerTaskInspect, 0, 10 * 1000);
+
+        TimerTask timerTaskInspect = new ImageAnalyzer(screenShotRepo, userRepo);
+        Timer timer2 = new Timer(true);
+        timer2.scheduleAtFixedRate(timerTaskInspect, 0, 10 * 1000);
 
 
     }

@@ -84,6 +84,9 @@
 
                                         <input name="otp" class="form-control" placeholder="" type="text">
                                     </div>
+                                    <br>
+                                    <div class="title h6"><span id="time">05:00</span>&nbsp;زمان باقی‌مانده تا اعتبار کد&nbsp;
+                                    </div>
                                     <button type="submit" class="btn btn-purple btn-lg full-width">
                                         تایید
                                     </button>
@@ -141,7 +144,30 @@
 <script defer src="fonts/fontawesome-all.js"></script>
 
 <script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script>
+function startTimer(duration, display) {
+var timer = duration, minutes, seconds;
+setInterval(function () {
+minutes = parseInt(timer / 60, 10);
+seconds = parseInt(timer % 60, 10);
 
+minutes = minutes < 10 ? "0" + minutes : minutes;
+seconds = seconds < 10 ? "0" + seconds : seconds;
+
+display.textContent = minutes + ":" + seconds;
+
+if (--timer < 0) {
+timer = duration;
+}
+}, 1000);
+}
+
+window.onload = function () {
+var fiveMinutes = 60 * 5,
+display = document.querySelector('#time');
+startTimer(fiveMinutes, display);
+};
+</script>
 </body>
 
 <!-- Mirrored from html.crumina.net/html-olympus/01-LandingPage.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Jan 2019 07:39:27 GMT -->

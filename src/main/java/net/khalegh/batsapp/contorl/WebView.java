@@ -50,6 +50,7 @@ public class WebView {
     private static final String PASSWORD_ARE_NOT_MATCHED = "خطا: رمز عبور یکسان نیست.";
     private static final String INCORRECT_USERNAME_OR_PASSWORD = "خطا: نام کاربری یا کلمه عبور اشتباه است.";
     private static final String REGISTER_DONE = "پیام: ثبت نام با موفقیت انجام شد!";
+    private static final Object PHONE_FORMAT_ERROR = "شماره وارد شده صحیح نیست";
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HH");
     private static final int SUSPENSION_MAX_POLICY = 1;
@@ -591,7 +592,8 @@ public class WebView {
 
     @RequestMapping("/signup")
     public String register(@RequestParam(required = false, defaultValue = "0") String error,
-                           Model model) throws ExecutionException {
+                           HttpServletResponse response,
+                           Model model) throws ExecutionException, IOException {
 
         if (error.equals(String.valueOf(REST.USER_EXIST))) {
             model.addAttribute("msg", USERNAME_ALREADY_USED);
@@ -601,6 +603,10 @@ public class WebView {
             return "signup";
         } else if (error.equals(String.valueOf(REST.SPACE_ERROR_USERNAME))) {
             model.addAttribute("msg", SPACE_ERROR_USERNAME);
+            return "signup";
+        } else if (error.equals(String.valueOf(REST.INPUT_IS_NOT_CORRECT))) {
+            model.addAttribute("msg", PHONE_FORMAT_ERROR);
+            error="0";
             return "signup";
         }
         @Nullable String appCacheCanary = MemoryCache.appCache.get(IS_EMPTY_GAP);
