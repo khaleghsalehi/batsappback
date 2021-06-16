@@ -477,9 +477,17 @@ public class REST {
     @PostMapping("/v1/regcode")
     public ModelAndView registerNewUserGetCode(Model model,
                                                @RequestParam(required = true) String username,
+                                               @RequestParam(required = true) String boToken,
                                                HttpServletRequest request,
                                                HttpServletResponse response) throws IOException,
             ExecutionException {
+
+        if (!MemoryCache.botProtection.asMap().containsKey(boToken)) {
+            log.error(" boToken invalid! or expired, malicious activity blocked.");
+            return new ModelAndView("redirect:/signup?error=" + INPUT_IS_NOT_CORRECT);
+        }
+        MemoryCache.botProtection.invalidate(boToken);
+        log.info("invalidate botToken -> " + boToken);
         // regex  that validate phone number
         String regex = "^(\\+98|0|0098)?9\\d{9}$";
         Pattern pattern = Pattern.compile(regex);
@@ -489,14 +497,13 @@ public class REST {
             return new ModelAndView("redirect:/signup?error=" + INPUT_IS_NOT_CORRECT);
         }
 
-        // check if user already registerd or not!
+        // check if user already registered or not!
         UserInfo qodQoDUserInfo = userRepo.findByUserName(username);
         if (qodQoDUserInfo != null || username.isEmpty()) {
             // TODO: 1/19/21  alert in signup page
             log.warn("user already registered.");
             return new ModelAndView("redirect:/signup?error=" + USER_EXIST);
         }
-
 
 
         if (MemoryCache.signUpOTP.asMap().containsKey(username)) {

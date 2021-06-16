@@ -90,6 +90,7 @@
                                         <input name="username" class="form-control" placeholder="" type="text">
                                     </div>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <input type="hidden" name="boToken" th:value="${botToken}"/>
                                     <div class="checkbox">
                                         <label>
                                             <input name="optionsCheckboxes" type="checkbox">

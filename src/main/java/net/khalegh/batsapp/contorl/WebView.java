@@ -594,6 +594,9 @@ public class WebView {
     public String register(@RequestParam(required = false, defaultValue = "0") String error,
                            HttpServletResponse response,
                            Model model) throws ExecutionException, IOException {
+        //generate bot token and add to cache
+        UUID botToken = UUID.randomUUID();
+        model.addAttribute("botToken", botToken);
 
         if (error.equals(String.valueOf(REST.USER_EXIST))) {
             model.addAttribute("msg", USERNAME_ALREADY_USED);
@@ -606,7 +609,7 @@ public class WebView {
             return "signup";
         } else if (error.equals(String.valueOf(REST.INPUT_IS_NOT_CORRECT))) {
             model.addAttribute("msg", PHONE_FORMAT_ERROR);
-            error="0";
+            error = "0";
             return "signup";
         }
         @Nullable String appCacheCanary = MemoryCache.appCache.get(IS_EMPTY_GAP);
@@ -620,6 +623,7 @@ public class WebView {
         model.addAttribute(ALL_TAGS, MemoryCache.appCache.get(ALL_TAGS));
         model.addAttribute(ALL_USERS, MemoryCache.appCache.get(ALL_USERS));
         model.addAttribute(ALL_COMMUNES, MemoryCache.appCache.get(ALL_COMMUNES));
+        MemoryCache.botProtection.put(String.valueOf(botToken), String.valueOf(botToken));
         return "signup";
     }
 
