@@ -482,13 +482,6 @@ public class REST {
                                                HttpServletRequest request,
                                                HttpServletResponse response) throws IOException,
             ExecutionException {
-
-        if (!MemoryCache.botProtection.asMap().containsKey(boToken)) {
-            log.error(" boToken invalid! or expired, malicious activity blocked.");
-            return new ModelAndView("redirect:/");
-        }
-        MemoryCache.botProtection.invalidate(boToken);
-        log.info("invalidate botToken -> " + boToken);
         // regex  that validate phone number
         String regex = "^(\\+98|0|0098)?9\\d{9}$";
         Pattern pattern = Pattern.compile(regex);
@@ -497,6 +490,14 @@ public class REST {
             log.info("phone number invalid, " + username);
             return new ModelAndView("redirect:/signup?error=" + INPUT_IS_NOT_CORRECT);
         }
+
+        if (!MemoryCache.botProtection.asMap().containsKey(boToken)) {
+            log.error(" boToken invalid! or expired, malicious activity blocked.");
+            return new ModelAndView("redirect:/signup?error=" + INPUT_IS_NOT_CORRECT);
+        }
+        MemoryCache.botProtection.invalidate(boToken);
+        log.info("invalidate botToken -> " + boToken);
+
 
         // check if user already registered or not!
         UserInfo qodQoDUserInfo = userRepo.findByUserName(username);

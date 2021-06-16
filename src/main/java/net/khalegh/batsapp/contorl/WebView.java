@@ -618,6 +618,7 @@ public class WebView {
         //generate bot token and add to cache
         UUID botToken = UUID.randomUUID();
         model.addAttribute("botToken", botToken);
+        MemoryCache.botProtection.put(String.valueOf(botToken), String.valueOf(botToken));
 
         if (error.equals(String.valueOf(REST.USER_EXIST))) {
             model.addAttribute("msg", USERNAME_ALREADY_USED);
@@ -644,7 +645,6 @@ public class WebView {
         model.addAttribute(ALL_TAGS, MemoryCache.appCache.get(ALL_TAGS));
         model.addAttribute(ALL_USERS, MemoryCache.appCache.get(ALL_USERS));
         model.addAttribute(ALL_COMMUNES, MemoryCache.appCache.get(ALL_COMMUNES));
-        MemoryCache.botProtection.put(String.valueOf(botToken), String.valueOf(botToken));
         return "signup";
     }
 
