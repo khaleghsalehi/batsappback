@@ -74,6 +74,12 @@
 
 
 
+
+
+
+
+
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -380,103 +386,132 @@
 <div class="container">
     <div class="row">
         <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="col-12" align="center">
-                    <div class="row">
-                        <div class="ui-block">
-                            <!--      neutral -->
-                            <div class="ui-block-content">
-                                <ul class="statistics-list-count">
-                                    <li>
-                                        <div class="points">
+            <div th:if="${parentsPermit} eq false" class="col-12" align="center">
+                <div class="row">
+                    <div class="ui-block">
+                        <article class="hentry post">
+                            <p class="textalign">
+                                برای رعایت پروتکل‌های امنیتی و حریم خصوصی، تمام داده‌های ارسال شده از گوشی کودک تا مادر
+                                و همچنین ذخیره شده در سرور‌های باتساپ، همه رمز شده است و تنها با اجازه والدین
+                                قابل بررسی توسط سرویس‌های هوشمند باتساپ است.
+                                <br>
+                                در صورتی که موافق هستید داده‌های شما توسط سرویس‌های مبتنی بر هوش مصنوعی باتساپ
+                                بررسی شود، گزینه زیر را تایید کنید.
+                            </p>
+                        </article>
+
+                    </div>
+                    <form class="content" action="/permit_ai" method="GET">
+                        <input name="uuid" type="hidden" th:value="${uuid}">
+                        <div class="checkbox">
+                            <label>
+                                <input name="allow"  id="parentAllowCheck" type="checkbox">
+                                موافق بررسی داده‌ها توسط سرویس هوشمند باتساپ هستم.
+                            </label>
+                        </div>
+                        <button type="submit" disabled="true" id="allowButton" class="btn btn-purple btn-lg full-width">
+                            سرویس تحلیل هوشمند را فعال کن
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div th:if="${parentsPermit} eq true" class="col-12" align="center">
+                <div class="row">
+                    <div class="ui-block">
+                        <!--      neutral -->
+                        <div class="ui-block-content">
+                            <ul class="statistics-list-count">
+                                <li>
+                                    <div class="points">
 									<span>
                                          دسته‌بندی نامشخص ( نیازمند بررسی والدین)
 									</span>
-                                        </div>
-                                        <div class="count-stat">
-                                            <th:block th:text="${neutralCount}"></th:block>
-                                        </div>
-                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='NEUTRAL')}">مشاهده و بررسی جزییات</a>
+                                    </div>
+                                    <div class="count-stat">
+                                        <th:block th:text="${neutralCount}"></th:block>
+                                    </div>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='NEUTRAL')}">مشاهده و بررسی جزییات</a>
 
-                                    </li>
-                                </ul>
-                            </div>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="ui-block">
-                            <!--      porn -->
-                            <div class="ui-block-content">
-                                <ul class="statistics-list-count">
-                                    <li>
-                                        <div class="points">
+                    </div>
+                    <div class="ui-block">
+                        <!--      porn -->
+                        <div class="ui-block-content">
+                            <ul class="statistics-list-count">
+                                <li>
+                                    <div class="points">
 									<span>
 										محتوای پورن کامل
 									</span>
-                                        </div>
-                                        <div class="count-stat">
-                                            <th:block th:text="${pornCount}"></th:block>
-                                        </div>
-                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='PORN')}">مشاهده و بررسی جزییات</a>
-                                    </li>
-                                </ul>
-                            </div>
+                                    </div>
+                                    <div class="count-stat">
+                                        <th:block th:text="${pornCount}"></th:block>
+                                    </div>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='PORN')}">مشاهده و بررسی جزییات</a>
+                                </li>
+                            </ul>
                         </div>
+                    </div>
 
-                        <div class="ui-block">
-                            <!--   sexy and erotic    -->
-                            <div class="ui-block-content">
-                                <ul class="statistics-list-count">
-                                    <li>
-                                        <div class="points">
+                    <div class="ui-block">
+                        <!--   sexy and erotic    -->
+                        <div class="ui-block-content">
+                            <ul class="statistics-list-count">
+                                <li>
+                                    <div class="points">
 									<span>
 										محتوای جنسی، برهنه و تحریک کننده
 									</span>
-                                        </div>
-                                        <div class="count-stat">
-                                            <th:block th:text="${sexCount}"></th:block>
-                                        </div>
-                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='SEXY')}">مشاهده و بررسی جزییات</a>
+                                    </div>
+                                    <div class="count-stat">
+                                        <th:block th:text="${sexCount}"></th:block>
+                                    </div>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='SEXY')}">مشاهده و بررسی جزییات</a>
 
-                                    </li>
-                                </ul>
-                            </div>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="ui-block">
-                            <!--       hentai     -->
-                            <div class="ui-block-content">
-                                <ul class="statistics-list-count">
-                                    <li>
-                                        <div class="points">
+                    </div>
+                    <div class="ui-block">
+                        <!--       hentai     -->
+                        <div class="ui-block-content">
+                            <ul class="statistics-list-count">
+                                <li>
+                                    <div class="points">
 									<span>
 										محتوای انیمیشن سکسی و کارتون جنسی
 									</span>
-                                        </div>
-                                        <div class="count-stat">
-                                            <th:block th:text="${hentaiCount}"></th:block>
-                                        </div>
-                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='HENTAI')}">مشاهده و بررسی جزییات</a>
+                                    </div>
+                                    <div class="count-stat">
+                                        <th:block th:text="${hentaiCount}"></th:block>
+                                    </div>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='HENTAI')}">مشاهده و بررسی جزییات</a>
 
-                                    </li>
-                                </ul>
-                            </div>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="ui-block">
-                            <!--         drawin  -->
-                            <div class="ui-block-content">
-                                <ul class="statistics-list-count">
-                                    <li>
-                                        <div class="points">
+                    </div>
+                    <div class="ui-block">
+                        <!--         drawin  -->
+                        <div class="ui-block-content">
+                            <ul class="statistics-list-count">
+                                <li>
+                                    <div class="points">
 									<span>
 										عکس (غیر جنسی و اشیا)، نقاشی و طراحی
 									</span>
-                                        </div>
-                                        <div class="count-stat">
-                                            <th:block th:text="${drawingCount}"></th:block>
-                                        </div>
-                                        <a th:href="@{/imageAnalyze(uuid=${uuid},type='DRAWING')}">مشاهده و بررسی جزییات</a>
-                                    </li>
-                                </ul>
-                            </div>
+                                    </div>
+                                    <div class="count-stat">
+                                        <th:block th:text="${drawingCount}"></th:block>
+                                    </div>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='DRAWING')}">مشاهده و بررسی جزییات</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
 
@@ -564,43 +599,18 @@
 
             enableTimePicker: false
         });
+</script>
+<script>
+    $('#parentAllowCheck').click(function () {
+    //check if checkbox is checked
+    if ($(this).is(':checked')) {
 
+        $('#allowButton').removeAttr('disabled'); //enable input
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    } else {
+        $('#allowButton').attr('disabled', true); //disable input
+    }
+});
 </script>
 
 </body>

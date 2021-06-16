@@ -18,9 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -331,11 +333,30 @@ public class WebView {
             model.addAttribute("uuid", userInfo.getUuid());
             model.addAttribute("username", userInfo.getUserName());
 
+            if (userInfo.isPermitAIService())
+                model.addAttribute("parentsPermit", true);
+            else
+                model.addAttribute("parentsPermit", false);
             return "analyze";
         } else {
             model.addAttribute("username", "Guest");
         }
         return "analyze";
+    }
+
+    @RequestMapping("/permit_ai")
+    public ModelAndView permitAIService(@RequestParam(required = true) String uuid,
+                                        @RequestParam(required = true, defaultValue = "false") boolean allow,
+                                        Model model,
+                                        HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.isAuthenticated() && allow) {
+            userRepo.permitAIService(UUID.fromString(uuid));
+            log.info("permitAIService enabled for uuid -> " + uuid);
+            return new ModelAndView("redirect:/imageAnalyze?uuid=" + uuid+"&type=UNKNOWN");
+        }
+        return new ModelAndView("redirect:/");
+
     }
 
     @RequestMapping("/suspect")

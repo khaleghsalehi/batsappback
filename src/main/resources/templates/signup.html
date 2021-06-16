@@ -93,11 +93,11 @@
                                     <input type="hidden" name="boToken" th:value="${botToken}"/>
                                     <div class="checkbox">
                                         <label>
-                                            <input name="optionsCheckboxes" type="checkbox">
+                                            <input name="optionsCheckboxes" id="agreement" type="checkbox">
                                             تمام <a href="/exbord#privacy">شرایط و ضوابط</a> باستاپ را می پذیرم.
                                         </label>
                                     </div>
-                                    <button type="submit" class="btn btn-purple btn-lg full-width">ایجاد حساب کاربری
+                                    <button type="submit" disabled="true" id="registerButton" class="btn btn-purple btn-lg full-width">ایجاد حساب کاربری
                                     </button>
                                     <a class="linker h5" href="/">خانه</a> |
                                     <a class="linker h5" href="/login">ورود</a>
@@ -156,6 +156,20 @@
 <script defer src="fonts/fontawesome-all.js"></script>
 
 <script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+<script>
+    $('#agreement').click(function () {
+    //check if checkbox is checked
+    if ($(this).is(':checked')) {
+
+        $('#registerButton').removeAttr('disabled'); //enable input
+
+    } else {
+        $('#registerButton').attr('disabled', true); //disable input
+    }
+});
+</script>
+
 
 </body>
 

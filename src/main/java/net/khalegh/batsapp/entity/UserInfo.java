@@ -78,4 +78,9 @@ public class UserInfo {
     @Setter
     private boolean sendSMS;
 
+    @Getter
+    @Setter
+    private boolean permitAIService;
+
+
 }

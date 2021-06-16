@@ -474,6 +474,7 @@ public class REST {
         return RESPONSE_ERROR;
     }
 
+
     @PostMapping("/v1/regcode")
     public ModelAndView registerNewUserGetCode(Model model,
                                                @RequestParam(required = true) String username,
@@ -484,7 +485,7 @@ public class REST {
 
         if (!MemoryCache.botProtection.asMap().containsKey(boToken)) {
             log.error(" boToken invalid! or expired, malicious activity blocked.");
-            return new ModelAndView("redirect:/signup?error=" + INPUT_IS_NOT_CORRECT);
+            return new ModelAndView("redirect:/");
         }
         MemoryCache.botProtection.invalidate(boToken);
         log.info("invalidate botToken -> " + boToken);
