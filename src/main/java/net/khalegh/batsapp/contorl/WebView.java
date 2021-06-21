@@ -400,7 +400,7 @@ public class WebView {
         }
     }
 
-    private static String changEnglish(String str) {
+    public static String changEnglish(String str) {
         str.replaceAll("۰", "0");
         str.replaceAll("۱", "1");
         str.replaceAll("۲", "2");
