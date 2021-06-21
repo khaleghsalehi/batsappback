@@ -400,20 +400,6 @@ public class WebView {
         }
     }
 
-    public static String changEnglish(String str) {
-        str.replaceAll("۰", "0");
-        str.replaceAll("۱", "1");
-        str.replaceAll("۲", "2");
-        str.replaceAll("۳", "3");
-        str.replaceAll("۴", "4");
-        str.replaceAll("۵", "5");
-        str.replaceAll("۶", "6");
-        str.replaceAll("۷", "7");
-        str.replaceAll("۸", "8");
-        str.replaceAll("۹", "9");
-        return str;
-
-    }
 
     @RequestMapping("/show")
     public String showActivities(@RequestParam(required = true) String date,
@@ -426,7 +412,7 @@ public class WebView {
         ArrayList<String> times = new ArrayList<>();
 
 
-        String originalRequestedDate = changEnglish(date);
+        String originalRequestedDate = utils.persianToDecimal(date);
         PersianDate today = PersianDate.now();
         final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = dateFormat.format(new Date());

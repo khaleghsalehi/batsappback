@@ -484,7 +484,7 @@ public class REST {
             ExecutionException {
         // regex  that validate phone number
         String tempPhone = username;
-        username = WebView.changEnglish(tempPhone);
+        username = utils.persianToDecimal(tempPhone);
         String regex = "^(\\+98|0|0098)?9\\d{9}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(username);
