@@ -96,7 +96,10 @@ public class WebView {
         return true;
     }
 
-
+    @RequestMapping("/welcome")
+    public String welcomeAfterSignUp(){
+        return "welcome";
+    }
     @RequestMapping("/signup2")
     public String signup2(@RequestParam(required = true) String username,
                           Model model,

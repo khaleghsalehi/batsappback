@@ -625,7 +625,8 @@ public class REST {
             commandRepo.save(command);
 
             log.info("user register and initialized successfully.");
-            response.sendRedirect("/login?error=200");
+            //response.sendRedirect("/login?error=200");
+            response.sendRedirect("/welcome");
             return RESPONSE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
