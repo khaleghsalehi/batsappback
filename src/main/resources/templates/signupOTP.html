@@ -85,14 +85,14 @@
                                         <label class="control-label"> لطفا کد امنیتی را وارد کنید </label>
                                         <input name="username" class="form-control" type="hidden"
                                                th:value="${username}">
-                                        <input name="otp" class="form-control" placeholder="" type="text">
+                                        <input name="otp" id="otp" class="form-control" placeholder="" type="text">
                                     </div>
                                     <br>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <div class="title h6"><span id="time">05:00</span>&nbsp;زمان باقی‌مانده تا اعتبار کد&nbsp;
                                     </div>
 
-                                    <button type="submit" class="btn btn-purple btn-lg full-width">
+                                    <button type="submit" class="btn btn-purple btn-lg full-width" onclick="persianToDecimal()">
                                         تایید
                                     </button>
                                 </div>
@@ -173,6 +173,24 @@ display = document.querySelector('#time');
 startTimer(fiveMinutes, display);
 };
 </script>
+<script>
+    var
+    persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g],
+    arabicNumbers  = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g],
+    persianToDecimal = function ()
+    {
+      var str = document.getElementById("otp").value;
+      if(typeof str === 'string')
+      {
+        for(var i=0; i<10; i++)
+        {
+          str = str.replace(persianNumbers[i], i).replace(arabicNumbers[i], i);
+        }
+      }
+      document.getElementById("otp").value = str;
+    };
+</script>
+
 </body>
 
 <!-- Mirrored from html.crumina.net/html-olympus/01-LandingPage.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Jan 2019 07:39:27 GMT -->

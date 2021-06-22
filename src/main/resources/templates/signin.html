@@ -26,6 +26,8 @@
 
 
 
+
+
     </script>
 
     <!-- Bootstrap CSS -->
@@ -78,19 +80,22 @@
                             <div class="row">
                                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="form-group label-floating is-empty">
-                                        <label class="control-label">شماره تلفن همراه</label>
-                                        <input name="username" class="form-control" placeholder="" type="text">
+                                        <label class="control-label">شماره تلفن همراه ( به انگلیسی)</label>
+                                        <input id="phone" name="username" class="form-control" placeholder=""
+                                               type="text">
                                     </div>
                                     <div class="form-group label-floating is-empty">
                                         <label class="control-label">رمز عبور</label>
                                         <input name="password" class="form-control" placeholder="" type="password">
                                     </div>
-                                    <button type="submit" class="btn btn-lg btn-primary full-width">ورود</button>
+                                    <button type="submit" class="btn btn-lg btn-primary full-width"
+                                            onclick="persianToDecimal()">ورود
+                                    </button>
                                     <br>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <br>
                                     <a href="/" class="linker h5">خانه</a>|
-                                    <a href="/signup" class="linker h5" >ثبت‌نام</a>
+                                    <a href="/signup" class="linker h5">ثبت‌نام</a>
                                 </div>
                             </div>
                         </form>
@@ -145,7 +150,23 @@
 <script defer src="fonts/fontawesome-all.js"></script>
 
 <script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
-
+<script>
+    var
+    persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g],
+    arabicNumbers  = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g],
+    persianToDecimal = function ()
+    {
+      var str = document.getElementById("phone").value;
+      if(typeof str === 'string')
+      {
+        for(var i=0; i<10; i++)
+        {
+          str = str.replace(persianNumbers[i], i).replace(arabicNumbers[i], i);
+        }
+      }
+      document.getElementById("phone").value = str;
+    };
+</script>
 </body>
 
 <!-- Mirrored from html.crumina.net/html-olympus/01-LandingPage.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Jan 2019 07:39:27 GMT -->
