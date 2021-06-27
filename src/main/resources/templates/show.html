@@ -65,6 +65,9 @@
 
 
 
+
+
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -446,8 +449,17 @@
                         </div>
                         <button type="submit" class="btn btn-primary btn-md-2">بررسی گزارش
                         </button>
+
                     </div>
                 </form>
+                <br>
+                <a th:href="@{/show(date=${lastActivityDate},
+                        from=${lastActivityFrom},
+                        to=${lastActivityTo},
+                        month=${lastActivityMonth})}">
+                    <button type="submit" class="btn btn-secondary btn-lg"> مشاهده فعالیت‌های اخیر کودک
+                    </button>
+                </a>
             </div>
         </div>
 
@@ -558,6 +570,9 @@
 
             enableTimePicker: false
         });
+
+
+
 
 
 

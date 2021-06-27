@@ -97,9 +97,10 @@ public class WebView {
     }
 
     @RequestMapping("/welcome")
-    public String welcomeAfterSignUp(){
+    public String welcomeAfterSignUp() {
         return "welcome";
     }
+
     @RequestMapping("/signup2")
     public String signup2(@RequestParam(required = true) String username,
                           Model model,
@@ -356,7 +357,7 @@ public class WebView {
         if (auth.isAuthenticated() && allow) {
             userRepo.permitAIService(UUID.fromString(uuid));
             log.info("permitAIService enabled for uuid -> " + uuid);
-            return new ModelAndView("redirect:/imageAnalyze?uuid=" + uuid+"&type=UNKNOWN");
+            return new ModelAndView("redirect:/imageAnalyze?uuid=" + uuid + "&type=UNKNOWN");
         }
         return new ModelAndView("redirect:/");
 
@@ -530,6 +531,15 @@ public class WebView {
         model.addAttribute("date", today);
         model.addAttribute("from", from);
         model.addAttribute("to", to);
+
+        String lastActivityFrom = sdf.format(new Date());
+        int pp = Integer.parseInt(lastActivityFrom) + 1;
+        String lastActivityTo = String.format("%2s", pp).replace(' ', '0');
+
+        model.addAttribute("lastActivityDate", PersianDate.now());
+        model.addAttribute("lastActivityFrom", lastActivityFrom);
+        model.addAttribute("lastActivityTo", lastActivityTo);
+        model.addAttribute("lastActivityMonth", PersianDate.now().getMonthValue());
 
 
         return "show";
