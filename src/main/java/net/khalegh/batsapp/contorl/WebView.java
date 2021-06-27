@@ -57,6 +57,8 @@ public class WebView {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HH");
     private static final int SUSPENSION_MAX_POLICY = 1;
 
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
 
     @Autowired
     ExperienceRepo experienceRepo;
@@ -414,8 +416,8 @@ public class WebView {
 
 
         String originalRequestedDate = utils.persianToDecimal(date);
+
         PersianDate today = PersianDate.now();
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = dateFormat.format(new Date());
 
 
@@ -494,9 +496,8 @@ public class WebView {
                 times.add(from + "-" + to);
             }
             times.forEach(s -> {
-                String pathCandidate = s;
 
-                String imagePath = home + "/" + uuidHash + "/" + today + "/" + pathCandidate;
+                String imagePath = home + "/" + uuidHash + "/" + originalRequestedDate + "/" + s;
 
                 if (Files.exists(Paths.get(imagePath))) {
                     File f = new File(imagePath);
@@ -504,10 +505,9 @@ public class WebView {
                     assert fileList != null;
 
                     for (String item : fileList) {
-                        if (originalRequestedDate.equals(date)) {
-                            images.put(Integer.valueOf(utils.extractFileNumber(item)),
-                                    uuidHash + "/" + today + "/" + s + "/" + item);
-                        }
+                        String imageName = uuidHash + "/" + originalRequestedDate + "/" + s + "/" + item;
+                        images.put(Integer.valueOf(utils.extractFileNumber(item)),
+                                imageName);
                     }
                 }
             });
