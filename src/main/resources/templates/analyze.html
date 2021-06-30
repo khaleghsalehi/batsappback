@@ -19,6 +19,7 @@
 		});
 
 
+
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
@@ -33,6 +34,7 @@
         body {
           font-family: 'Times New Roman', serif;
         }
+
 
 
     </style>
@@ -344,7 +346,7 @@
                         <input name="uuid" type="hidden" th:value="${uuid}">
                         <div class="checkbox">
                             <label>
-                                <input name="allow"  id="parentAllowCheck" type="checkbox">
+                                <input name="allow" id="parentAllowCheck" type="checkbox">
                                 <th:block th:text="#{aiAgreementCheckBoxLabel}"></th:block>
                             </label>
                         </div>
@@ -369,7 +371,9 @@
                                     <div class="count-stat">
                                         <th:block th:text="${neutralCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='NEUTRAL')}"><th:block th:text="#{showDetails}"></th:block></a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='NEUTRAL')}">
+                                        <th:block th:text="#{showDetails}"></th:block>
+                                    </a>
 
                                 </li>
                             </ul>
@@ -388,7 +392,9 @@
                                     <div class="count-stat">
                                         <th:block th:text="${pornCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='PORN')}"><th:block th:text="#{showDetails}"></th:block></a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='PORN')}">
+                                        <th:block th:text="#{showDetails}"></th:block>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -407,7 +413,9 @@
                                     <div class="count-stat">
                                         <th:block th:text="${sexCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='SEXY')}"><th:block th:text="#{showDetails}"></th:block></a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='SEXY')}">
+                                        <th:block th:text="#{showDetails}"></th:block>
+                                    </a>
 
                                 </li>
                             </ul>
@@ -426,7 +434,9 @@
                                     <div class="count-stat">
                                         <th:block th:text="${hentaiCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='HENTAI')}"><th:block th:text="#{showDetails}"></th:block></a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='HENTAI')}">
+                                        <th:block th:text="#{showDetails}"></th:block>
+                                    </a>
 
                                 </li>
                             </ul>
@@ -445,7 +455,9 @@
                                     <div class="count-stat">
                                         <th:block th:text="${drawingCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='DRAWING')}"><th:block th:text="#{showDetails}"></th:block></a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='DRAWING')}">
+                                        <th:block th:text="#{showDetails}"></th:block>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -468,10 +480,11 @@
         </div>
     </div>
     <!-- footer       -->
-    <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
-        <div class="sub-footer-copyright" style="color: #ffff;">
+    <div class="footer footer-full-width" id="footer">
+        <div class="sub-footer-copyright" style="color: #171414">
 						<span>
-							<a href="/" style="color: #ffff;">BATSAPP</a> تمام حقوق مادی و معنوی سایت محفوظ است
+							<a href="/" style="color: #171414;"><th:block th:text="#{batsAppTitle}"></th:block> |</a> <th:block
+                                th:text="#{copyRightLabel}"></th:block>
 						</span>
         </div>
     </div>
@@ -538,6 +551,7 @@
 
             enableTimePicker: false
         });
+
 </script>
 <script>
     $('#parentAllowCheck').click(function () {
@@ -550,6 +564,7 @@
         $('#allowButton').attr('disabled', true); //disable input
     }
 });
+
 </script>
 
 </body>
