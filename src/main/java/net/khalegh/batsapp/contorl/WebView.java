@@ -14,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -87,7 +88,14 @@ public class WebView {
     @Autowired
     ScreenShotRepo screenShotRepo;
 
+    @Autowired
+    Environment environment;
+
     boolean checkIfAuthorizedByOTP(String userName) throws ExecutionException, IOException {
+        if (Objects.equals(environment.getProperty("towFactorAuth"), "false")) {
+            log.info("opt disabled, return true...");
+            return true;
+        }
         if (!MemoryCache.AuthenticatedByOTP.asMap().containsKey(userName)) {
             Security.sendSMS(userName);
             log.info(userName + " need OTP verification, redirect... ");
@@ -590,6 +598,11 @@ public class WebView {
     @RequestMapping("/login")
     public String loginPage(@RequestParam(required = false, defaultValue = "0") String error,
                             Model model) {
+        if (Objects.equals(environment.getProperty("towFactorAuth"), "false"))
+            model.addAttribute("isOTP", "false");
+        else
+            model.addAttribute("isOTP", "true");
+
         if (error.equals(String.valueOf(REST.ERROR_USER_OR_PASSWORD))) {
             model.addAttribute("msg", INCORRECT_USERNAME_OR_PASSWORD);
             return "signin";
@@ -614,6 +627,24 @@ public class WebView {
     public String register(@RequestParam(required = false, defaultValue = "0") String error,
                            HttpServletResponse response,
                            Model model) throws ExecutionException, IOException {
+        if (Objects.equals(environment.getProperty("towFactorAuth"), "false")) {
+            log.info("opt disabled, forward normal registeration ...");
+            if (error.equals(String.valueOf(REST.USER_EXIST))) {
+                model.addAttribute("msg", USERNAME_ALREADY_USED);
+                return "basicSignUp";
+            } else if (error.equals(String.valueOf(REST.PASSWORD_NOT_SAME))) {
+                model.addAttribute("msg", PASSWORD_ARE_NOT_MATCHED);
+                return "basicSignUp";
+            } else if (error.equals(String.valueOf(REST.SPACE_ERROR_USERNAME))) {
+                model.addAttribute("msg", SPACE_ERROR_USERNAME);
+                return "basicSignUp";
+            } else if (error.equals(String.valueOf(REST.INPUT_IS_NOT_CORRECT))) {
+                model.addAttribute("msg", PHONE_FORMAT_ERROR);
+                error = "0";
+                return "basicSignUp";
+            }
+            return "basicSignUp";
+        }
         //generate bot token and add to cache
         UUID botToken = UUID.randomUUID();
         model.addAttribute("botToken", botToken);

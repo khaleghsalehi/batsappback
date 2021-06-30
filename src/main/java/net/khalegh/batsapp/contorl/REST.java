@@ -543,8 +543,102 @@ public class REST {
         }
     }
 
+
     @GetMapping("/v1/reg")
     public int registerNewUser(Model model,
+                               @RequestParam(required = true) String username,
+                               @RequestParam(required = true) String password,
+                               @RequestParam(required = true) String rePassword,
+
+                               HttpServletRequest request,
+                               HttpServletResponse response) throws IOException {
+
+        // TODO: 1/19/21 load/update user in memory cache for performance issue
+        //todo check if password and repassword are same
+
+        UserInfo qodQoDUserInfo = userRepo.findByUserName(username);
+        // check for withspace
+        Pattern pattern = Pattern.compile("\\s");
+        Matcher matcher = pattern.matcher(username);
+        boolean found = matcher.find();
+        username = username.toLowerCase();
+        if (found) {
+            response.sendRedirect("/signup?error=" + SPACE_ERROR_USERNAME);
+            return SPACE_ERROR_USERNAME;
+        }
+        if (qodQoDUserInfo != null || username.isEmpty()) {
+            // TODO: 1/19/21  alert in signup page
+            log.warn("user already registered.");
+            response.sendRedirect("/signup?error=" + USER_EXIST);
+            return USER_EXIST;
+        }
+        try {
+            if (!password.equals(rePassword)) {
+                response.sendRedirect("/signup?error=" + PASSWORD_NOT_SAME);
+                return PASSWORD_NOT_SAME;
+            }
+            UserInfo userInfo = new UserInfo();
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12); // Strength set as 12
+            String encodedPassword = encoder.encode(password);
+            userInfo.setUserName(username);
+            userInfo.setUuid(UUID.randomUUID());
+            userInfo.setPassword(encodedPassword);
+            userInfo.setCountry("نامشخص");
+            userInfo.setCity("نامشخص");
+            userInfo.setBio("این کاربر هنوز بیوگرافی را مشخص نکرده‌اند");
+            userInfo.setStatus("نامشخص");
+            userInfo.setFirstName("نامشخص");
+            userInfo.setLastName("نامشخص");
+            userInfo.setEmail("نامشخص");
+            userInfo.setPhoneNumber("نامشخص");
+            File userDir = new File(environment.getProperty("upload.path") + "user-photos/" + userInfo.getUuid());
+            if (userDir.mkdir()) {
+                log.info("create user profile dir success.");
+                File file = new File(DEFAULT_AVATAR);
+                String absolutePath = file.getAbsolutePath();
+                Path src = Paths.get(absolutePath);
+                String picturePathPrefix = userDir + "/picture";
+                Path dst = Paths.get(picturePathPrefix);
+                Files.copy(src, dst);
+                Thumbnails.of(new File(picturePathPrefix))
+                        .size(100, 100)
+                        .outputFormat("jpg")
+                        .toFiles(Rename.PREFIX_DOT_THUMBNAIL);
+
+                // set profile picture
+                Thumbnails.of(new File(picturePathPrefix))
+                        .size(250, 250)
+                        .outputFormat("jpg")
+                        .toFiles(Rename.SUFFIX_HYPHEN_THUMBNAIL);
+            }
+            userRepo.save(userInfo);
+//            User.initUser(environment.getProperty("upload.path"), userInfo.getUuid());
+
+            // init user
+            ParentalConfig parentalConfig = new ParentalConfig();
+            parentalConfig.setCommand("start");
+            parentalConfig.setUuid(userInfo.getUuid());
+            parentalConfig.setImageQuality(15);
+            parentalConfig.setScreenShotDelay(60);
+            parentalConfigRepo.save(parentalConfig);
+
+            Command command = new Command();
+            command.setCommandName("start");
+            command.setUserId(userInfo.getUuid());
+            commandRepo.save(command);
+
+            log.info("user register and initialized successfully.");
+            //response.sendRedirect("/login?error=200");
+            response.sendRedirect("/welcome");
+            return RESPONSE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RESPONSE_SUCCESS;
+        }
+    }
+
+    @GetMapping("/v1/basicReg")
+    public int basicRegisterNewUser(Model model,
                                @RequestParam(required = true) String username,
                                @RequestParam(required = true) String password,
                                @RequestParam(required = true) String rePassword,

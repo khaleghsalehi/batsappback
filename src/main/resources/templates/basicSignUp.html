@@ -5,7 +5,7 @@
 
 <head>
 
-    <title>باتساپ | حساب کاربری</title>
+    <title th:text="#{signUpCreateAccount}"></title>
 
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
@@ -28,6 +28,27 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
 
     <!-- Bootstrap CSS -->
@@ -37,6 +58,23 @@
 
     <!-- Main Styles CSS -->
     <link rel="stylesheet" type="text/css" href="nui/css/main.min.css">
+    <style>
+        body {
+          font-family: 'Times New Roman', serif;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    </style>
 
 
 </head>
@@ -46,18 +84,22 @@
 <div class="content-bg-wrap"></div>
 
 
+<!-- ... end Header Standard Landing  -->
 <div class="header-spacer--standard"></div>
 
 <div class="container">
     <div class="row display-flex">
         <div class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
             <div class="landing-content">
-                <h2>به باتساپ خوش آمدید!</h2>
+                <h1>
+                    <th:block th:text="#{signUpWelcomeLabel}"></th:block>
+                </h1>
                 <h5>
-                    اپلیکیشن هوشمند نظارت بر فعالیت‌های کودکان و نوجوانان در دنیای مجازی
+                    <th:block th:text="#{signUpBannerLabel}"></th:block>
                 </h5>
-                <a href="/exbord" class="btn btn-md btn-border c-white">در مورد باستاپ بیشتر بدانید</a>
-
+                <a href="/exbord" class="btn btn-md btn-border c-white">
+                    <th:block th:text="#{signUpLearMoreLabel}"></th:block>
+                </a>
             </div>
         </div>
 
@@ -66,46 +108,63 @@
             <!-- Login-Registration Form  -->
 
             <div class="registration-login-form">
-                <!-- Nav tabs -->
-
-                <!-- Tab panes -->
                 <div class="tab-content">
-
-                    <div class="tab-pane  active" id="login" role="tabpanel" data-mh="log-tab">
-                        <div class="title h6">ورود به حساب کاربری</div>
-                        <form class="content" th:action="@{/login}" method="post">
+                    <div class="tab-pane active" id="signup" role="tabpanel" data-mh="log-tab">
+                        <div class="title h6">
+                            <th:block th:text="#{signUpCreateAccount}"></th:block>
+                        </div>
+                        <form class="content" action="/v1/basicReg" method="get">
                             <div class="text-center" th:if="${msg!= null} ">
                                 <p style="color: #dc0b0b" th:text="${msg}"></p>
                             </div>
-                            <div class="row">
+                            <div class="row display-flex">
                                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="form-group label-floating is-empty">
-                                        <label th:if="${isOTP} == 'true'" class="control-label">شماره تلفن همراه ( به انگلیسی)</label>
-                                        <label th:if="${isOTP} == 'false'" class="control-label">نام کاربری</label>
-                                        <input id="phone" name="username" class="form-control" placeholder=""
-                                               type="text">
+                                        <label class="control-label">
+                                            <th:block th:text="#{signUpUserName}"></th:block>
+                                        </label>
+                                        <input name="username" class="form-control" placeholder="" type="text">
                                     </div>
                                     <div class="form-group label-floating is-empty">
-                                        <label class="control-label">رمز عبور</label>
+                                        <label class="control-label">
+                                            <th:block th:text="#{signUpPassword}"></th:block>
+                                        </label>
                                         <input name="password" class="form-control" placeholder="" type="password">
                                     </div>
-                                    <button type="submit" class="btn btn-lg btn-primary full-width"
-                                            onclick="persianToDecimal()">ورود
-                                    </button>
-                                    <br>
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label">
+                                            <th:block th:text="#{signUpRePassword}"></th:block>
+                                        </label>
+                                        <input name="rePassword" class="form-control" placeholder="" type="password">
+                                    </div>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                    <br>
-                                    <a href="/" class="linker h5">خانه</a>|
-                                    <a href="/signup" class="linker h5">ثبت‌نام</a>
-
+                                    <button type="submit" class="btn btn-purple btn-lg full-width">
+                                        <th:block th:text="#{signUpButtonLabel}"></th:block>
+                                    </button>
+                                    <a class="linker h5" href="/">
+                                        <th:block th:text="#{homePage}"></th:block>
+                                    </a> |
+                                    <a class="linker h5" href="/login">
+                                        <th:block th:text="#{loginLabel}"></th:block>
+                                    </a>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-
             <!-- ... end Login-Registration Form  -->
+            <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" align="center">
+                <a href="/signup?lang=fa" class="linker h5  c-white">فارسی</a>|
+                <a href="/signup?lang=en" class="linker h5  c-white">English</a>|
+                <a href="/signup?lang=az" class="linker h5  c-white">Azeri</a>|
+                <a href="/signup?lang=tr" class="linker h5  c-white">Turkçe</a>|
+                <a href="/signup?lang=ar" class="linker h5  c-white">العربية</a>
+            </div>
+            <br>
+            <br>
+            <br>
+
         </div>
     </div>
 </div>
@@ -152,23 +211,7 @@
 <script defer src="fonts/fontawesome-all.js"></script>
 
 <script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
-<script>
-    var
-    persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g],
-    arabicNumbers  = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g],
-    persianToDecimal = function ()
-    {
-      var str = document.getElementById("phone").value;
-      if(typeof str === 'string')
-      {
-        for(var i=0; i<10; i++)
-        {
-          str = str.replace(persianNumbers[i], i).replace(arabicNumbers[i], i);
-        }
-      }
-      document.getElementById("phone").value = str;
-    };
-</script>
+
 </body>
 
 <!-- Mirrored from html.crumina.net/html-olympus/01-LandingPage.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Jan 2019 07:39:27 GMT -->
