@@ -392,10 +392,10 @@
             <hr>
             <div class="col-xs-1" align="center">
                 <div class="col-xs-12">
-                    <h5 th:text="'بازه زمانی ثبت تصاویر در هر '+${screenShotDelay}+' ثانیه تنظیم شده است'"></h5>
+                    <h5 th:text="#{delayTimeLabel(${screenShotDelay})}"></h5>
                 </div>
                 <div class="col-xs-12">
-                    <h5 th:text="'کیفیت عکس ثبت شده با '+${imageQuality}+'% وضوح تنظیم شده است'"></h5>
+                    <h5 th:text="#{imageQualityLabel(${imageQuality})}"></h5>
                 </div>
                 <br>
                 <div class="col-xs-12">

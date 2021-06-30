@@ -2,7 +2,7 @@
 <html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
 <head>
 
-    <title>باتساپ</title>
+    <title th:text="#{batsAppTitle}"></title>
 
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
@@ -19,82 +19,23 @@
 		});
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-grid.css">
 
-
-    <link rel="stylesheet" href="nui/css/jquery.md.bootstrap.datetimepicker.style.css"/>
-
-
     <!-- Main Styles CSS -->
     <link rel="stylesheet" type="text/css" href="nui/css/main.min.css">
     <!--    autorefresh    -->
     <meta http-equiv="refresh" content="300">
+    <style>
+        body {
+          font-family: 'Times New Roman', serif;
+        }
 
+
+    </style>
 </head>
 
 <body>
@@ -103,7 +44,7 @@
 
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo-colored.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" th:alt="#{batsAppTitle}">
             </div>
         </a>
 
@@ -112,15 +53,15 @@
                 <li>
                     <a href="#" class="js-sidebar-open">
                         <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="بازکردن منو">
+                             th:data-original-title="#{openMenu}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
                         </svg>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="گزارش فعالیت‌های کودک">
+                             th:data-original-title="#{reportKidsActivity}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
                     </a>
@@ -128,7 +69,7 @@
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/signup">
                         <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ثبت نام">
+                             th:data-original-title="#{signUpLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
                         </svg>
                     </a>
@@ -136,7 +77,7 @@
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/login">
                         <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ورود">
+                             th:data-original-title="#{loginLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
                     </a>
@@ -144,7 +85,7 @@
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/setting">
                         <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="تنظیمات">
+                             th:data-original-title="#{settingLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
                         </svg>
                     </a>
@@ -153,7 +94,7 @@
                     <a href="/exbord">
                         <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
                              data-placement="right"
-                             data-original-title="درباره باتساپ">
+                             th:data-original-title="#{aboutLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
                         </svg>
                     </a>
@@ -161,7 +102,7 @@
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/logout">
                         <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خروج">
+                             th:data-original-title="#{exitLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-logout-icon"></use>
                         </svg>
                     </a>
@@ -174,7 +115,7 @@
     <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1">
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo-colored.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" th:alt="#{batsAppTitle}">
             </div>
             <div class="title-block">
                 <h6 class="logo-title"></h6>
@@ -188,72 +129,72 @@
                         <svg class="olymp-close-icon left-menu-icon">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
                         </svg>
-                        <span class="left-menu-title">بستن منو</span>
+                        <span class="left-menu-title"><th:block th:text="#{closeMenu}"></th:block></span>
                     </a>
                 </li>
                 <li>
                     <a href="/">
                         <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خانه">
+                             th:data-original-title="#{homePage}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
                         </svg>
-                        <span class="left-menu-title">خانه</span>
+                        <span class="left-menu-title"><th:block th:text="#{homePage}"></th:block></span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="گزارش فعالیت‌های کودک">
+                             th:data-original-title="#{reportKidsActivity}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
-                        <span class="left-menu-title">گزارش فعالیت‌های کودک</span>
+                        <span class="left-menu-title"><th:block th:text="#{reportKidsActivity}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/setting">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="تنطیمات">
+                             th:data-original-title=#{settingLabel}>
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
                         </svg>
-                        <span class="left-menu-title">تنظیمات</span>
+                        <span class="left-menu-title"><th:block th:text="#{settingLabel}"></th:block></span>
                     </a>
                 </li>
 
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/signup">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ثبت نام">
+                             th:data-original-title="#{signUpLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
                         </svg>
-                        <span class="left-menu-title">ثبت نام</span>
+                        <span class="left-menu-title"><th:block th:text="#{signUpLabel}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/login">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ورود">
+                             th:data-original-title="#{loginLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
-                        <span class="left-menu-title">ورود</span>
+                        <span class="left-menu-title"><th:block th:text="#{loginLabel}"></th:block></span>
                     </a>
                 </li>
                 <li>
                     <a href="/exbord">
                         <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
                              data-placement="right"
-                             data-original-title="درباره باتساپ">
+                             th:data-original-title="#{aboutLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
                         </svg>
-                        <span class="left-menu-title">درباره باتساپ</span>
+                        <span class="left-menu-title"><th:block th:text="#{aboutLabel}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/logout">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خروج">
+                             th:data-original-title="#{exitLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
-                        <span class="left-menu-title">خروج</span>
+                        <span class="left-menu-title"><th:block th:text="#{exitLabel}"></th:block></span>
                     </a>
                 </li>
             </ul>
@@ -265,7 +206,7 @@
 
     <div class="fixed-sidebar-left sidebar--small" id="sidebar-left-responsive">
         <a href="/" class="logo js-sidebar-open">
-            <img src="nui/img/logo-colored.png" alt="باتساپ">
+            <img src="nui/img/logo-colored.png" th:alt="#{batsAppTitle}">
         </a>
 
     </div>
@@ -273,7 +214,7 @@
     <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1-responsive">
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo-colored.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" th:alt="#{batsAppTitle}">
             </div>
             <div class="title-block">
                 <h6 class="logo-title"></h6>
@@ -287,74 +228,74 @@
                         <svg class="olymp-close-icon left-menu-icon">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
                         </svg>
-                        <span class="left-menu-title">بستن منو</span>
+                        <span class="left-menu-title"><th:block th:text="#{closeMenu}"></th:block></span>
                     </a>
                 </li>
                 <li>
                     <a href="/">
                         <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خانه">
+                             th:data-original-title="#{homePage}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
                         </svg>
-                        <span class="left-menu-title">خانه</span>
+                        <span class="left-menu-title"><th:block th:text="#{homePage}"></th:block></span>
                     </a>
                 </li>
                 <!--REPORT-->
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="گزارش فعالیت‌های کودک">
+                             th:data-original-title="#{reportKidsActivity}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
-                        <span class="left-menu-title">گزارش فعالیت‌های کودک</span>
+                        <span class="left-menu-title"><th:block th:text="#{reportKidsActivity}"></th:block></span>
                     </a>
                 </li>
 
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/signup">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ثبت نام">
+                             th:data-original-title="#{signUpLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
                         </svg>
-                        <span class="left-menu-title">ثبت نام</span>
+                        <span class="left-menu-title"><th:block th:text="#{signUpLabel}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/login">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ورود">
+                             th:data-original-title="#{loginLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
-                        <span class="left-menu-title">ورود</span>
+                        <span class="left-menu-title"><th:block th:text="#{loginLabel}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/setting">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="تنطیمات">
+                             th:data-original-title="#{settingLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
                         </svg>
-                        <span class="left-menu-title">تنظیمات</span>
+                        <span class="left-menu-title"><th:block th:text="#{settingLabel}"></th:block></span>
                     </a>
                 </li>
                 <li>
                     <a href="/exbord">
                         <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
                              data-placement="right"
-                             data-original-title="درباره باتساپ">
+                             th:data-original-title="#{aboutLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
                         </svg>
-                        <span class="left-menu-title">درباره باتساپ</span>
+                        <span class="left-menu-title"><th:block th:text="#{aboutLabel}"></th:block></span>
                     </a>
                 </li>
                 <!--Exit-->
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/logout">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خروج">
+                             th:data-original-title="#{exitLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
-                        <span class="left-menu-title">خروج</span>
+                        <span class="left-menu-title"><th:block th:text="#{exitLabel}"></th:block></span>
                     </a>
                 </li>
 
@@ -391,12 +332,10 @@
                     <div class="ui-block">
                         <article class="hentry post">
                             <p class="textalign">
-                                برای رعایت پروتکل‌های امنیتی و حریم خصوصی، تمام داده‌های ارسال شده از گوشی کودک تا مادر
-                                و همچنین ذخیره شده در سرور‌های باتساپ، همه رمز شده است و تنها با اجازه والدین
-                                قابل بررسی توسط سرویس‌های هوشمند باتساپ است.
+                                <th:block th:text="#{aiAgreementPart1}"></th:block>
                                 <br>
-                                در صورتی که موافق هستید داده‌های شما توسط سرویس‌های مبتنی بر هوش مصنوعی باتساپ
-                                بررسی شود، گزینه زیر را تایید کنید.
+                                <th:block th:text="#{aiAgreementPart2}"></th:block>
+
                             </p>
                         </article>
 
@@ -406,11 +345,11 @@
                         <div class="checkbox">
                             <label>
                                 <input name="allow"  id="parentAllowCheck" type="checkbox">
-                                موافق بررسی داده‌ها توسط سرویس هوشمند باتساپ هستم.
+                                <th:block th:text="#{aiAgreementCheckBoxLabel}"></th:block>
                             </label>
                         </div>
                         <button type="submit" disabled="true" id="allowButton" class="btn btn-purple btn-lg full-width">
-                            سرویس تحلیل هوشمند را فعال کن
+                            <th:block th:text="#{aiAgreementButtonLabel}"></th:block>
                         </button>
                     </form>
                 </div>
@@ -424,13 +363,13 @@
                                 <li>
                                     <div class="points">
 									<span>
-                                         دسته‌بندی نامشخص ( نیازمند بررسی والدین)
+                                         <th:block th:text="#{catUnknown}"></th:block>
 									</span>
                                     </div>
                                     <div class="count-stat">
                                         <th:block th:text="${neutralCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='NEUTRAL')}">مشاهده و بررسی جزییات</a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='NEUTRAL')}"><th:block th:text="#{showDetails}"></th:block></a>
 
                                 </li>
                             </ul>
@@ -443,13 +382,13 @@
                                 <li>
                                     <div class="points">
 									<span>
-										محتوای پورن کامل
+										 <th:block th:text="#{catPorn}"></th:block>
 									</span>
                                     </div>
                                     <div class="count-stat">
                                         <th:block th:text="${pornCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='PORN')}">مشاهده و بررسی جزییات</a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='PORN')}"><th:block th:text="#{showDetails}"></th:block></a>
                                 </li>
                             </ul>
                         </div>
@@ -462,13 +401,13 @@
                                 <li>
                                     <div class="points">
 									<span>
-										محتوای جنسی، برهنه و تحریک کننده
+										 <th:block th:text="#{catErotic}"></th:block>
 									</span>
                                     </div>
                                     <div class="count-stat">
                                         <th:block th:text="${sexCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='SEXY')}">مشاهده و بررسی جزییات</a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='SEXY')}"><th:block th:text="#{showDetails}"></th:block></a>
 
                                 </li>
                             </ul>
@@ -481,13 +420,13 @@
                                 <li>
                                     <div class="points">
 									<span>
-										محتوای انیمیشن سکسی و کارتون جنسی
+										 <th:block th:text="#{catSexy}"></th:block>
 									</span>
                                     </div>
                                     <div class="count-stat">
                                         <th:block th:text="${hentaiCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='HENTAI')}">مشاهده و بررسی جزییات</a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='HENTAI')}"><th:block th:text="#{showDetails}"></th:block></a>
 
                                 </li>
                             </ul>
@@ -500,13 +439,13 @@
                                 <li>
                                     <div class="points">
 									<span>
-										عکس (غیر جنسی و اشیا)، نقاشی و طراحی
+										 <th:block th:text="#{catDraw}"></th:block>
 									</span>
                                     </div>
                                     <div class="count-stat">
                                         <th:block th:text="${drawingCount}"></th:block>
                                     </div>
-                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='DRAWING')}">مشاهده و بررسی جزییات</a>
+                                    <a th:href="@{/imageAnalyze(uuid=${uuid},type='DRAWING')}"><th:block th:text="#{showDetails}"></th:block></a>
                                 </li>
                             </ul>
                         </div>
