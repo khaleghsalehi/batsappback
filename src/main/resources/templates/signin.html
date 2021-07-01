@@ -5,7 +5,7 @@
 
 <head>
 
-    <title>باتساپ | حساب کاربری</title>
+    <title id="titleLabel">باتساپ | حساب کاربری</title>
 
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
@@ -21,6 +21,17 @@
 				families: ['Roboto:300,400,500,700:latin']
 			}
 		});
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -52,11 +63,12 @@
     <div class="row display-flex">
         <div class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
             <div class="landing-content">
-                <h2>به باتساپ خوش آمدید!</h2>
-                <h5>
+                <h2 id="welcomeLabel">به باتساپ خوش آمدید!</h2>
+                <h5 id="bannerLabel">
                     اپلیکیشن هوشمند نظارت بر فعالیت‌های کودکان و نوجوانان در دنیای مجازی
                 </h5>
-                <a href="/exbord" class="btn btn-md btn-border c-white">در مورد باستاپ بیشتر بدانید</a>
+                <a id="moreAboutLabel" href="/exbord" class="btn btn-md btn-border c-white">در مورد باستاپ بیشتر
+                    بدانید</a>
 
             </div>
         </div>
@@ -72,7 +84,7 @@
                 <div class="tab-content">
 
                     <div class="tab-pane  active" id="login" role="tabpanel" data-mh="log-tab">
-                        <div class="title h6">ورود به حساب کاربری</div>
+                        <div id="loginTitleLabel" class="title h6">ورود به حساب کاربری</div>
                         <form class="content" th:action="@{/login}" method="post">
                             <div class="text-center" th:if="${msg!= null} ">
                                 <p style="color: #dc0b0b" th:text="${msg}"></p>
@@ -80,23 +92,25 @@
                             <div class="row">
                                 <div class="col col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="form-group label-floating is-empty">
-                                        <label th:if="${isOTP} == 'true'" class="control-label">شماره تلفن همراه ( به انگلیسی)</label>
-                                        <label th:if="${isOTP} == 'false'" class="control-label">نام کاربری</label>
+                                        <label th:if="${isOTP} == 'true'" class="control-label">شماره تلفن همراه ( به
+                                            انگلیسی)</label>
+                                        <label id="userNameLabel" th:if="${isOTP} == 'false'" class="control-label">نام
+                                            کاربری</label>
                                         <input id="phone" name="username" class="form-control" placeholder=""
                                                type="text">
                                     </div>
                                     <div class="form-group label-floating is-empty">
-                                        <label class="control-label">رمز عبور</label>
+                                        <label id="passwordLabel" class="control-label">رمز عبور</label>
                                         <input name="password" class="form-control" placeholder="" type="password">
                                     </div>
-                                    <button type="submit" class="btn btn-lg btn-primary full-width"
+                                    <button id="loginLabel" type="submit" class="btn btn-lg btn-primary full-width"
                                             onclick="persianToDecimal()">ورود
                                     </button>
                                     <br>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <br>
-                                    <a href="/" class="linker h5">خانه</a>|
-                                    <a href="/signup" class="linker h5">ثبت‌نام</a>
+                                    <a id="homePageLabel" href="/" class="linker h5">خانه</a>|
+                                    <a id="signUpLabel" href="/signup" class="linker h5">ثبت‌نام</a>
 
                                 </div>
                             </div>
@@ -104,6 +118,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" align="center">
+                <a href="#" onclick="persianLabel()" id="fa-click" class="linker h5 c-white">فارسی</a>|
+                <a href="#" onclick="englishLabel()" id="en-click" class="linker h5 c-white">English</a>|
+                <a href="#" onclick="azeriLabel()" id="az-click" class="linker h5 c-white">Azeri</a>|
+                <a href="#" onclick="turkishLabel()" id="tr-click" class="linker h5 c-white">Turkçe</a>|
+                <a href="#" onclick="arabicLabel()" id="ar-click" class="linker h5 c-white">العربية</a>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
 
             <!-- ... end Login-Registration Form  -->
         </div>
@@ -153,6 +178,80 @@
 
 <script src="nui/Bootstrap/dist/js/bootstrap.bundle.js"></script>
 <script>
+        function persianLabel() {
+            document.getElementById('homePageLabel').innerHTML= 'خانه';
+            document.getElementById('signUpLabel').innerHTML= 'ثبت نام';
+            document.getElementById('loginLabel').innerHTML= 'ورود';
+            document.getElementById('passwordLabel').innerHTML= 'کلمه عبور';
+            document.getElementById('userNameLabel').innerHTML= 'نام کاربری';
+            document.getElementById('loginTitleLabel').innerHTML= 'ورود به حساب کاربری';
+            document.getElementById('moreAboutLabel').innerHTML= 'در مورد باتساپ بیشتر بدانید';
+            document.getElementById('bannerLabel').innerHTML= 'اپلیکیشن هوشمند نظارت بر فعالیت‌های کودکان و نوجوانان در دنیای مجازی';
+            document.getElementById('welcomeLabel').innerHTML= 'به باتساپ خوش آمدید';
+            document.getElementById('titleLabel').innerHTML= 'باتساپ | ثبت نام';
+        };
+          function englishLabel() {
+            document.getElementById('homePageLabel').innerHTML = 'Home';
+            document.getElementById('signUpLabel').innerHTML = 'Register';
+            document.getElementById('loginLabel').innerHTML = 'Login';
+            document.getElementById('passwordLabel').innerHTML = 'Password';
+            document.getElementById('userNameLabel').innerHTML = 'Username';
+            document.getElementById('loginTitleLabel').innerHTML = 'Login';
+            document.getElementById('moreAboutLabel').innerHTML = 'Learn more about BatsApp';
+            document.getElementById('bannerLabel').innerHTML = 'Smart application for monitoring the activities of children and adolescents in the virtual world';
+            document.getElementById('welcomeLabel').innerHTML = 'Welcome to Batsapp';
+            document.getElementById('titleLabel').innerHTML = 'Batsapp | Register';
+        };
+
+
+
+
+
+</script>
+
+<script>
+            function arabicLabel() {
+                document.getElementById('homePageLabel').innerHTML= 'الصفحة الرئيسية';
+                document.getElementById('signUpLabel').innerHTML= 'Register';
+                document.getElementById('loginLabel').innerHTML= 'تسجيل الدخول';
+                document.getElementById('passwordLabel').innerHTML= 'Password';
+                document.getElementById('userNameLabel').innerHTML= 'Username';
+                document.getElementById('loginTitleLabel').innerHTML= 'سجيل الدخول';
+                document.getElementById('moreAboutLabel').innerHTML= 'تعرف على المزيد حول باتساب';
+                document.getElementById('bannerLabel').innerHTML= 'تطبيق ذكي لرصد أنشطة الأطفال والمراهقين في العالم الافتراضي';
+                document.getElementById('welcomeLabel').innerHTML= 'مرحبًا بك في باتساب';
+                document.getElementById('titleLabel').innerHTML= 'باتساب | يسجل';
+          }
+</script>
+<script>
+        function turkishLabel() {
+             document.getElementById('homePageLabel').innerHTML= 'Ana Sayfa';
+             document.getElementById('signUpLabel').innerHTML= 'Kayıt Ol';
+             document.getElementById('loginLabel').innerHTML= 'Giriş';
+             document.getElementById('passwordLabel').innerHTML= 'Parola';
+             document.getElementById('userNameLabel').innerHTML= 'Kullanıcı Adı';
+             document.getElementById('loginTitleLabel').innerHTML= 'Giriş';
+             document.getElementById('moreAboutLabel').innerHTML= 'BatsApp hakkında daha fazla bilgi edinin';
+             document.getElementById('bannerLabel').innerHTML= 'Sanal dünyadaki çocuk ve ergenlerin etkinliklerini izlemek için akıllı uygulama';
+             document.getElementById('welcomeLabel').innerHTML= 'Batsappa Hoş Geldiniz';
+             document.getElementById('titleLabel').innerHTML= 'BatsApp | Kayıt ol';
+        }
+</script>
+<script>
+        function azeriLabel() {
+            document.getElementById('homePageLabel').innerHTML = 'Ev';
+            document.getElementById('signUpLabel').innerHTML = 'Qeydiyyatdan keçin';
+            document.getElementById('loginLabel').innerHTML = 'Giriş';
+            document.getElementById('passwordLabel').innerHTML = 'Şifrə';
+            document.getElementById('userNameLabel').innerHTML = 'İstifadəçi adı';
+            document.getElementById('loginTitleLabel').innerHTML = 'Giriş';
+            document.getElementById('moreAboutLabel').innerHTML = 'BatsApp haqqında daha çox məlumat';
+            document.getElementById('bannerLabel').innerHTML = 'Uşaqların və yeniyetmələrin virtual aləmdəki fəaliyyətlərini izləmək üçün ağıllı tətbiq';
+            document.getElementById('welcomeLabel').innerHTML = 'Batsapp a xoş gəlmisiniz';
+            document.getElementById('titleLabel').innerHTML = 'BatsApp | Qeydiyyatdan keçin ';
+        }
+</script>
+<script>
     var
     persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g],
     arabicNumbers  = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g],
@@ -170,7 +269,4 @@
     };
 </script>
 </body>
-
-<!-- Mirrored from html.crumina.net/html-olympus/01-LandingPage.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Jan 2019 07:39:27 GMT -->
-
 </html>
