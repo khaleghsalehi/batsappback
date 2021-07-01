@@ -2,7 +2,7 @@
 <html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
 <head>
 
-    <title>باتساپ</title>
+    <title th:text="#{batsAppTitle}"></title>
 
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
@@ -29,60 +29,31 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-reboot.css">
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="nui/Bootstrap/dist/css/bootstrap-grid.css">
 
-
-    <link rel="stylesheet" href="nui/css/jquery.md.bootstrap.datetimepicker.style.css"/>
-
-
     <!-- Main Styles CSS -->
     <link rel="stylesheet" type="text/css" href="nui/css/main.min.css">
     <!--    autorefresh    -->
     <meta http-equiv="refresh" content="300">
+    <style>
+        body {
+          font-family: 'Times New Roman', serif;
+        }
 
+
+
+
+
+
+
+
+
+
+    </style>
 </head>
 
 <body>
@@ -91,7 +62,7 @@
 
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo-colored.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" th:alt="#{batsAppTitle}">
             </div>
         </a>
 
@@ -100,15 +71,15 @@
                 <li>
                     <a href="#" class="js-sidebar-open">
                         <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="بازکردن منو">
+                             th:data-original-title="#{openMenu}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
                         </svg>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="گزارش فعالیت‌های کودک">
+                             th:data-original-title="#{reportKidsActivity}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
                     </a>
@@ -116,7 +87,7 @@
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/signup">
                         <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ثبت نام">
+                             th:data-original-title="#{signUpLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
                         </svg>
                     </a>
@@ -124,7 +95,7 @@
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/login">
                         <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ورود">
+                             th:data-original-title="#{loginLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
                     </a>
@@ -132,7 +103,7 @@
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/setting">
                         <svg class="olymp-star-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="تنظیمات">
+                             th:data-original-title="#{settingLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
                         </svg>
                     </a>
@@ -141,7 +112,7 @@
                     <a href="/exbord">
                         <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
                              data-placement="right"
-                             data-original-title="درباره باتساپ">
+                             th:data-original-title="#{aboutLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
                         </svg>
                     </a>
@@ -149,7 +120,7 @@
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/logout">
                         <svg class="olymp-happy-faces-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خروج">
+                             th:data-original-title="#{exitLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-logout-icon"></use>
                         </svg>
                     </a>
@@ -162,7 +133,7 @@
     <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1">
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo-colored.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" th:alt="#{batsAppTitle}">
             </div>
             <div class="title-block">
                 <h6 class="logo-title"></h6>
@@ -176,72 +147,72 @@
                         <svg class="olymp-close-icon left-menu-icon">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
                         </svg>
-                        <span class="left-menu-title">بستن منو</span>
+                        <span class="left-menu-title"><th:block th:text="#{closeMenu}"></th:block></span>
                     </a>
                 </li>
                 <li>
                     <a href="/">
                         <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خانه">
+                             th:data-original-title="#{homePage}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
                         </svg>
-                        <span class="left-menu-title">خانه</span>
+                        <span class="left-menu-title"><th:block th:text="#{homePage}"></th:block></span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="گزارش فعالیت‌های کودک">
+                             th:data-original-title="#{reportKidsActivity}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
-                        <span class="left-menu-title">گزارش فعالیت‌های کودک</span>
+                        <span class="left-menu-title"><th:block th:text="#{reportKidsActivity}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/setting">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="تنطیمات">
+                             th:data-original-title=#{settingLabel}>
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
                         </svg>
-                        <span class="left-menu-title">تنظیمات</span>
+                        <span class="left-menu-title"><th:block th:text="#{settingLabel}"></th:block></span>
                     </a>
                 </li>
 
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/signup">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ثبت نام">
+                             th:data-original-title="#{signUpLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
                         </svg>
-                        <span class="left-menu-title">ثبت نام</span>
+                        <span class="left-menu-title"><th:block th:text="#{signUpLabel}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/login">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ورود">
+                             th:data-original-title="#{loginLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
-                        <span class="left-menu-title">ورود</span>
+                        <span class="left-menu-title"><th:block th:text="#{loginLabel}"></th:block></span>
                     </a>
                 </li>
                 <li>
                     <a href="/exbord">
                         <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
                              data-placement="right"
-                             data-original-title="درباره باتساپ">
+                             th:data-original-title="#{aboutLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
                         </svg>
-                        <span class="left-menu-title">درباره باتساپ</span>
+                        <span class="left-menu-title"><th:block th:text="#{aboutLabel}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/logout">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خروج">
+                             th:data-original-title="#{exitLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
-                        <span class="left-menu-title">خروج</span>
+                        <span class="left-menu-title"><th:block th:text="#{exitLabel}"></th:block></span>
                     </a>
                 </li>
             </ul>
@@ -253,7 +224,7 @@
 
     <div class="fixed-sidebar-left sidebar--small" id="sidebar-left-responsive">
         <a href="/" class="logo js-sidebar-open">
-            <img src="nui/img/logo-colored.png" alt="باتساپ">
+            <img src="nui/img/logo-colored.png" th:alt="#{batsAppTitle}">
         </a>
 
     </div>
@@ -261,7 +232,7 @@
     <div class="fixed-sidebar-left sidebar--large" id="sidebar-left-1-responsive">
         <a href="/" class="logo">
             <div class="img-wrap">
-                <img src="nui/img/logo-colored.png" alt="باتساپ">
+                <img src="nui/img/logo-colored.png" th:alt="#{batsAppTitle}">
             </div>
             <div class="title-block">
                 <h6 class="logo-title"></h6>
@@ -275,74 +246,74 @@
                         <svg class="olymp-close-icon left-menu-icon">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-close-icon"></use>
                         </svg>
-                        <span class="left-menu-title">بستن منو</span>
+                        <span class="left-menu-title"><th:block th:text="#{closeMenu}"></th:block></span>
                     </a>
                 </li>
                 <li>
                     <a href="/">
                         <svg class="olymp-menu-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خانه">
+                             th:data-original-title="#{homePage}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-menu-icon"></use>
                         </svg>
-                        <span class="left-menu-title">خانه</span>
+                        <span class="left-menu-title"><th:block th:text="#{homePage}"></th:block></span>
                     </a>
                 </li>
                 <!--REPORT-->
                 <li>
-                    <a th:href="@{/show(date=${today},from=${from},to=${to})}">
+                    <a th:href="@{/show(date=${today},from=${from},to=${to},month=${month})}">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="گزارش فعالیت‌های کودک">
+                             th:data-original-title="#{reportKidsActivity}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-share-post-icon"></use>
                         </svg>
-                        <span class="left-menu-title">گزارش فعالیت‌های کودک</span>
+                        <span class="left-menu-title"><th:block th:text="#{reportKidsActivity}"></th:block></span>
                     </a>
                 </li>
 
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/signup">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ثبت نام">
+                             th:data-original-title="#{signUpLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-register-icon"></use>
                         </svg>
-                        <span class="left-menu-title">ثبت نام</span>
+                        <span class="left-menu-title"><th:block th:text="#{signUpLabel}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username == 'anonymousUser' or  username ==null }">
                     <a href="/login">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="ورود">
+                             th:data-original-title="#{loginLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
-                        <span class="left-menu-title">ورود</span>
+                        <span class="left-menu-title"><th:block th:text="#{loginLabel}"></th:block></span>
                     </a>
                 </li>
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/setting">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="تنطیمات">
+                             th:data-original-title="#{settingLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-settings-icon"></use>
                         </svg>
-                        <span class="left-menu-title">تنظیمات</span>
+                        <span class="left-menu-title"><th:block th:text="#{settingLabel}"></th:block></span>
                     </a>
                 </li>
                 <li>
                     <a href="/exbord">
                         <svg class="olymp-chat---messages-icon left-menu-icon" data-toggle="tooltip"
                              data-placement="right"
-                             data-original-title="درباره باتساپ">
+                             th:data-original-title="#{aboutLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-chat---messages-icon"></use>
                         </svg>
-                        <span class="left-menu-title">درباره باتساپ</span>
+                        <span class="left-menu-title"><th:block th:text="#{aboutLabel}"></th:block></span>
                     </a>
                 </li>
                 <!--Exit-->
                 <li th:if="${username != 'anonymousUser' and  username !=null }">
                     <a href="/logout">
                         <svg class="olymp-newsfeed-icon left-menu-icon" data-toggle="tooltip" data-placement="right"
-                             data-original-title="خروج">
+                             th:data-original-title="#{exitLabel}">
                             <use xlink:href="nui/svg-icons/sprites/icons.svg#olymp-login-icon"></use>
                         </svg>
-                        <span class="left-menu-title">خروج</span>
+                        <span class="left-menu-title"><th:block th:text="#{exitLabel}"></th:block></span>
                     </a>
                 </li>
 
@@ -378,14 +349,17 @@
                 <form action="/show" name="sentMessage" id="pickDateTime" novalidate>
                     <div class="ui-block">
                         <div class="input-group-prepend">
-                            <span class="input-group-text cursor-pointer" id="date1">انتخاب روز</span>
+                            <span class="input-group-text cursor-pointer" id="date1">
+                                <th:block th:text="#{showSelectDate}"></th:block></span>
                             <input type="text" name="date" id="inputDate1-text" class="form-control"
-                                   placeholder="تاریخ مورد نظر"
+                                   th:placeholder="#{showSelectDate}"
                                    aria-label="date1" aria-describedby="date1">
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <label class="control-label" for="startTime">از ساعت</label>
+                                <label class="control-label" for="startTime">
+                                    <th:block th:text="#{showFromHour}"></th:block>
+                                </label>
                                 <select name="from" class="selectpicker form-control" id="startTime" size="auto"
                                         tabindex="-98">
                                     <option value="00">00</option>
@@ -416,7 +390,9 @@
                                 </select>
                             </div>
                             <div class="col-6">
-                                <label class="control-label" for="endTime">الی ساعت</label>
+                                <label class="control-label" for="endTime">
+                                    <th:block th:text="#{showToHour}"></th:block>
+                                </label>
                                 <select name="to" class="selectpicker form-control" id="endTime" size="auto"
                                         tabindex="-98">
                                     <option value="00">00</option>
@@ -447,7 +423,8 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-md-2">بررسی گزارش
+                        <button type="submit" class="btn btn-primary btn-md-2">
+                            <th:block th:text="#{showCheckReport}"></th:block>
                         </button>
 
                     </div>
@@ -457,7 +434,8 @@
                         from=${lastActivityFrom},
                         to=${lastActivityTo},
                         month=${lastActivityMonth})}">
-                    <button type="submit" class="btn btn-secondary btn-lg"> مشاهده فعالیت‌های اخیر کودک
+                    <button type="submit" class="btn btn-secondary btn-lg">
+                        <th:block th:text="#{reportKidsActivity}"></th:block>
                     </button>
                 </a>
             </div>
@@ -473,7 +451,7 @@
                         <button type="submit"
                                 class="btn btn-md btn-danger"
                         >
-                            از گوشی کودک برای مدتی گزارش ارسال نشده است. مشاهده جزییات
+                            <th:block th:text="#{showSuspectedLabel}"></th:block>
                         </button>
                     </a>
                 </div>
@@ -484,9 +462,8 @@
         <div th:if="${screenShotCount != 'empty' }" class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="col-12" align="center">
                 <br>
-                <b th:text="${screenShotCount}+' عدد تعداد عکس‌های ارسال شده از گوشی کودک در تاریخ '+${date}+' ساعت'"></b>
+                <b th:text="#{showResult(${screenShotCount},${date},${from},${to})}"></b>
                 <br>
-                <b th:text="${from}+' الی '+${to}"></b>
             </div>
         </div>
 
@@ -500,10 +477,11 @@
             </div>
         </div>
         <!-- footer       -->
-        <div class="col col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="sub-footer-copyright" style="color: #ffff;">
+        <div class="footer footer-full-width" id="footer">
+            <div class="sub-footer-copyright" style="color: #171414">
 						<span>
-							<a href="/" style="color: #ffff;">BATSAPP</a> تمام حقوق مادی و معنوی سایت محفوظ است
+							<a href="/" style="color: #171414;"><th:block th:text="#{batsAppTitle}"></th:block> |</a> <th:block
+                                th:text="#{copyRightLabel}"></th:block>
 						</span>
             </div>
         </div>
@@ -570,6 +548,16 @@
 
             enableTimePicker: false
         });
+
+
+
+
+
+
+
+
+
+
 
 
 
